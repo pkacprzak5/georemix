@@ -1,9 +1,11 @@
-import ExampleWindow from "./components/ExampleWindow";
+import { MainWindow } from "./components/MainWindow";
+import { OpenStreetMapWindow } from "./components/OpenStreetMapWindow";
 
 function App() {
   return (
     <>
-      <ExampleWindow />
+      <MainWindow />
+      <OpenStreetMapWindow />
     </>
   );
 }

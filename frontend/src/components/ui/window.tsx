@@ -14,31 +14,32 @@ function ClickAnimation({ x, y, id, angle }: ClickAnimationProps) {
       key={id}
       className="fixed pointer-events-none z-50 select-none"
       style={{ left: x - 20, top: y - 10 } as React.CSSProperties}>
-        {
-          // set CSS var --angle so the keyframes can use it; cast to allow custom CSS var
-        }
-        {(() => {
-          const innerStyle = {
-            WebkitTextStroke: '0.5px var(--border)',
-            ['--angle']: `${angle}deg`,
-          } as React.CSSProperties & { ['--angle']?: string };
+      {
+        // set CSS var --angle so the keyframes can use it; cast to allow custom CSS var
+      }
+      {(() => {
+        const innerStyle = {
+          WebkitTextStroke: "0.5px var(--border)",
+          ["--angle"]: `${angle}deg`,
+        } as React.CSSProperties & { ["--angle"]?: string };
 
-          return (
-            <div
-              className="animate-[float-up_0.8s_ease-out_forwards] text-secondary-background font-heading text-3xl text-shadow-lg"
-              style={innerStyle}
-            >
-              Click!
-            </div>
-          );
-        })()}
-        
+        return (
+          <div
+            className="animate-[float-up_0.8s_ease-out_forwards] text-secondary-background font-heading text-3xl text-shadow-lg"
+            style={innerStyle}>
+            Click!
+          </div>
+        );
+      })()}
     </div>
   );
 }
 
 interface WindowProps extends React.ComponentProps<"div"> {
   title?: string;
+  initialPosition?: { x: number; y: number };
+  position?: { x: number; y: number };
+  setPosition?: (position: { x: number; y: number }) => void;
   onClose?: () => void;
   onMinimize?: () => void;
   onMaximize?: () => void;
@@ -46,14 +47,25 @@ interface WindowProps extends React.ComponentProps<"div"> {
 
 function Window({
   className,
+  initialPosition,
+  position: externalPosition,
+  setPosition: externalSetPosition,
   children,
   title = "Window",
   onClose,
   onMinimize,
   onMaximize,
+  style,
   ...props
 }: WindowProps) {
-  const [position, setPosition] = React.useState({ x: 100, y: 100 });
+  const [internalPosition, setInternalPosition] = React.useState({
+    x: initialPosition?.x || 0,
+    y: initialPosition?.y || 0,
+  });
+  
+  // Use external position if provided, otherwise use internal position
+  const position = externalPosition !== undefined ? externalPosition : internalPosition;
+  const setPosition = externalSetPosition || setInternalPosition;
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStart, setDragStart] = React.useState({ x: 0, y: 0 });
   const [clickAnimations, setClickAnimations] = React.useState<ClickAnimationProps[]>([]);
@@ -84,7 +96,7 @@ function Window({
         });
       }
     },
-    [isDragging, dragStart]
+    [isDragging, dragStart, setPosition]
   );
 
   const handleMouseUp = React.useCallback(() => {
@@ -151,9 +163,10 @@ function Window({
           className
         )}
         style={{
+          ...style,
           left: position.x,
           top: position.y,
-          zIndex: 40,
+          zIndex: 40, 
         }}
         onMouseDown={handleMouseDown}
         {...props}>
@@ -172,8 +185,7 @@ function Window({
             <button
               onClick={(e) => handleIconClick(e, onMinimize)}
               className="w-6 h-6 flex items-center justify-center rounded-sm border-2 border-black bg-white text-black transition-all duration-75 hover:bg-black hover:text-white active:translate-x-px active:translate-y-px"
-              aria-label="Minimize"
-            >
+              aria-label="Minimize">
               <span className="text-xs font-bold">–</span>
             </button>
 
@@ -181,8 +193,7 @@ function Window({
             <button
               onClick={(e) => handleIconClick(e, onMaximize)}
               className="w-6 h-6 flex items-center justify-center rounded-sm border-2 border-black bg-white text-black transition-all duration-75 hover:bg-black hover:text-white active:translate-x-px active:translate-y-px"
-              aria-label="Maximize"
-            >
+              aria-label="Maximize">
               <span className="text-xs font-bold">□</span>
             </button>
 
@@ -190,17 +201,14 @@ function Window({
             <button
               onClick={(e) => handleIconClick(e, onClose)}
               className="w-6 h-6 flex items-center justify-center rounded-sm border-2 border-black bg-white text-black transition-all duration-75 hover:bg-black hover:text-white active:translate-x-px active:translate-y-px"
-              aria-label="Close"
-            >
+              aria-label="Close">
               <span className="text-xs font-bold">✕</span>
             </button>
           </div>
         </div>
 
         {/* Window Body */}
-        <div data-slot="window-body" className="flex-1 p-6 overflow-auto">
-          {children}
-        </div>
+        {children}
       </div>
 
       {/* Click Animations */}
@@ -254,6 +262,16 @@ function WindowContent({ className, ...props }: React.ComponentProps<"div">) {
   return <div data-slot="window-content" className={cn("", className)} {...props} />;
 }
 
+function WindowBody({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="window-body"
+      className={cn("flex-1 p-6 overflow-auto", className)}
+      {...props}
+    />
+  );
+}
+
 function WindowFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -270,6 +288,7 @@ export {
   WindowTitle,
   WindowDescription,
   WindowContent,
+  WindowBody,
   WindowAction,
   WindowFooter,
 };

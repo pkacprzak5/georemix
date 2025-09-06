@@ -73,6 +73,10 @@
   }
 }
 
+@theme{
+  --sharp-ease: cubic-bezier(0.16, 0.77, 0.01, 0.99);
+}
+
 @keyframes float-up {
   0% {
   transform: translateY(0) scale(1) rotate(var(--angle, 0deg));
@@ -88,3 +92,12 @@ button{
   @apply cursor-pointer
 };
 
+  .custom-pinpoint-icon {
+    background: transparent !important;
+
+  }
+  .custom-pinpoint-icon svg {
+    display: block;
+        width: 32px;
+    height: 32px;
+  }
