@@ -309,7 +309,7 @@ function WindowAction({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function WindowContent({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="window-content" className={cn("", className)} {...props} />;
+  return <div data-slot="window-content" className={cn("relative", className)} {...props} />;
 }
 
 function WindowBody({ className, ...props }: React.ComponentProps<"div">) {
