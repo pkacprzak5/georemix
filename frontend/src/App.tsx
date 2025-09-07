@@ -1,11 +1,11 @@
 import { MainWindow } from "./components/MainWindow";
-import { OpenStreetMapWindow } from "./components/OpenStreetMapWindow";
+import { MapWindow } from "./components/OpenStreetMapWindow";
 
 function App() {
   return (
     <>
       <MainWindow />
-      <OpenStreetMapWindow />
+      <MapWindow />
     </>
   );
 }

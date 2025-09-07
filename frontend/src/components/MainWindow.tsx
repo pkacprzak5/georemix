@@ -7,7 +7,7 @@ const TEST_IMAGE_ID = "164095525622425"; // Replace with a valid Mapillary image
 export function MainWindow() {
   return (
     <Window
-      title="Main Window"
+      title="guesser.exe"
       initialPosition={{ x: (window.innerWidth / 2) * 0.05, y: (window.innerHeight / 2) * 0.05 }}
       className="h-[95vh] w-[95vw] overflow-hidden">
       <WindowContent className="w-full h-full">

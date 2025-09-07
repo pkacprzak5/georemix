@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, type CSSProperties } from "react";
 import { Viewer, type ViewerOptions } from "mapillary-js";
 
 const MAPILLARY_KEY = import.meta.env.VITE_MAPILLARY_ACCESS_TOKEN;
-console.log(MAPILLARY_KEY)
 
 interface MapillaryViewerProps {
   imageId: string;

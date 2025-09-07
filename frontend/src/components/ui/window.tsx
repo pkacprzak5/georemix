@@ -1,4 +1,5 @@
-import * as React from "react";
+
+import { useEffect, useState, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
 interface ClickAnimationProps {
@@ -58,7 +59,7 @@ function Window({
   style,
   ...props
 }: WindowProps) {
-  const [internalPosition, setInternalPosition] = React.useState({
+  const [internalPosition, setInternalPosition] = useState({
     x: initialPosition?.x || 0,
     y: initialPosition?.y || 0,
   });
@@ -66,13 +67,32 @@ function Window({
   // Use external position if provided, otherwise use internal position
   const position = externalPosition !== undefined ? externalPosition : internalPosition;
   const setPosition = externalSetPosition || setInternalPosition;
-  const [isDragging, setIsDragging] = React.useState(false);
-  const [dragStart, setDragStart] = React.useState({ x: 0, y: 0 });
-  const [clickAnimations, setClickAnimations] = React.useState<ClickAnimationProps[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [clickAnimations, setClickAnimations] = useState<ClickAnimationProps[]>([]);
   // track last creation time to throttle spammy clicks
-  const lastClickCreatedAt = React.useRef<number>(0);
+  const lastClickCreatedAt = useRef<number>(0);
 
-  const windowRef = React.useRef<HTMLDivElement>(null);
+  const windowRef = useRef<HTMLDivElement>(null);
+
+  // Helper function to clamp position within viewport bounds
+  const clampPositionToViewport = useCallback((x: number, y: number) => {
+    if (!windowRef.current) {
+      return { x, y };
+    }
+
+    const rect = windowRef.current.getBoundingClientRect();
+    const windowWidth = Number(style?.width) || rect.width;
+    const windowHeight = Number(style?.height) || rect.height;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Ensure window stays within viewport bounds
+    const clampedX = Math.max(0, Math.min(x, viewportWidth - windowWidth));
+    const clampedY = Math.max(0, Math.min(y, viewportHeight - windowHeight));
+
+    return { x: clampedX, y: clampedY };
+  }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (
@@ -87,23 +107,26 @@ function Window({
     }
   };
 
-  const handleMouseMove = React.useCallback(
+  const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       if (isDragging) {
-        setPosition({
-          x: e.clientX - dragStart.x,
-          y: e.clientY - dragStart.y,
-        });
+        const newX = e.clientX - dragStart.x;
+        const newY = e.clientY - dragStart.y;
+        
+        // Clamp position to stay within viewport
+        const clampedPosition = clampPositionToViewport(newX, newY);
+        
+        setPosition(clampedPosition);
       }
     },
-    [isDragging, dragStart, setPosition]
+    [isDragging, dragStart, setPosition, clampPositionToViewport]
   );
 
-  const handleMouseUp = React.useCallback(() => {
+  const handleMouseUp = useCallback(() => {
     setIsDragging(false);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
@@ -113,6 +136,33 @@ function Window({
       };
     }
   }, [isDragging, handleMouseMove, handleMouseUp]);
+
+  // Ensure window stays within viewport bounds when position changes externally
+  useEffect(() => {
+    const clampedPosition = clampPositionToViewport(position.x, position.y);
+    if (clampedPosition.x !== position.x || clampedPosition.y !== position.y) {
+      setPosition(clampedPosition);
+    }
+  }, [position.x, position.y, clampPositionToViewport, setPosition]);
+
+  // Monitor window size changes and adjust position if needed
+  // commented out for now, maybe wont be needed
+  
+  // useEffect(() => {
+  //   if (!windowRef.current) {
+  //     return;
+  //   }
+
+  //   const resizeObserver = new ResizeObserver(() => {
+  //     const clampedPosition = clampPositionToViewport(position.x, position.y);
+  //     if (clampedPosition.x !== position.x || clampedPosition.y !== position.y) {
+  //       setPosition(clampedPosition);
+  //     }
+  //   });
+
+  //   resizeObserver.observe(windowRef.current);
+  //   return () => resizeObserver.disconnect();
+  // }, [position.x, position.y, clampPositionToViewport, setPosition]);
 
   const createClickAnimation = (e: React.MouseEvent) => {
     const now = Date.now();
