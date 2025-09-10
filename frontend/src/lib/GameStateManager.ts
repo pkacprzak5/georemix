@@ -9,6 +9,8 @@ export class GameStateManager {
   private _levelResults: LevelResult[] = [];
   private _gameLevelProvider: LevelProviderStrategy;
   private _currentTheme: "light" | "dark" = "light";
+  private _playerName: string = "";
+  private _selectedRound: number | null = null;
 
   // Mock data for development
   constructor(private _eventBridge: EventBridge) {
@@ -21,6 +23,22 @@ export class GameStateManager {
       throw new Error("No current round set");
     }
     return ROUNDS[this._currentRoundNumber];
+  }
+
+  get playerName(): string {
+    return this._playerName;
+  }
+
+  set playerName(name: string) {
+    this._playerName = name;
+  }
+
+  get selectedRound(): number | null {
+    return this._selectedRound;
+  }
+
+  set selectedRound(round: number | null) {
+    this._selectedRound = round;
   }
 
   get gameTheme(): "light" | "dark" {

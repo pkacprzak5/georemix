@@ -3,7 +3,9 @@ import { GroupName } from "./types";
 import { HomePage } from "../../components/pages/HomePage";
 import { SettingsPage } from "../../components/pages/SettingsPage";
 import { GamePage } from "../../components/pages/GamePage";
-import { WelcomePage } from "../../components/pages/WelcomePage";
+import { TitlePage } from "../../components/pages/TitlePage";
+import { PlayerSelect } from "../../components/pages/PlayerSelect";
+import { RoundSelect } from "../../components/pages/RoundSelect";
 
 
 export const mainGroup: Group = {
@@ -16,12 +18,21 @@ export const mainGroup: Group = {
   initialPage: "home",
 };
 
-export const welcomeGroup: Group = {
-  id: GroupName.WELCOME,
+export const titleGroup: Group = {
+  id: GroupName.TITLE,
   pages: [
-    { id: "welcome", component: WelcomePage, title: "Welcome" },
+    { id: "title", component: TitlePage, title: "NVIDIA Geo-Guessing" },
   ],
-  initialPage: "welcome",
+  initialPage: "title",
+};
+
+export const initGroup: Group = {
+  id: GroupName.INIT_GROUP,
+  pages: [
+    { id: "player-select", component: PlayerSelect, title: "Player Select" },
+    { id: "round-select", component: RoundSelect, title: "Round Select" },
+  ],
+  initialPage: "player-select",
 };
 
 export const levelStartGroup: Group = {
@@ -50,7 +61,8 @@ export const gameEndGroup: Group = {
 
 // Map of group name -> Group for easy lookup/registration
 export const GROUPS_MAP: Map<GroupName, Group> = new Map([
-  [welcomeGroup.id as GroupName, welcomeGroup],
+  [titleGroup.id as GroupName, titleGroup],
+  [initGroup.id as GroupName, initGroup],
   [mainGroup.id as GroupName, mainGroup],
   [levelStartGroup.id as GroupName, levelStartGroup],
   [levelEndGroup.id as GroupName, levelEndGroup],

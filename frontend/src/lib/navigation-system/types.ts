@@ -38,7 +38,8 @@ export interface NavigationContextType {
 }
 
 export enum GroupName {
-  WELCOME = "welcome",
+  TITLE = "title",
+  INIT_GROUP = "init_group",
   MAIN_MENU = "main_menu",
   LEVEL_START = "level_start",
   LEVEL_END = "level_end",
