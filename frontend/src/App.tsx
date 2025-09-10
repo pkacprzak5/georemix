@@ -1,13 +1,16 @@
 import { MainWindow } from "./components/MainWindow";
 import { MapWindow } from "./components/OpenStreetMapWindow";
 import { GameStateProvider } from "./context/GameStateContext";
+import { NavigationProvider } from "./lib/navigation-system/NavigationProvider";
 
 function App() {
   return (
-    <GameStateProvider>
-      <MainWindow />
-      <MapWindow />
-    </GameStateProvider>
+    <NavigationProvider>
+      <GameStateProvider>
+        <MainWindow />
+        <MapWindow />
+      </GameStateProvider>
+    </NavigationProvider>
   );
 }
 

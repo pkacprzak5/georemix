@@ -1,25 +1,18 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Window, WindowContent } from "@/components/ui/window";
 import MapillaryViewer from "@/components/MapillaryViewer";
-import { Sheet, SheetContent } from "@/components/ui/custom-sheet";
+import { NavigationSheet } from "@/lib/navigation-system/NavigationSheet";
+import { useNavigation } from "@/lib/navigation-system/NavigationProvider";
 import { Button } from "@/components/ui/button";
 
 const TEST_IMAGE_ID = "164095525622425"; // Replace with a valid Mapillary image ID for testing
 
 export function MainWindow() {
-  const [isSheetOpen, setIsSheetOpen] = useState(true);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const { showMenu, state } = useNavigation();
 
-  const handleCloseSheet = () => {
-    setHasInteracted(true);
-    setIsSheetOpen(false);
-  };
-
-  // Unused for now
-  // const handleOpenSheet = () => {
-  //   setHasInteracted(true);
-  //   setIsSheetOpen(true);
-  // };
+  useEffect(() => {
+    showMenu(); // Ensure menu is shown at start
+  }, [showMenu]);
 
   return (
     <Window
@@ -29,22 +22,15 @@ export function MainWindow() {
       <WindowContent className="w-full h-full relative">
         <div className="w-full h-full relative">
           <MapillaryViewer imageId={TEST_IMAGE_ID} width="100%" height="100%" />
-
-          {/* Sheet controlled programmatically - contained within WindowContent */}
-          <Sheet open={isSheetOpen} modal={false}>
-            <SheetContent
-              side="bottom"
-              animate={hasInteracted}
-              className="w-full h-full [&>button]:hidden">
-              <div className="flex gap-2 mt-auto">
-                <Button
-                  onClick={handleCloseSheet}
-                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800">
-                  Hide Panel
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <NavigationSheet />
+          {!state.isMenuOpen && (
+            <Button
+              onClick={showMenu}
+              className="absolute bottom-4 right-4 z-50"
+            >
+              Show Menu
+            </Button>
+          )}
         </div>
       </WindowContent>
     </Window>
