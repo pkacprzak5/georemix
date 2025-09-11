@@ -86,6 +86,11 @@ export class GameStateManager {
       this._gameLevelProvider.loadNextLevelInfo(this.getLevelInfo(nextLevelNumber).levelId).then(() => {
         this._currentLevelNumber = nextLevelNumber;
         this._currentTheme = this.currentLevelInfo.level_theme;
+        this._eventBridge.emit('loadingFinished', {
+          levelNumber: nextLevelNumber,
+          levelId: this.getLevelInfo(nextLevelNumber).levelId,
+          timestamp: Date.now()
+        });
         resolve(null);
       });
     });

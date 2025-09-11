@@ -1,4 +1,4 @@
-import type { GameEvent } from '@/types/game';
+import type { GameEvent } from '@/types/project';
 
 type EventCallback = (data: unknown) => void;
 

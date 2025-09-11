@@ -25,10 +25,12 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
 
   function startGameplay() {
     hideMenu();
+    eventBridge.emit('gameplayStarted', { timestamp: Date.now() });
   }
 
   function endGameplay() {
     showMenu();
+    eventBridge.emit('gameplayEnded', { timestamp: Date.now() });
   }
 
   const contextValue = useMemo(

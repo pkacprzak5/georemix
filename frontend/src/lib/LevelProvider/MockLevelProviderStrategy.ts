@@ -1,5 +1,5 @@
 import { LevelProviderStrategy } from "./LevelProviderStrategy";
-import type { LevelInfo } from "@/types/game";
+import type { LevelInfo } from "@/lib/constants";
 
 /**
  * Mock implementation of LevelProviderStrategy using static data
@@ -8,16 +8,16 @@ import type { LevelInfo } from "@/types/game";
 export class MockLevelProviderStrategy extends LevelProviderStrategy {
   private static readonly LEVELS: LevelInfo[] = [
     {
-      id: "164095525622425",
-      name: "Cyberpunk City",
-      isDarkMode: false,
-      photoUrl: "https://example.com/eiffel-tower.jpg",
-      targetLocation: {
-        lat: 48.8584,
-        lng: 2.2945,
-        name: "Kraków",
-        country: "Poland",
-      },
+      levelName: "Cyberpunk City",
+      levelId: "164095525622425",
+      level_theme: "light",
+      level_photos: [
+        {
+          lat: 48.8584,
+          lng: 2.2945,
+          name: "Kraków",
+        }
+      ],
     },
   ];
 
