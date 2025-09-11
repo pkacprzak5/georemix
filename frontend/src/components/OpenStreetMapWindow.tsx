@@ -3,9 +3,6 @@ import { Window, WindowContent } from "@/components/ui/window";
 import MapViewer from "./MapViewer";
 import "leaflet/dist/leaflet.css";
 
-
-
-
 export function MapWindow() {
   // Window size constants for calculations
   const WINDOW_WIDTH_MINIMIZED = 300;

@@ -1,5 +1,5 @@
 import { LevelProviderStrategy } from "./LevelProviderStrategy";
-import type { LevelInfo } from "@/lib/constants";
+import type { LevelInfo } from "@/types/project";
 
 /**
  * Mock implementation of LevelProviderStrategy using static data

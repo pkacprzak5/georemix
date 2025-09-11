@@ -8,7 +8,7 @@ export function TitlePage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigateTo(GroupName.INIT_GROUP, 'player-select');
-    }, 3000); // 3 seconds
+    }, 3000); 
 
     return () => clearTimeout(timer);
   }, [navigateTo]);

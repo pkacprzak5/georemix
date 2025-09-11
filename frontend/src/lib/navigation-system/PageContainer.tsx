@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigation } from "./NavigationProvider";
-import { LoadingScreen } from "./LoadingScreen";
+import { LoadingScreen } from "../../components/LoadingScreen";
 import type { Page } from "./types";
 
 const pageVariants = {
@@ -28,7 +28,7 @@ export function PageContainer() {
   const { state, groups } = useNavigation();
   const initialPageRef = useRef<string | null>(null);
   const isInitialPage = initialPageRef.current === null;
-  
+
   useEffect(() => {
     initialPageRef.current = state.currentPage;
   }, [state.currentPage]);
@@ -39,20 +39,15 @@ export function PageContainer() {
   }
 
   const group = groups.get(state.currentGroup);
-  console.log(group, state.currentGroup, groups)
   if (!group) {
     return null;
   }
-  console.log('c')
   const currentPageIndex = group.pages.findIndex((p: Page) => p.id === state.currentPage);
   const currentPage = group.pages[currentPageIndex];
   if (!currentPage) {
     return null;
   }
-  console.log('b')
-  // Create a loading page component
-  const LoadingPage = () => <LoadingScreen />;
-  console.log("a")
+
   // Determine what to render based on loading state
   const renderContent = () => {
     if (state.isLoading) {
@@ -65,7 +60,7 @@ export function PageContainer() {
           exit="exit"
           transition={pageTransition}
           className="absolute inset-0">
-          <LoadingPage />
+          <LoadingScreen />
         </motion.div>
       );
     }
@@ -100,7 +95,6 @@ export function PageContainer() {
       </motion.div>
     );
   };
-
 
   return (
     <div className="relative w-full h-full overflow-hidden">

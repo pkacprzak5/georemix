@@ -8,7 +8,7 @@ export class EventBridge {
   /**
    * Register an event listener for a specific game event
    */
-  on(event: GameEvent, callback: EventCallback): () => void {
+  addEventListener(event: GameEvent, callback: EventCallback): () => void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set());
     }

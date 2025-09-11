@@ -1,7 +1,7 @@
 import type { LevelProviderStrategy } from "@/lib/LevelProvider/LevelProviderStrategy";
 import { MockLevelProviderStrategy } from "@/lib/LevelProvider/MockLevelProviderStrategy";
 import type { EventBridge } from "./EventBridge";
-import { ROUNDS, type LevelInfo, type LevelResult, type RoundInfo } from "./constants";
+import { ROUNDS, type LevelInfo, type LevelResult, type RoundInfo } from "@/types/project";
 
 export class GameStateManager {
   private _currentRoundNumber: number | null = null;
