@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import { pinpoint } from "pepicons/print";
 import { Button } from "@/components/ui/button";
-import { type MapPosition } from "@/types/project";
+import { type MapCoordinates } from "@/types/project";
+import { useGameState } from "@/context/game-state";
 
 interface MapLayer {
   url: string;
@@ -11,7 +12,7 @@ interface MapLayer {
 }
 
 interface MapClickHandlerProps {
-  onPositionSelect: (position: MapPosition) => void;
+  onPositionSelect: (position: MapCoordinates) => void;
 }
 
 const mapLayer: MapLayer = {
@@ -50,12 +51,37 @@ function MapResizer() {
 }
 
 export default function MapViewer() {
-  const [position, setPosition] = useState<MapPosition | null>(null);
+  const [position, setPosition] = useState<MapCoordinates | null>(null);
+  const [locationPins, setLocationPins] = useState<MapCoordinates[]>([]);
+  const { eventBridge } = useGameState();
+
+  // Listen for location events from eventBridge
+  useEffect(() => {
+    const unsubscribe = eventBridge.addEventListener("locationUpdate", (data: unknown) => {
+      // Expect data to be [lng, lat] array
+      if (Array.isArray(data) && data.length >= 2) {
+        const [lng, lat] = data;
+        const newPin: MapCoordinates = { lat: lat as number, lng: lng as number };
+        setLocationPins(prev => [...prev, newPin]);
+      }
+    });
+
+    return unsubscribe;
+  }, [eventBridge]);
 
   // Custom icon for selected position using Pepicons pinpoint
   const customIcon = L.divIcon({
     html: `${pinpoint}`,
     className: "custom-pinpoint-icon",
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+  });
+
+  // Custom icon for location pins (different color/style)
+  const locationPinIcon = L.divIcon({
+    html: `<div style="color: #ef4444;">${pinpoint}</div>`,
+    className: "custom-location-pin-icon",
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
@@ -71,6 +97,13 @@ export default function MapViewer() {
         <MapClickHandler onPositionSelect={setPosition} />
         <MapResizer />
         {position && <Marker position={position} icon={customIcon} />}
+        {locationPins.map((pin, index) => (
+          <Marker 
+            key={index} 
+            position={pin} 
+            icon={locationPinIcon}
+          />
+        ))}
       </MapContainer>
       {position && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-[1000] pointer-events-auto">

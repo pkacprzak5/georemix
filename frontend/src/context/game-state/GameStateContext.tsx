@@ -20,8 +20,8 @@ interface GameStateProviderProps {
 
 export function GameStateProvider({ children }: GameStateProviderProps) {
   const eventBridge = useMemo(() => new EventBridge(), []);
-  const gameStateManager = useMemo(() => new GameStateManager(eventBridge), []);
-  const { navigateToNewGroup } = useNavigation();
+  const gameStateManager = useMemo(() => new GameStateManager(), []);
+  const { showMenu, hideMenu, navigateToNewGroup } = useNavigation();
 
   function startGameplay() {
     eventBridge.emit("gameplayStarted", { timestamp: Date.now() });

@@ -1,96 +1,98 @@
-import { useState, useRef, useEffect, type CSSProperties } from "react";
-import { Viewer, type ViewerOptions } from "mapillary-js";
-import { cn } from "@/lib/utils";
+import { useRef } from "react";
+import { ReactPhotoSphereViewer } from "react-photo-sphere-viewer";
+import { VirtualTourPlugin } from "@photo-sphere-viewer/virtual-tour-plugin";
+import { Viewer } from "@photo-sphere-viewer/core";
+import { useEventBridge, useGameStateManager } from "@/context/game-state";
+import { BASE_URL, IMAGES_ENDPOINT } from "@/constants";
+import type { MapCoordinates } from "@/types/project";
+import "@photo-sphere-viewer/virtual-tour-plugin/index.css";
+import "@photo-sphere-viewer/core/index.css";
 
-const MAPILLARY_KEY = import.meta.env.VITE_MAPILLARY_ACCESS_TOKEN;
-
-interface PanoramaViewerProps {
-  imageId: string;
-  className?: string;
+interface Node {
+  id: string;
+  name: string;
+  panorama: string;
 }
 
-export function PanoramaViewer({ imageId, className }: PanoramaViewerProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const viewerRef = useRef<Viewer | null>(null);
-  const [error, setError] = useState<string | null>(null);
+const PanoramaViewer = () => {
+  const pSRef = useRef<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const eventBridge = useEventBridge();
+  const gameState = useGameStateManager();
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) {
+  // Get node function that fetches from server
+  const getNode = async (nodeId: string): Promise<Node | null> => {
+    const roundNumber = gameState.currentRoundNumber;
+    const levelNumber = gameState.currentLevelInfo.number;
+    const endpoint = BASE_URL + `/round${roundNumber}/level${levelNumber}/nodes`;
+
+    try {
+      const response = await fetch(`${endpoint}/${nodeId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const nodeData = await response.json();
+      return nodeData;
+    } catch (error) {
+      console.error("Error fetching node:", error);
+      return null;
+    }
+  };
+
+  const handleReady = (instance: Viewer) => {
+    const virtualTour = instance.getPlugin(VirtualTourPlugin) as VirtualTourPlugin;
+    console.log("Virtual Tour Plugin:", virtualTour);
+
+    if (!virtualTour) {
       return;
     }
 
-    const accessToken = MAPILLARY_KEY || "YOUR_MAPILLARY_ACCESS_TOKEN";
-
-    const options: ViewerOptions = {
-      accessToken: accessToken, // Required by Mapillary.js itself and by MockDataProvider's internal API client
-      container: container,
-      imageId: imageId,
-      // combinedPanning: false,
-      component: {
-        cover: false, // Prevents the initial cover UI to show the image directly
-      },
-    };
-
-    try {
-      viewerRef.current = new Viewer(options);
-      setError(null); // Clear any previous errors
-    } catch (err) {
-      console.error("Failed to initialize Mapillary viewer:", err);
-      setError(
-        `Failed to initialize Mapillary viewer: ${err instanceof Error ? err.message : "Unknown error"}`
-      );
-    }
-
-    // Clean up the viewer instance when the component unmounts
-    return () => {
-      if (viewerRef.current) {
-        try {
-          viewerRef.current.remove(); // Removes the viewer and its DOM elements
-        } catch (err) {
-          console.warn("Error removing viewer:", err);
-        }
-        viewerRef.current = null;
-      }
-    };
-  }, [imageId]); // Re-initialize if imageId or mock provider usage changes
-
-  // Apply the width and height to the container div
-  const containerStyle: CSSProperties = {
-    position: "relative", // Necessary for Mapillary.js internal positioning
-    marginBottom: "20px",
+    // Listen for node changes
+    virtualTour.addEventListener("node-changed", (e: any) => {
+      // eslint-disable-line @typescript-eslint/no-explicit-any
+      console.log("Node changed to:", e);
+      const location: MapCoordinates = {
+        lat: e.node.gps[1],
+        lng: e.node.gps[0],
+      };
+      eventBridge.emit("locationUpdate", location);
+    });
   };
 
+  const plugins = [
+    [
+      VirtualTourPlugin,
+      {
+        dataMode: "server",
+        positionMode: "gps",
+        renderMode: "3d",
+        getNode: getNode,
+        startNodeId: gameState.currentLevelInfo.initialNode, // Start with the first node
+        preload: true,
+        transitionOptions: {
+          showLoader: false,
+          speed: "20rpm",
+          effect: "fade",
+          rotation: false,
+        },
+      },
+    ],
+  ] as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
   return (
-    <div
-      ref={containerRef}
-      style={containerStyle}
-      className={cn("mapillary-viewer-container", className)}>
-      {error ? (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100%",
-            backgroundColor: "#f5f5f5",
-            border: "2px dashed #ccc",
-            borderRadius: "8px",
-            color: "#666",
-            textAlign: "center",
-            padding: "20px",
-          }}>
-          <div>
-            <h3>Mapillary Viewer Error</h3>
-            <p>{error}</p>
-            <p style={{ fontSize: "0.9em", marginTop: "10px" }}>
-              Try using a different image ID or check your access token.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div />
-      )}
+    <div id={"container-360"} style={{ width: "100%", height: "100%" }}>
+      <ReactPhotoSphereViewer
+        ref={pSRef}
+        height={"100%"}
+        width={"100%"}
+        hideNavbarButton={true}
+        navbar={false}
+        onReady={handleReady}
+        plugins={plugins}
+        container={"container-360"}
+        src={`${IMAGES_ENDPOINT}/${gameState.currentLevelInfo.initialNode}.jpg`} // Default image, will be replaced by server-mode loading
+      />
     </div>
   );
-}
+};
+
+export default PanoramaViewer;
