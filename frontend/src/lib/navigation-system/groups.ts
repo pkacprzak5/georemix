@@ -1,12 +1,11 @@
 import type { Group } from "./types";
 import { GroupName } from "./types";
-import { HomePage } from "../../components/pages/HomePage";
-import { SettingsPage } from "../../components/pages/SettingsPage";
-import { GamePage } from "../../components/pages/GamePage";
-import { TitlePage } from "../../components/pages/TitlePage";
-import { PlayerSelect } from "../../components/pages/PlayerSelect";
-import { RoundSelect } from "../../components/pages/RoundSelect";
-
+import { HomePage } from "../../pages/HomePage";
+import { SettingsPage } from "../../pages/SettingsPage";
+import { GamePage } from "../../pages/GamePage";
+import { TitlePage } from "../../pages/TitlePage";
+import { PlayerSelect } from "../../pages/PlayerSelect";
+import { RoundSelect } from "../../pages/RoundSelect";
 
 export const mainGroup: Group = {
   id: GroupName.MAIN_MENU,
@@ -20,9 +19,7 @@ export const mainGroup: Group = {
 
 export const titleGroup: Group = {
   id: GroupName.TITLE,
-  pages: [
-    { id: "title", component: TitlePage, title: "NVIDIA Geo-Guessing" },
-  ],
+  pages: [{ id: "title", component: TitlePage, title: "NVIDIA Geo-Guessing" }],
   initialPage: "title",
 };
 

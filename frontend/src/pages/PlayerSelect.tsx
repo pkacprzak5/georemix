@@ -1,24 +1,24 @@
-import { useState } from 'react';
-import { useNavigation } from '@/lib/navigation-system/NavigationProvider';
-import { useGameStateManager } from '@/context/GameStateContext';
-import { GroupName } from '@/lib/navigation-system/types';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { useNavigation } from "@/lib/navigation-system/NavigationProvider";
+import { useGameStateManager } from "@/context/game-state";
+import { GroupName } from "@/lib/navigation-system/types";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export function PlayerSelect() {
   const { navigateTo } = useNavigation();
   const gameStateManager = useGameStateManager();
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState("");
 
   const handleSubmit = () => {
     if (playerName.trim()) {
       gameStateManager.playerName = playerName.trim();
-      navigateTo(GroupName.INIT_GROUP, 'round-select');
+      navigateTo(GroupName.INIT_GROUP, "round-select");
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSubmit();
     }
   };
@@ -42,11 +42,7 @@ export function PlayerSelect() {
             autoFocus
           />
 
-          <Button
-            onClick={handleSubmit}
-            disabled={!playerName.trim()}
-            className="w-full"
-          >
+          <Button onClick={handleSubmit} disabled={!playerName.trim()} className="w-full">
             Continue
           </Button>
         </div>
