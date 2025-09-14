@@ -96,7 +96,7 @@ export class GameStateManager {
     this._currentDistance = distance;
   }
 
-  async loadRound(roundNumber: number | null = this._currentRoundNumber) {
+  async loadRound(roundNumber: number | null) {
     if (!roundNumber) {
       throw new Error("No current round set");
     }
@@ -110,6 +110,7 @@ export class GameStateManager {
       })
       .then(data => {
         this._currentLevelNumber = 0;
+        this._currentRoundNumber = roundNumber;
         const metadataArray = data;
         this._levels = metadataArray.map((level: LevelInfo, i: number) => ({
           initialNode: level.initialNode,
