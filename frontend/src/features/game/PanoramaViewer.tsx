@@ -89,6 +89,7 @@ const PanoramaViewer = () => {
         onReady={handleReady}
         plugins={plugins}
         container={"container-360"}
+        requestHeaders={{ "Cache-Control": "no-store" }}
         src={`${IMAGES_ENDPOINT}/${gameState.currentLevelInfo.initialNode}.jpg`} // Default image, will be replaced by server-mode loading
       />
     </div>

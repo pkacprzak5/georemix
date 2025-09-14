@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 
-const INTRO_DURATION = 3000;
+const INTRO_DURATION = 100;
 
 export function TitlePage() {
   const { navigateTo } = useNavigation();
