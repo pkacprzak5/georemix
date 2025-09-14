@@ -3,7 +3,7 @@ import { Window, WindowContent } from "@/components/ui/window";
 import MapViewer from "./MapViewer";
 import "leaflet/dist/leaflet.css";
 
-export function MapWindow() {
+export function MinimapWindow() {
   // Window size constants for calculations
   const WINDOW_WIDTH_MINIMIZED = 300;
   const WINDOW_HEIGHT_MINIMIZED = 200;
@@ -87,14 +87,16 @@ export function MapWindow() {
   //   // Animation logic for expanding from center would go here
   // };
 
-  const windowClass = `${isResizing ? "transition-[width,height,left,top] duration-400 sharp-ease" : ""} ${isClosing ? "transition-transform duration-300 sharp-ease" : ""}`
+  const windowClass = `${isResizing ? "transition-[width,height,left,top] duration-400 sharp-ease" : ""} ${isClosing ? "transition-transform duration-300 sharp-ease" : ""}`;
 
   const style = {
     width: isMaximized ? window.innerWidth * WINDOW_WIDTH_MAXIMIZED_RATIO : WINDOW_WIDTH_MINIMIZED,
-    height: isMaximized ? window.innerHeight * WINDOW_HEIGHT_MAXIMIZED_RATIO : WINDOW_HEIGHT_MINIMIZED,
+    height: isMaximized
+      ? window.innerHeight * WINDOW_HEIGHT_MAXIMIZED_RATIO
+      : WINDOW_HEIGHT_MINIMIZED,
     transform: isClosing ? "scale(0)" : "scale(1)",
     transformOrigin: "center",
-  }
+  };
 
   return (
     isVisible && (
@@ -109,7 +111,7 @@ export function MapWindow() {
         onClose={handleClose}>
         <WindowContent className="w-full h-full relative">
           <div className="absolute top-2 left-2  bg-white p-2 rounded shadow z-[1000]"></div>
-          <MapViewer/>
+          <MapViewer />
         </WindowContent>
       </Window>
     )

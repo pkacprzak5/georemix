@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Window, WindowContent } from "@/components/ui/window";
-import MapillaryViewer from "@/components/MapillaryViewer";
+import { PanoramaViewer } from "@/features/game/PanoramaViewer";
 import { NavigationSheet } from "@/lib/navigation-system/NavigationSheet";
 import { useNavigation } from "@/lib/navigation-system/NavigationProvider";
 import { Button } from "@/components/ui/button";
@@ -21,13 +21,10 @@ export function MainWindow() {
       className="h-[95vh] w-[95vw] overflow-hidden">
       <WindowContent className="w-full h-full relative">
         <div className="w-full h-full relative">
-          <MapillaryViewer imageId={TEST_IMAGE_ID} width="100%" height="100%" />
+          <PanoramaViewer imageId={TEST_IMAGE_ID} width="100%" height="100%" />
           <NavigationSheet />
           {!state.isMenuOpen && (
-            <Button
-              onClick={showMenu}
-              className="absolute bottom-4 right-4 z-50"
-            >
+            <Button onClick={showMenu} className="absolute bottom-4 right-4 z-50">
               Show Menu
             </Button>
           )}

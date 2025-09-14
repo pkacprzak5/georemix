@@ -49,11 +49,10 @@ function MapResizer() {
   return null;
 }
 
-
 export default function MapViewer() {
   const [position, setPosition] = useState<MapPosition | null>(null);
-  
-    // Custom icon for selected position using Pepicons pinpoint
+
+  // Custom icon for selected position using Pepicons pinpoint
   const customIcon = L.divIcon({
     html: `${pinpoint}`,
     className: "custom-pinpoint-icon",
@@ -67,8 +66,7 @@ export default function MapViewer() {
       <MapContainer
         center={[51.505, -0.09]}
         zoom={13}
-        style={{ height: "100%", width: "100%", cursor: "default" }}
-        >
+        style={{ height: "100%", width: "100%", cursor: "default" }}>
         <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
         <MapClickHandler onPositionSelect={setPosition} />
         <MapResizer />

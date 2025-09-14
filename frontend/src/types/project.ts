@@ -3,11 +3,7 @@ export interface MapPosition {
   lng: number;
 }
 
-export type GameEvent =
-  | 'gameplayStarted'
-  | 'gameplayEnded'
-  | 'loadingFinished';
-
+export type GameEvent = "gameplayStarted" | "gameplayEnded" | "loadingFinished";
 
 export type LevelPhoto = {
   lat: number;
@@ -26,7 +22,7 @@ export type LevelResult = {
   levelId: string;
   score: number;
   timeTaken: number;
-}
+};
 
 export type RoundInfo = LevelInfo[];
 
