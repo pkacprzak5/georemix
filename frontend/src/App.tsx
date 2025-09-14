@@ -1,16 +1,16 @@
-import { useState } from "react";
-import "./App.css";
+import { MainWindow } from "./components/MainWindow";
+import { MapWindow } from "./components/OpenStreetMapWindow";
+import { GameStateProvider } from "./context/GameStateContext";
+import { NavigationProvider } from "./lib/navigation-system/NavigationProvider";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <h1>Map App Test</h1>
-      <div className="card">
-        <button onClick={() => setCount((prevCount) => prevCount + 1)}>count is {count}</button>
-      </div>
-    </>
+    <NavigationProvider>
+      <GameStateProvider>
+        <MainWindow />
+        <MapWindow />
+      </GameStateProvider>
+    </NavigationProvider>
   );
 }
 
