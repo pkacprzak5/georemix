@@ -3,7 +3,7 @@ import { ReactPhotoSphereViewer } from "react-photo-sphere-viewer";
 import { VirtualTourPlugin } from "@photo-sphere-viewer/virtual-tour-plugin";
 import { Viewer } from "@photo-sphere-viewer/core";
 import { useEventBridge, useGameStateManager } from "@/context/game-state";
-import { BASE_URL, IMAGES_ENDPOINT } from "@/constants";
+import { BASE_URL } from "@/constants";
 import type { MapCoordinates } from "@/types/project";
 import "@photo-sphere-viewer/virtual-tour-plugin/index.css";
 import "@photo-sphere-viewer/core/index.css";
@@ -17,12 +17,12 @@ interface Node {
 const PanoramaViewer = () => {
   const pSRef = useRef<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
   const eventBridge = useEventBridge();
-  const gameState = useGameStateManager();
+  const gameStateManager = useGameStateManager();
 
   // Get node function that fetches from server
   const getNode = async (nodeId: string): Promise<Node | null> => {
-    const roundNumber = gameState.currentRoundNumber;
-    const levelNumber = gameState.currentLevelInfo.number;
+    const roundNumber = gameStateManager.currentRoundNumber;
+    const levelNumber = gameStateManager.currentLevelInfo.number;
     const endpoint = BASE_URL + `/round${roundNumber}/level${levelNumber}/nodes`;
 
     try {
@@ -49,13 +49,14 @@ const PanoramaViewer = () => {
     // Listen for node changes
     virtualTour.addEventListener("node-changed", (e: any) => {
       // eslint-disable-line @typescript-eslint/no-explicit-any
-      console.log("Node changed to:", e);
       const location: MapCoordinates = {
         lat: e.node.gps[1],
         lng: e.node.gps[0],
       };
-      eventBridge.emit("locationUpdate", location);
+      gameStateManager.setCoordinates(location);
     });
+
+    eventBridge.emit("viewerLoaded", {});
   };
 
   const plugins = [
@@ -66,7 +67,7 @@ const PanoramaViewer = () => {
         positionMode: "gps",
         renderMode: "3d",
         getNode: getNode,
-        startNodeId: gameState.currentLevelInfo.initialNode, // Start with the first node
+        startNodeId: gameStateManager.currentLevelInfo.initialNode, // Start with the first node
         preload: true,
         transitionOptions: {
           showLoader: false,
@@ -80,6 +81,7 @@ const PanoramaViewer = () => {
 
   return (
     <div id={"container-360"} style={{ width: "100%", height: "100%" }}>
+      {/* @ts-ignore */}
       <ReactPhotoSphereViewer
         ref={pSRef}
         height={"100%"}
@@ -90,7 +92,7 @@ const PanoramaViewer = () => {
         plugins={plugins}
         container={"container-360"}
         requestHeaders={{ "Cache-Control": "no-store" }}
-        src={`${IMAGES_ENDPOINT}/${gameState.currentLevelInfo.initialNode}.jpg`} // Default image, will be replaced by server-mode loading
+        // src={`${IMAGES_ENDPOINT}/${gameState.currentLevelInfo.initialNode}.jpg`} // Default image, will be replaced by server-mode loading
       />
     </div>
   );

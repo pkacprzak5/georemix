@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-lea
 import { pinpoint } from "pepicons/print";
 import { Button } from "@/components/ui/button";
 import { type MapCoordinates } from "@/types/project";
-import { useGameState } from "@/context/game-state";
+import { useEventBridge, useGameStateManager } from "@/context/game-state";
 
 interface MapLayer {
   url: string;
@@ -52,36 +52,21 @@ function MapResizer() {
 
 export default function MapViewer() {
   const [position, setPosition] = useState<MapCoordinates | null>(null);
-  const [locationPins, setLocationPins] = useState<MapCoordinates[]>([]);
-  const { eventBridge } = useGameState();
+  const gameStateManager = useGameStateManager();
+  const eventBridge = useEventBridge();
 
-  // Listen for location events from eventBridge
-  useEffect(() => {
-    const unsubscribe = eventBridge.addEventListener("locationUpdate", (data: unknown) => {
-      // Expect data to be [lng, lat] array
-      if (Array.isArray(data) && data.length >= 2) {
-        const [lng, lat] = data;
-        const newPin: MapCoordinates = { lat: lat as number, lng: lng as number };
-        setLocationPins(prev => [...prev, newPin]);
-      }
-    });
-
-    return unsubscribe;
-  }, [eventBridge]);
+  const handleSubmit = () => {
+    if (!position) {
+      return;
+    }
+    gameStateManager.calculateResult(position);
+    eventBridge.emit("resultSubmitted", {});
+  };
 
   // Custom icon for selected position using Pepicons pinpoint
   const customIcon = L.divIcon({
     html: `${pinpoint}`,
     className: "custom-pinpoint-icon",
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32],
-  });
-
-  // Custom icon for location pins (different color/style)
-  const locationPinIcon = L.divIcon({
-    html: `<div style="color: #ef4444;">${pinpoint}</div>`,
-    className: "custom-location-pin-icon",
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
@@ -97,17 +82,12 @@ export default function MapViewer() {
         <MapClickHandler onPositionSelect={setPosition} />
         <MapResizer />
         {position && <Marker position={position} icon={customIcon} />}
-        {locationPins.map((pin, index) => (
-          <Marker 
-            key={index} 
-            position={pin} 
-            icon={locationPinIcon}
-          />
-        ))}
       </MapContainer>
       {position && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-[1000] pointer-events-auto">
-          <Button className="relative z-[1000]">Submit</Button>
+          <Button onClick={handleSubmit} className="relative z-[1000]">
+            Submit
+          </Button>
         </div>
       )}
     </>
