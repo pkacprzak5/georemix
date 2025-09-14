@@ -1,6 +1,7 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { TextParticle, type TextParticleProps } from "../ui/text-particle";
+import { useDrag } from "@/hooks/use-drag";
 
 const TEXT_PARTICLE_THROTTLE = 400;
 const TEXT_PARTICLE_REMOVE_DELAY = 800;
@@ -32,100 +33,23 @@ function WindowLayout({
   style,
   ...props
 }: WindowLayoutProps) {
-  const [internalPosition, setInternalPosition] = useState({
-    x: initialPosition?.x || 0,
-    y: initialPosition?.y || 0,
-  });
-
   const windowRef = useRef<HTMLDivElement>(null);
+  const draggableHeaderRef = useRef<HTMLDivElement>(null);
 
-  // TODO:  Dragging feels like functionality that could be extracted to useDrag() hook or sth.
-
-  // Use external position if provided, otherwise use internal position
-  const position = externalPosition !== undefined ? externalPosition : internalPosition;
-  const setPosition = externalSetPosition || setInternalPosition;
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-
-  // track last creation time to throttle spammy clicks
   const [textParticleProps, setTextParticleProps] = useState<TextParticleProps[]>([]);
   const lastClickCreatedAt = useRef<number>(0);
 
-  // Helper function to clamp position within viewport bounds
-  const clampPositionToViewport = useCallback((x: number, y: number) => {
-    if (!windowRef.current) {
-      return { x, y };
-    }
-
-    const rect = windowRef.current.getBoundingClientRect();
-    const windowWidth = Number(style?.width) || rect.width;
-    const windowHeight = Number(style?.height) || rect.height;
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
-    // Ensure window stays within viewport bounds
-    const clampedX = Math.max(0, Math.min(x, viewportWidth - windowWidth));
-    const clampedY = Math.max(0, Math.min(y, viewportHeight - windowHeight));
-
-    return { x: clampedX, y: clampedY };
-  }, []);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (
-      e.target === e.currentTarget ||
-      (e.target as HTMLElement).closest('[data-slot="window-header"]')
-    ) {
-      setIsDragging(true);
-      setDragStart({
-        x: e.clientX - position.x,
-        y: e.clientY - position.y,
-      });
-    }
-  };
-
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (isDragging) {
-        const newX = e.clientX - dragStart.x;
-        const newY = e.clientY - dragStart.y;
-
-        // Clamp position to stay within viewport
-        const clampedPosition = clampPositionToViewport(newX, newY);
-
-        setPosition(clampedPosition);
-      }
-    },
-    [isDragging, dragStart, setPosition, clampPositionToViewport]
-  );
-
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-  }, []);
-
-  useEffect(() => {
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-      };
-    }
-  }, [isDragging, handleMouseMove, handleMouseUp]);
-
-  useEffect(() => {
-    const clampedPosition = clampPositionToViewport(position.x, position.y);
-
-    if (clampedPosition.x !== position.x || clampedPosition.y !== position.y) {
-      setPosition(clampedPosition);
-    }
-  }, [position.x, position.y, clampPositionToViewport, setPosition]);
+  const { position, isDragging } = useDrag({
+    initialPosition,
+    position: externalPosition,
+    setPosition: externalSetPosition,
+    ref: draggableHeaderRef,
+    style,
+  });
 
   const createClickAnimation = (e: React.MouseEvent) => {
     const now = Date.now();
 
-    // If last animation was created recently, skip this one
     if (now - lastClickCreatedAt.current < TEXT_PARTICLE_THROTTLE) {
       return;
     }
@@ -145,7 +69,6 @@ function WindowLayout({
       },
     ]);
 
-    // Remove animation after it completes
     setTimeout(() => {
       setTextParticleProps((prev) => prev.filter((animation) => animation.id !== id));
     }, TEXT_PARTICLE_REMOVE_DELAY);
@@ -154,9 +77,13 @@ function WindowLayout({
   const handleIconClick = (e: React.MouseEvent, action?: () => void) => {
     e.stopPropagation();
     e.preventDefault();
+
     createClickAnimation(e);
+
     if (action) {
-      setTimeout(() => action(), 150); // Small delay for visual feedback
+      // TODO:  I am not a fun of that. It might make our app
+      //        feel sluggish.
+      setTimeout(() => action(), 150);
     }
   };
 
@@ -176,10 +103,10 @@ function WindowLayout({
           top: position.y,
           zIndex: 40,
         }}
-        onMouseDown={handleMouseDown}
         {...props}>
         {/* Header Bar */}
         <div
+          ref={draggableHeaderRef}
           data-slot="window-header"
           className={cn(
             "flex items-center justify-between px-4 py-2 bg-main text-main-foreground border-b-2 border-border rounded-t-[3px] select-none",

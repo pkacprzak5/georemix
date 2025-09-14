@@ -1,4 +1,3 @@
-import { MinimapWindow } from "./features/minimap/MinimapWindow";
 import { GameStateProvider } from "./context/game-state/GameStateContext";
 import { NavigationProvider } from "./lib/navigation-system/navigation-provider";
 import { Window, WindowContent } from "@/components/layout/window";
@@ -21,7 +20,6 @@ function App() {
             </div>
           </WindowContent>
         </Window>
-        <MinimapWindow />
       </GameStateProvider>
     </NavigationProvider>
   );
