@@ -1,42 +1,15 @@
-
 import { useEffect, useState, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { TextParticle, type TextParticleProps } from "../ui/text-particle";
 
-interface ClickAnimationProps {
-  x: number;
-  y: number;
-  id: string;
-  angle: number;
+const TEXT_PARTICLE_THROTTLE = 400;
+const TEXT_PARTICLE_REMOVE_DELAY = 800;
+
+function randomAngle(minAngle: number, maxAngle: number) {
+  return Math.round((Math.random() * (maxAngle - minAngle) + minAngle) * 100) / 100;
 }
 
-function ClickAnimation({ x, y, id, angle }: ClickAnimationProps) {
-  return (
-    <div
-      key={id}
-      className="fixed pointer-events-none z-50 select-none"
-      style={{ left: x - 20, top: y - 10 } as React.CSSProperties}>
-      {
-        // set CSS var --angle so the keyframes can use it; cast to allow custom CSS var
-      }
-      {(() => {
-        const innerStyle = {
-          WebkitTextStroke: "0.5px var(--border)",
-          ["--angle"]: `${angle}deg`,
-        } as React.CSSProperties & { ["--angle"]?: string };
-
-        return (
-          <div
-            className="animate-[float-up_0.8s_ease-out_forwards] text-secondary-background font-heading text-3xl text-shadow-lg"
-            style={innerStyle}>
-            Click!
-          </div>
-        );
-      })()}
-    </div>
-  );
-}
-
-interface WindowProps extends React.ComponentProps<"div"> {
+type WindowLayoutProps = {
   title?: string;
   initialPosition?: { x: number; y: number };
   position?: { x: number; y: number };
@@ -44,9 +17,9 @@ interface WindowProps extends React.ComponentProps<"div"> {
   onClose?: () => void;
   onMinimize?: () => void;
   onMaximize?: () => void;
-}
+} & React.ComponentProps<"div">;
 
-function Window({
+function WindowLayout({
   className,
   initialPosition,
   position: externalPosition,
@@ -58,22 +31,25 @@ function Window({
   onMaximize,
   style,
   ...props
-}: WindowProps) {
+}: WindowLayoutProps) {
   const [internalPosition, setInternalPosition] = useState({
     x: initialPosition?.x || 0,
     y: initialPosition?.y || 0,
   });
-  
+
+  const windowRef = useRef<HTMLDivElement>(null);
+
+  // TODO:  Dragging feels like functionality that could be extracted to useDrag() hook or sth.
+
   // Use external position if provided, otherwise use internal position
   const position = externalPosition !== undefined ? externalPosition : internalPosition;
   const setPosition = externalSetPosition || setInternalPosition;
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [clickAnimations, setClickAnimations] = useState<ClickAnimationProps[]>([]);
-  // track last creation time to throttle spammy clicks
-  const lastClickCreatedAt = useRef<number>(0);
 
-  const windowRef = useRef<HTMLDivElement>(null);
+  // track last creation time to throttle spammy clicks
+  const [textParticleProps, setTextParticleProps] = useState<TextParticleProps[]>([]);
+  const lastClickCreatedAt = useRef<number>(0);
 
   // Helper function to clamp position within viewport bounds
   const clampPositionToViewport = useCallback((x: number, y: number) => {
@@ -112,10 +88,10 @@ function Window({
       if (isDragging) {
         const newX = e.clientX - dragStart.x;
         const newY = e.clientY - dragStart.y;
-        
+
         // Clamp position to stay within viewport
         const clampedPosition = clampPositionToViewport(newX, newY);
-        
+
         setPosition(clampedPosition);
       }
     },
@@ -130,6 +106,7 @@ function Window({
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
+
       return () => {
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
@@ -137,60 +114,41 @@ function Window({
     }
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
-  // Ensure window stays within viewport bounds when position changes externally
   useEffect(() => {
     const clampedPosition = clampPositionToViewport(position.x, position.y);
+
     if (clampedPosition.x !== position.x || clampedPosition.y !== position.y) {
       setPosition(clampedPosition);
     }
   }, [position.x, position.y, clampPositionToViewport, setPosition]);
 
-  // Monitor window size changes and adjust position if needed
-  // commented out for now, maybe wont be needed
-  
-  // useEffect(() => {
-  //   if (!windowRef.current) {
-  //     return;
-  //   }
-
-  //   const resizeObserver = new ResizeObserver(() => {
-  //     const clampedPosition = clampPositionToViewport(position.x, position.y);
-  //     if (clampedPosition.x !== position.x || clampedPosition.y !== position.y) {
-  //       setPosition(clampedPosition);
-  //     }
-  //   });
-
-  //   resizeObserver.observe(windowRef.current);
-  //   return () => resizeObserver.disconnect();
-  // }, [position.x, position.y, clampPositionToViewport, setPosition]);
-
   const createClickAnimation = (e: React.MouseEvent) => {
     const now = Date.now();
-    const THROTTLE_MS = 400;
 
     // If last animation was created recently, skip this one
-    if (now - lastClickCreatedAt.current < THROTTLE_MS) {
+    if (now - lastClickCreatedAt.current < TEXT_PARTICLE_THROTTLE) {
       return;
     }
 
     lastClickCreatedAt.current = now;
+    const id = now.toString();
+    const angle = randomAngle(-30, 30);
 
-    // random rotation between -30 and 30 degrees
-    const angle = Math.round((Math.random() * 60 - 30) * 100) / 100;
-
-    const newAnimation: ClickAnimationProps = {
-      x: e.clientX,
-      y: e.clientY,
-      id: now.toString(),
-      angle,
-    };
-
-    setClickAnimations((prev) => [...prev, newAnimation]);
+    setTextParticleProps((prev) => [
+      ...prev,
+      {
+        x: e.clientX,
+        y: e.clientY,
+        angle,
+        id,
+        text: "Click!",
+      },
+    ]);
 
     // Remove animation after it completes
     setTimeout(() => {
-      setClickAnimations((prev) => prev.filter((anim) => anim.id !== newAnimation.id));
-    }, 800);
+      setTextParticleProps((prev) => prev.filter((animation) => animation.id !== id));
+    }, TEXT_PARTICLE_REMOVE_DELAY);
   };
 
   const handleIconClick = (e: React.MouseEvent, action?: () => void) => {
@@ -216,7 +174,7 @@ function Window({
           ...style,
           left: position.x,
           top: position.y,
-          zIndex: 40, 
+          zIndex: 40,
         }}
         onMouseDown={handleMouseDown}
         {...props}>
@@ -262,8 +220,8 @@ function Window({
       </div>
 
       {/* Click Animations */}
-      {clickAnimations.map((anim) => (
-        <ClickAnimation key={anim.id} {...anim} />
+      {textParticleProps.map((anim) => (
+        <TextParticle key={anim.id} {...anim} />
       ))}
     </>
   );
@@ -314,11 +272,7 @@ function WindowContent({ className, ...props }: React.ComponentProps<"div">) {
 
 function WindowBody({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      data-slot="window-body"
-      className={cn("flex-1 p-6 overflow-auto", className)}
-      {...props}
-    />
+    <div data-slot="window-body" className={cn("flex-1 p-6 overflow-auto", className)} {...props} />
   );
 }
 
@@ -333,7 +287,7 @@ function WindowFooter({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 export {
-  Window,
+  WindowLayout as Window,
   WindowHeader,
   WindowTitle,
   WindowDescription,

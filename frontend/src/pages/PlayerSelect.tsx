@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { useNavigation } from "@/lib/navigation-system/NavigationProvider";
 import { useGameStateManager } from "@/context/game-state";
-import { GroupName } from "@/lib/navigation-system/types";
+import { groupNameMap } from "@/lib/navigation-system/types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export function PlayerSelect() {
-  const { navigateTo } = useNavigation();
   const gameStateManager = useGameStateManager();
+  const { navigateTo } = useNavigation();
   const [playerName, setPlayerName] = useState("");
 
   const handleSubmit = () => {
     if (playerName.trim()) {
       gameStateManager.playerName = playerName.trim();
-      navigateTo(GroupName.INIT_GROUP, "round-select");
+      navigateTo(groupNameMap.INIT_GROUP, "round-select");
     }
   };
 
@@ -37,7 +37,7 @@ export function PlayerSelect() {
             placeholder="Your name"
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
             className="w-full"
             autoFocus
           />

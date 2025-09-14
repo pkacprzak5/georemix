@@ -1,5 +1,5 @@
 import type { Group } from "./types";
-import { GroupName } from "./types";
+import { groupNameMap } from "./types";
 import { HomePage } from "../../pages/HomePage";
 import { SettingsPage } from "../../pages/SettingsPage";
 import { GamePage } from "../../pages/GamePage";
@@ -8,7 +8,7 @@ import { PlayerSelect } from "../../pages/PlayerSelect";
 import { RoundSelect } from "../../pages/RoundSelect";
 
 export const mainGroup: Group = {
-  id: GroupName.MAIN_MENU,
+  id: groupNameMap.MAIN_MENU,
   pages: [
     { id: "home", component: HomePage, title: "Home" },
     { id: "settings", component: SettingsPage, title: "Settings" },
@@ -18,13 +18,13 @@ export const mainGroup: Group = {
 };
 
 export const titleGroup: Group = {
-  id: GroupName.TITLE,
+  id: groupNameMap.TITLE,
   pages: [{ id: "title", component: TitlePage, title: "NVIDIA Geo-Guessing" }],
   initialPage: "title",
 };
 
 export const initGroup: Group = {
-  id: GroupName.INIT_GROUP,
+  id: groupNameMap.INIT_GROUP,
   pages: [
     { id: "player-select", component: PlayerSelect, title: "Player Select" },
     { id: "round-select", component: RoundSelect, title: "Round Select" },
@@ -33,7 +33,7 @@ export const initGroup: Group = {
 };
 
 export const levelStartGroup: Group = {
-  id: GroupName.LEVEL_START,
+  id: groupNameMap.LEVEL_START,
   pages: [
     // Define level start pages here
   ],
@@ -41,7 +41,7 @@ export const levelStartGroup: Group = {
 };
 
 export const levelEndGroup: Group = {
-  id: GroupName.LEVEL_END,
+  id: groupNameMap.LEVEL_END,
   pages: [
     // Define level end pages here
   ],
@@ -49,7 +49,7 @@ export const levelEndGroup: Group = {
 };
 
 export const gameEndGroup: Group = {
-  id: GroupName.GAME_END,
+  id: groupNameMap.GAME_END,
   pages: [
     // Define game end pages here
   ],

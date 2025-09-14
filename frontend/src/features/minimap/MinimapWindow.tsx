@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { Window, WindowContent } from "@/components/ui/window";
+import { Window, WindowContent } from "@/components/layout/window";
 import MapViewer from "./MapViewer";
 import "leaflet/dist/leaflet.css";
 
-export function MinimapWindow() {
-  // Window size constants for calculations
-  const WINDOW_WIDTH_MINIMIZED = 300;
-  const WINDOW_HEIGHT_MINIMIZED = 200;
-  const WINDOW_WIDTH_MAXIMIZED_RATIO = 0.5; // 50% of viewport
-  const WINDOW_HEIGHT_MAXIMIZED_RATIO = 0.5; // 50% of viewport
+// Window size constants for calculations
+const WINDOW_WIDTH_MINIMIZED = 300;
+const WINDOW_HEIGHT_MINIMIZED = 200;
+const WINDOW_WIDTH_MAXIMIZED_RATIO = 0.5; // 50% of viewport
+const WINDOW_HEIGHT_MAXIMIZED_RATIO = 0.5; // 50% of viewport
 
+export function MinimapWindow() {
   const [isMaximized, setIsMaximized] = useState(false);
   const [position, setPosition] = useState({
     x: window.innerWidth * 0.98 - WINDOW_WIDTH_MINIMIZED,
@@ -79,13 +79,6 @@ export function MinimapWindow() {
       setIsVisible(false);
     }, 300);
   };
-
-  // const handleExpand = () => {
-  //   // This function expands from center (currently unused)
-  //   setIsClosing(false);
-  //   setIsVisible(true);
-  //   // Animation logic for expanding from center would go here
-  // };
 
   const windowClass = `${isResizing ? "transition-[width,height,left,top] duration-400 sharp-ease" : ""} ${isClosing ? "transition-transform duration-300 sharp-ease" : ""}`;
 

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useMemo } from "react";
 import { EventBridge } from "@/context/game-state/EventBridge";
 import { GameStateManager } from "@/context/game-state/GameStateManager";
 import { useNavigation } from "@/lib/navigation-system/NavigationProvider";
-import { GroupName } from "@/lib/navigation-system/types";
+import { groupNameMap } from "@/lib/navigation-system/types";
 
 interface GameStateContextType {
   eventBridge: EventBridge;
@@ -57,7 +57,6 @@ export function useGameState(): GameStateContextType {
   return context;
 }
 
-// Convenience hooks for specific functionality
 export function useEventBridge(): EventBridge {
   const { eventBridge } = useGameState();
   return eventBridge;

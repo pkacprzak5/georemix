@@ -21,11 +21,11 @@ export interface NavigationState {
 }
 
 export type NavigationAction =
-  | { type: 'SHOW_MENU' }
-  | { type: 'HIDE_MENU' }
-  | { type: 'NAVIGATE'; groupId: GroupId; pageId: PageId }
-  | { type: 'SET_LOADING'; loading: boolean }
-  | { type: 'NAVIGATE_WITH_LOADING'; groupId: GroupId; pageId: PageId; promise: Promise<unknown> };
+  | { type: "SHOW_MENU" }
+  | { type: "HIDE_MENU" }
+  | { type: "NAVIGATE"; groupId: GroupId; pageId: PageId }
+  | { type: "SET_LOADING"; loading: boolean }
+  | { type: "NAVIGATE_WITH_LOADING"; groupId: GroupId; pageId: PageId; promise: Promise<unknown> };
 
 export interface NavigationContextType {
   state: NavigationState;
@@ -37,11 +37,13 @@ export interface NavigationContextType {
   groups: Map<GroupId, Group>;
 }
 
-export enum GroupName {
-  TITLE = "title",
-  INIT_GROUP = "init_group",
-  MAIN_MENU = "main_menu",
-  LEVEL_START = "level_start",
-  LEVEL_END = "level_end",
-  GAME_END = "game_end",
-}
+export const groupNameMap = {
+  TITLE: "TITLE",
+  INIT_GROUP: "INIT_GROUP",
+  MAIN_MENU: "MAIN_MENU",
+  LEVEL_START: "LEVEL_START",
+  LEVEL_END: "LEVEL_END",
+  GAME_END: "GAME_END",
+} as const;
+
+export type GroupName = (typeof groupNameMap)[keyof typeof groupNameMap];

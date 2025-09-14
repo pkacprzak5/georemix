@@ -1,6 +1,6 @@
 import { useNavigation } from "@/lib/navigation-system/NavigationProvider";
 import { useGameStateManager } from "@/context/game-state";
-import { GroupName } from "@/lib/navigation-system/types";
+import { groupNameMap } from "@/lib/navigation-system/types";
 import { Button } from "@/components/ui/button";
 
 export function RoundSelect() {
@@ -9,7 +9,7 @@ export function RoundSelect() {
 
   const handleRoundSelect = (roundIndex: number) => {
     gameStateManager.selectedRound = roundIndex;
-    navigateTo(GroupName.MAIN_MENU, "home");
+    navigateTo(groupNameMap.MAIN_MENU, "home");
   };
 
   return (
