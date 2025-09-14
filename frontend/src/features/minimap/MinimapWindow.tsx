@@ -1,15 +1,16 @@
-import { useState } from "react";
-import { Window, WindowContent } from "@/components/ui/window";
+import { useEffect, useState } from "react";
+import { Window, WindowContent } from "@/components/layout/window";
 import MapViewer from "./MapViewer";
 import "leaflet/dist/leaflet.css";
+import { useEventBridge } from "@/context/game-state";
+
+// Window size constants for calculations
+const WINDOW_WIDTH_MINIMIZED = 300;
+const WINDOW_HEIGHT_MINIMIZED = 200;
+const WINDOW_WIDTH_MAXIMIZED_RATIO = 0.5; // 50% of viewport
+const WINDOW_HEIGHT_MAXIMIZED_RATIO = 0.5; // 50% of viewport
 
 export function MinimapWindow() {
-  // Window size constants for calculations
-  const WINDOW_WIDTH_MINIMIZED = 300;
-  const WINDOW_HEIGHT_MINIMIZED = 200;
-  const WINDOW_WIDTH_MAXIMIZED_RATIO = 0.5; // 50% of viewport
-  const WINDOW_HEIGHT_MAXIMIZED_RATIO = 0.5; // 50% of viewport
-
   const [isMaximized, setIsMaximized] = useState(false);
   const [position, setPosition] = useState({
     x: window.innerWidth * 0.98 - WINDOW_WIDTH_MINIMIZED,
@@ -17,7 +18,10 @@ export function MinimapWindow() {
   });
   const [isResizing, setIsResizing] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [isOpening, setIsOpening] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isOpened, setIsOpened] = useState(false);
+  const eventBridge = useEventBridge();
 
   const handleMaximize = () => {
     if (isMaximized) {
@@ -70,31 +74,51 @@ export function MinimapWindow() {
   };
 
   const handleClose = () => {
+    setIsOpening(false);
     setIsClosing(true);
+    setIsOpened(false);
     // Don't change position - just scale to 0 from current position
     // The transformOrigin: 'center' will make it shrink from its center point
 
     // Unmount after animation completes (faster timing)
     setTimeout(() => {
       setIsVisible(false);
+      setIsClosing(false);
     }, 300);
   };
 
-  // const handleExpand = () => {
-  //   // This function expands from center (currently unused)
-  //   setIsClosing(false);
-  //   setIsVisible(true);
-  //   // Animation logic for expanding from center would go here
-  // };
+  const handleOpen = () => {
+    setIsClosing(false);
+    setIsOpening(true);
+    setIsOpened(true);
 
-  const windowClass = `${isResizing ? "transition-[width,height,left,top] duration-400 sharp-ease" : ""} ${isClosing ? "transition-transform duration-300 sharp-ease" : ""}`;
+    setTimeout(() => {
+      setIsOpening(false);
+    }, 300);
+  };
+
+  useEffect(() => {
+    const loadedSubscriptionCleanup = eventBridge.addEventListener("viewerLoaded", handleOpen);
+    const pausedCleanup = eventBridge.addEventListener("gamePaused", handleOpen);
+    const unloadedSubscriptionCleanup = eventBridge.addEventListener("resultSubmitted", handleClose);
+    const unpausedCleanup = eventBridge.addEventListener("gameUnpaused", handleClose);
+
+    return () => {
+      loadedSubscriptionCleanup();
+      unloadedSubscriptionCleanup();
+      pausedCleanup();
+      unpausedCleanup();
+    };
+  }, []);
+
+  const windowClass = `${isResizing ? "transition-[width,height,left,top,transform] duration-400 sharp-ease" : ""} ${isClosing || isOpening ? "transition-transform duration-300 sharp-ease" : ""}`;
 
   const style = {
     width: isMaximized ? window.innerWidth * WINDOW_WIDTH_MAXIMIZED_RATIO : WINDOW_WIDTH_MINIMIZED,
     height: isMaximized
       ? window.innerHeight * WINDOW_HEIGHT_MAXIMIZED_RATIO
       : WINDOW_HEIGHT_MINIMIZED,
-    transform: isClosing ? "scale(0)" : "scale(1)",
+    transform: isOpened ? "scale(1)" : "scale(0)",
     transformOrigin: "center",
   };
 

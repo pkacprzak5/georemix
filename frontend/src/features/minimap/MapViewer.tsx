@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import { pinpoint } from "pepicons/print";
 import { Button } from "@/components/ui/button";
-import { type MapPosition } from "@/types/project";
+import { type MapCoordinates } from "@/types/project";
+import { useEventBridge, useGameStateManager } from "@/context/game-state";
 
 interface MapLayer {
   url: string;
@@ -11,7 +12,7 @@ interface MapLayer {
 }
 
 interface MapClickHandlerProps {
-  onPositionSelect: (position: MapPosition) => void;
+  onPositionSelect: (position: MapCoordinates) => void;
 }
 
 const mapLayer: MapLayer = {
@@ -50,7 +51,17 @@ function MapResizer() {
 }
 
 export default function MapViewer() {
-  const [position, setPosition] = useState<MapPosition | null>(null);
+  const [position, setPosition] = useState<MapCoordinates | null>(null);
+  const gameStateManager = useGameStateManager();
+  const eventBridge = useEventBridge();
+
+  const handleSubmit = () => {
+    if (!position) {
+      return;
+    }
+    gameStateManager.calculateResult(position);
+    eventBridge.emit("resultSubmitted", {});
+  };
 
   // Custom icon for selected position using Pepicons pinpoint
   const customIcon = L.divIcon({
@@ -74,7 +85,9 @@ export default function MapViewer() {
       </MapContainer>
       {position && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-[1000] pointer-events-auto">
-          <Button className="relative z-[1000]">Submit</Button>
+          <Button onClick={handleSubmit} className="relative z-[1000]">
+            Submit
+          </Button>
         </div>
       )}
     </>

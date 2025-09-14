@@ -1,14 +1,16 @@
-import { useEffect } from 'react';
-import { useNavigation } from '@/lib/navigation-system/NavigationProvider';
-import { GroupName } from '@/lib/navigation-system/types';
+import { useEffect } from "react";
+import { useNavigation } from "@/lib/navigation-system/navigation-provider";
+import { moduleIdMap } from "@/lib/navigation-system/types";
+
+const INTRO_DURATION = 100;
 
 export function TitlePage() {
   const { navigateTo } = useNavigation();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigateTo(GroupName.INIT_GROUP, 'player-select');
-    }, 3000); 
+      navigateTo(moduleIdMap.INTRO, "player-name-input");
+    }, INTRO_DURATION);
 
     return () => clearTimeout(timer);
   }, [navigateTo]);

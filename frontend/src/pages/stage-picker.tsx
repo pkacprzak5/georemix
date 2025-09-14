@@ -1,15 +1,15 @@
-import { useNavigation } from "@/lib/navigation-system/NavigationProvider";
-import { useGameStateManager } from "@/context/game-state";
-import { GroupName } from "@/lib/navigation-system/types";
 import { Button } from "@/components/ui/button";
+import { useGameStateManager } from "@/context/game-state";
+import { useNavigation } from "@/lib/navigation-system/navigation-provider";
+import { moduleIdMap } from "@/lib/navigation-system/types";
 
-export function RoundSelect() {
-  const { navigateTo } = useNavigation();
+export function StagePicker() {
+  const { navigateWithLoading } = useNavigation();
   const gameStateManager = useGameStateManager();
 
   const handleRoundSelect = (roundIndex: number) => {
-    gameStateManager.selectedRound = roundIndex;
-    navigateTo(GroupName.MAIN_MENU, "home");
+    const promise = gameStateManager.loadRound(roundIndex)
+    navigateWithLoading(moduleIdMap.LEVEL_START, "level-start", promise);
   };
 
   return (
@@ -21,15 +21,15 @@ export function RoundSelect() {
         </div>
 
         <div className="space-y-4">
-          <Button onClick={() => handleRoundSelect(0)} variant="default" className="w-full">
+          <Button onClick={() => handleRoundSelect(1)} variant="default" className="w-full">
             Round 1: Cyberpunk City
           </Button>
 
-          <Button onClick={() => handleRoundSelect(1)} variant="default" className="w-full">
+          <Button disabled onClick={() => handleRoundSelect(2)} variant="default" className="w-full">
             Round 2: Coming Soon
           </Button>
 
-          <Button onClick={() => handleRoundSelect(2)} variant="default" className="w-full">
+          <Button disabled onClick={() => handleRoundSelect(3)} variant="default" className="w-full">
             Round 3: Coming Soon
           </Button>
         </div>
