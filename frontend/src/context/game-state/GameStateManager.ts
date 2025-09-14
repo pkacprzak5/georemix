@@ -1,5 +1,3 @@
-import type { LevelProviderStrategy } from "@/lib/LevelProvider/LevelProviderStrategy";
-import { MockLevelProviderStrategy } from "@/lib/LevelProvider/MockLevelProviderStrategy";
 import type { EventBridge } from "./EventBridge";
 import { ROUNDS, type LevelInfo, type LevelResult, type RoundInfo } from "@/types/project";
 
@@ -7,15 +5,12 @@ export class GameStateManager {
   private _currentRoundNumber: number | null = null;
   private _currentLevelNumber: number | null = null;
   private _levelResults: LevelResult[] = [];
-  private _gameLevelProvider: LevelProviderStrategy;
   private _currentTheme: "light" | "dark" = "light";
   private _playerName: string = "";
   private _selectedRound: number | null = null;
 
   // Mock data for development
-  constructor(private _eventBridge: EventBridge) {
-    this._gameLevelProvider = new MockLevelProviderStrategy();
-  }
+  constructor(private _eventBridge: EventBridge) {}
 
   // Getters
   get currentRound(): RoundInfo {
@@ -53,7 +48,7 @@ export class GameStateManager {
   }
 
   getLevelInfo(i: number): LevelInfo {
-    const currentLevelInfo = this.currentRound[i]
+    const currentLevelInfo = this.currentRound[i];
     if (!currentLevelInfo) {
       throw new Error("No level info found for index " + i);
     }
@@ -76,23 +71,10 @@ export class GameStateManager {
   }
 
   loadNextLevel(): Promise<null> {
-    return new Promise((resolve) => {
-      
-
+    return new Promise(() => {
       // Async function to fetch the next level info
       // The LevelProviderStrategy should somehow handle passing
       // the level needed info to the game
-      const nextLevelNumber = (this._currentLevelNumber ?? -1) + 1;
-      this._gameLevelProvider.loadNextLevelInfo(this.getLevelInfo(nextLevelNumber).levelId).then(() => {
-        this._currentLevelNumber = nextLevelNumber;
-        this._currentTheme = this.currentLevelInfo.level_theme;
-        this._eventBridge.emit('loadingFinished', {
-          levelNumber: nextLevelNumber,
-          levelId: this.getLevelInfo(nextLevelNumber).levelId,
-          timestamp: Date.now()
-        });
-        resolve(null);
-      });
     });
   }
 
@@ -108,5 +90,4 @@ export class GameStateManager {
     this._currentLevelNumber = null;
     this._levelResults = [];
   }
-
 }

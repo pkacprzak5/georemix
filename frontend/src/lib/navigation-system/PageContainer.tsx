@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigation } from "./NavigationProvider";
-import { LoadingScreen } from "../../components/LoadingScreen";
+import { LoadingScreen } from "../../pages/LoadingScreen";
 import type { Page } from "./types";
 
 const pageVariants = {
