@@ -1,6 +1,6 @@
 import { MainWindow } from "./components/MainWindow";
-import { MapWindow } from "./components/OpenStreetMapWindow";
-import { GameStateProvider } from "./context/GameStateContext";
+import { MinimapWindow } from "./features/minimap/MinimapWindow";
+import { GameStateProvider } from "./context/game-state/GameStateContext";
 import { NavigationProvider } from "./lib/navigation-system/NavigationProvider";
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <NavigationProvider>
       <GameStateProvider>
         <MainWindow />
-        <MapWindow />
+        <MinimapWindow />
       </GameStateProvider>
     </NavigationProvider>
   );

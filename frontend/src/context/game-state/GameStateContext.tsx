@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from "react";
-import { EventBridge } from "@/lib/EventBridge";
-import { GameStateManager } from "@/lib/GameStateManager";
+import { EventBridge } from "@/context/game-state/EventBridge";
+import { GameStateManager } from "@/context/game-state/GameStateManager";
 import { useNavigation } from "@/lib/navigation-system/NavigationProvider";
 import { GroupName } from "@/lib/navigation-system/types";
 
@@ -25,12 +25,12 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
 
   function startGameplay() {
     hideMenu();
-    eventBridge.emit('gameplayStarted', { timestamp: Date.now() });
+    eventBridge.emit("gameplayStarted", { timestamp: Date.now() });
   }
 
   function endGameplay() {
     showMenu();
-    eventBridge.emit('gameplayEnded', { timestamp: Date.now() });
+    eventBridge.emit("gameplayEnded", { timestamp: Date.now() });
   }
 
   const contextValue = useMemo(

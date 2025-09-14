@@ -3,17 +3,13 @@ import { Viewer, type ViewerOptions } from "mapillary-js";
 
 const MAPILLARY_KEY = import.meta.env.VITE_MAPILLARY_ACCESS_TOKEN;
 
-interface MapillaryViewerProps {
+interface PanoramaViewerProps {
   imageId: string;
   width?: string | number;
   height?: string | number;
 }
 
-function MapillaryViewer({
-  imageId,
-  width = "100%",
-  height = "500px"
-}: MapillaryViewerProps) {
+export function PanoramaViewer({ imageId, width = "100%", height = "500px" }: PanoramaViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<Viewer | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +26,7 @@ function MapillaryViewer({
       accessToken: accessToken, // Required by Mapillary.js itself and by MockDataProvider's internal API client
       container: container,
       imageId: imageId,
-      // combinedPanning: false, 
+      // combinedPanning: false,
       component: {
         cover: false, // Prevents the initial cover UI to show the image directly
       },
@@ -97,5 +93,3 @@ function MapillaryViewer({
     </div>
   );
 }
-
-export default MapillaryViewer;

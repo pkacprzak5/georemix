@@ -1,4 +1,4 @@
-import type { GameEvent } from '@/types/project';
+import type { GameEvent } from "@/types/project";
 
 type EventCallback = (data: unknown) => void;
 
@@ -33,7 +33,7 @@ export class EventBridge {
   emit(event: GameEvent, data: unknown): void {
     const eventListeners = this.listeners.get(event);
     if (eventListeners) {
-      eventListeners.forEach(callback => {
+      eventListeners.forEach((callback) => {
         try {
           callback(data);
         } catch (error) {
