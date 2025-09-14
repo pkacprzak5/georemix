@@ -68,7 +68,7 @@ function WindowLayout({
     const clampedY = Math.max(0, Math.min(y, viewportHeight - windowHeight));
 
     return { x: clampedX, y: clampedY };
-  }, []);
+  }, [style]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (
