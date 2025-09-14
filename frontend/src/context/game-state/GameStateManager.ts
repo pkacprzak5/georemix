@@ -1,6 +1,7 @@
 import type { EventBridge } from "./EventBridge";
 import { ROUNDS, type LevelInfo, type LevelResult, type RoundInfo } from "@/types/project";
 
+// TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
   private _currentRoundNumber: number | null = null;
   private _currentLevelNumber: number | null = null;

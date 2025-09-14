@@ -1,10 +1,10 @@
+import { AnimatePresence, motion, type Transition, type Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useNavigation } from "./NavigationProvider";
-import { LoadingScreen } from "../../pages/LoadingScreen";
+import { useNavigation } from "./navigation-provider";
 import type { Page } from "./types";
+import { LoadingScreen } from "@/pages/loading-screen";
 
-const pageVariants = {
+const pageVariants: Variants = {
   enter: {
     x: "100%",
     opacity: 0,
@@ -19,13 +19,14 @@ const pageVariants = {
   },
 };
 
-const pageTransition = {
-  type: "tween" as const,
+const pageTransition: Transition = {
+  type: "tween",
   duration: 0.3,
 };
 
-export function PageContainer() {
-  const { state, groups } = useNavigation();
+export function Router() {
+  const { state, modules: groups } = useNavigation();
+
   const initialPageRef = useRef<string | null>(null);
   const isInitialPage = initialPageRef.current === null;
 
@@ -34,14 +35,15 @@ export function PageContainer() {
   }, [state.currentPage]);
 
   // Track if this is the first page being rendered
-  if (!state.currentGroup || !state.currentPage) {
+  if (!state.currentModule || !state.currentPage) {
     return null;
   }
 
-  const group = groups.get(state.currentGroup);
+  const group = groups.get(state.currentModule);
   if (!group) {
     return null;
   }
+
   const currentPageIndex = group.pages.findIndex((p: Page) => p.id === state.currentPage);
   const currentPage = group.pages[currentPageIndex];
   if (!currentPage) {

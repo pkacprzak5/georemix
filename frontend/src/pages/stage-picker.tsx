@@ -1,15 +1,15 @@
-import { useNavigation } from "@/lib/navigation-system/NavigationProvider";
-import { useGameStateManager } from "@/context/game-state";
-import { groupNameMap } from "@/lib/navigation-system/types";
 import { Button } from "@/components/ui/button";
+import { useGameStateManager } from "@/context/game-state";
+import { useNavigation } from "@/lib/navigation-system/navigation-provider";
+import { moduleIdMap } from "@/lib/navigation-system/types";
 
-export function RoundSelect() {
+export function StagePicker() {
   const { navigateTo } = useNavigation();
   const gameStateManager = useGameStateManager();
 
   const handleRoundSelect = (roundIndex: number) => {
     gameStateManager.selectedRound = roundIndex;
-    navigateTo(groupNameMap.MAIN_MENU, "home");
+    navigateTo(moduleIdMap.LEVEL_START, "level-start");
   };
 
   return (

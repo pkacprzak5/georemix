@@ -1,15 +1,15 @@
 import { useState, useRef, useEffect, type CSSProperties } from "react";
 import { Viewer, type ViewerOptions } from "mapillary-js";
+import { cn } from "@/lib/utils";
 
 const MAPILLARY_KEY = import.meta.env.VITE_MAPILLARY_ACCESS_TOKEN;
 
 interface PanoramaViewerProps {
   imageId: string;
-  width?: string | number;
-  height?: string | number;
+  className?: string;
 }
 
-export function PanoramaViewer({ imageId, width = "100%", height = "500px" }: PanoramaViewerProps) {
+export function PanoramaViewer({ imageId, className }: PanoramaViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<Viewer | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -57,14 +57,15 @@ export function PanoramaViewer({ imageId, width = "100%", height = "500px" }: Pa
 
   // Apply the width and height to the container div
   const containerStyle: CSSProperties = {
-    width,
-    height,
     position: "relative", // Necessary for Mapillary.js internal positioning
     marginBottom: "20px",
   };
 
   return (
-    <div ref={containerRef} style={containerStyle} className="mapillary-viewer-container">
+    <div
+      ref={containerRef}
+      style={containerStyle}
+      className={cn("mapillary-viewer-container", className)}>
       {error ? (
         <div
           style={{

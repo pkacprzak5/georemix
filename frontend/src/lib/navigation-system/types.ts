@@ -1,49 +1,23 @@
-export type PageId = string;
-export type GroupId = string;
-
-export interface Page {
+export type Page = {
   id: PageId;
   component: React.ComponentType;
   title?: string;
-}
+};
 
-export interface Group {
-  id: GroupId;
+export type PageId = string;
+
+export type Module = {
+  id: ModuleId;
   pages: Page[];
   initialPage?: PageId;
-}
+};
 
-export interface NavigationState {
-  isMenuOpen: boolean;
-  currentGroup: GroupId | null;
-  currentPage: PageId | null;
-  isLoading: boolean;
-}
-
-export type NavigationAction =
-  | { type: "SHOW_MENU" }
-  | { type: "HIDE_MENU" }
-  | { type: "NAVIGATE"; groupId: GroupId; pageId: PageId }
-  | { type: "SET_LOADING"; loading: boolean }
-  | { type: "NAVIGATE_WITH_LOADING"; groupId: GroupId; pageId: PageId; promise: Promise<unknown> };
-
-export interface NavigationContextType {
-  state: NavigationState;
-  navigateTo: (groupId: GroupId, pageId: PageId) => void;
-  navigateWithLoading: (groupId: GroupId, pageId: PageId, promise: Promise<unknown>) => void;
-  showMenu: () => void;
-  hideMenu: () => void;
-  navigateToNewGroup: (groupId: GroupId) => void;
-  groups: Map<GroupId, Group>;
-}
-
-export const groupNameMap = {
+export const moduleIdMap = {
   TITLE: "TITLE",
-  INIT_GROUP: "INIT_GROUP",
-  MAIN_MENU: "MAIN_MENU",
+  INTRO: "INTRO",
   LEVEL_START: "LEVEL_START",
   LEVEL_END: "LEVEL_END",
-  GAME_END: "GAME_END",
+  FINAL: "FINAL",
 } as const;
 
-export type GroupName = (typeof groupNameMap)[keyof typeof groupNameMap];
+export type ModuleId = (typeof moduleIdMap)[keyof typeof moduleIdMap];

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useNavigation } from "@/lib/navigation-system/NavigationProvider";
-import { useGameStateManager } from "@/context/game-state";
-import { groupNameMap } from "@/lib/navigation-system/types";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useGameStateManager } from "@/context/game-state";
+import { useNavigation } from "@/lib/navigation-system/navigation-provider";
+import { moduleIdMap } from "@/lib/navigation-system/types";
 
-export function PlayerSelect() {
+export function PlayerNameInput() {
   const gameStateManager = useGameStateManager();
   const { navigateTo } = useNavigation();
   const [playerName, setPlayerName] = useState("");
@@ -13,7 +13,7 @@ export function PlayerSelect() {
   const handleSubmit = () => {
     if (playerName.trim()) {
       gameStateManager.playerName = playerName.trim();
-      navigateTo(groupNameMap.INIT_GROUP, "round-select");
+      navigateTo(moduleIdMap.INTRO, "stage-picker");
     }
   };
 
@@ -22,6 +22,8 @@ export function PlayerSelect() {
       handleSubmit();
     }
   };
+
+  const isButtonDisabled = !playerName.trim();
 
   return (
     <div className="flex items-center justify-center min-h-full">
@@ -42,7 +44,7 @@ export function PlayerSelect() {
             autoFocus
           />
 
-          <Button onClick={handleSubmit} disabled={!playerName.trim()} className="w-full">
+          <Button onClick={handleSubmit} disabled={isButtonDisabled} className="w-full">
             Continue
           </Button>
         </div>

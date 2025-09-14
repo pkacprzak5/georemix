@@ -1,15 +1,15 @@
 import React, { createContext, useContext, useMemo } from "react";
 import { EventBridge } from "@/context/game-state/EventBridge";
 import { GameStateManager } from "@/context/game-state/GameStateManager";
-import { useNavigation } from "@/lib/navigation-system/NavigationProvider";
-import { groupNameMap } from "@/lib/navigation-system/types";
+import { useNavigation } from "@/lib/navigation-system/navigation-provider";
+import type { ModuleId } from "@/lib/navigation-system/types";
 
 interface GameStateContextType {
   eventBridge: EventBridge;
   gameStateManager: GameStateManager;
   startGameplay: () => void;
   endGameplay: () => void;
-  navigateToNewGroup: (newGroup: GroupName) => void;
+  navigateToNewGroup: (newGroup: ModuleId) => void;
 }
 
 const GameStateContext = createContext<GameStateContextType | null>(null);
@@ -21,15 +21,13 @@ interface GameStateProviderProps {
 export function GameStateProvider({ children }: GameStateProviderProps) {
   const eventBridge = useMemo(() => new EventBridge(), []);
   const gameStateManager = useMemo(() => new GameStateManager(eventBridge), []);
-  const { showMenu, hideMenu, navigateToNewGroup } = useNavigation();
+  const { navigateToNewGroup } = useNavigation();
 
   function startGameplay() {
-    hideMenu();
     eventBridge.emit("gameplayStarted", { timestamp: Date.now() });
   }
 
   function endGameplay() {
-    showMenu();
     eventBridge.emit("gameplayEnded", { timestamp: Date.now() });
   }
 
