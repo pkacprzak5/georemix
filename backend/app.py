@@ -4,8 +4,6 @@ import json
 import os
 from dotenv import load_dotenv
 
-from utils import calculate_bearing
-
 load_dotenv()
 
 BASE_URL = os.getenv('BASE_URL', 'http://localhost:5000')
@@ -104,15 +102,10 @@ def get_level_node(round_num, level_num, node_id):
     for linked_node_id in node_links:
         # Find the linked node to get GPS for bearing calculation
         linked_node = next((node for node in nodes if str(node["id"]) == str(linked_node_id)), None)
-        if linked_node:
-            lng1, lat1 = node_data["gps"]
-            lng2, lat2 = linked_node["gps"]
-            bearing_deg = calculate_bearing(lat1, lng1, lat2, lng2)
-            
+        if linked_node:    
             links.append({
                 "nodeId": str(linked_node_id),
                 "gps": linked_node["gps"],
-                "position": {"yaw": f"{bearing_deg}deg", "pitch": "0deg"},
             })
     
     # Build the response node
@@ -148,14 +141,10 @@ def get_level_nodes(round_num, level_num):
         for linked_node_id in node_links:
             # Find the linked node to get GPS for bearing calculation
             linked_node = next((node for node in nodes if str(node["id"]) == str(linked_node_id)), None)
-            if linked_node:
-                lng1, lat1 = node_data["gps"]
-                lng2, lat2 = linked_node["gps"]
-                bearing_deg = calculate_bearing(lat1, lng1, lat2, lng2)
-                
+            if linked_node: 
                 links.append({
                     "nodeId": str(linked_node_id),
-                    "position": {"yaw": f"{bearing_deg}deg", "pitch": "0deg"},
+                    "gps": linked_node["gps"],
                 })
         
         # Build the response node
@@ -164,7 +153,7 @@ def get_level_nodes(round_num, level_num):
             "panorama": IMAGE_ENDPOINT + str(node_data["panorama"]),
             "links": links,
             "gps": node_data["gps"],
-            "sphereCorrection": node_data["sphereCorrection"],
+            "panoData": {"poseHeading": (node_data["sphereCorrection"]["pan"]) / 180 * 3.14},
         }
         response_nodes.append(response_node)
     
