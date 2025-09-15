@@ -39,7 +39,7 @@ export function Gameplay() {
       
       // Navigate to results after showing overlay for 2 seconds
       setTimeout(() => {
-        navigateTo(moduleIdMap.LEVEL_END, "level-results");
+        navigateTo(moduleIdMap.LEVEL_END, "level-summary");
       }, 2000);
     });
 

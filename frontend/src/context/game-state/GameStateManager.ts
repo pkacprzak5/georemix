@@ -138,7 +138,6 @@ export class GameStateManager {
           thumbnail: level.thumbnail,
           number: i + 1
         }))
-
       })
       .catch(error => {
         console.error('Fetch error:', error);

@@ -1,5 +1,4 @@
 import { useState, useCallback } from "react";
-import { cn } from "@/lib/utils";
 
 type Position = { x: number; y: number };
 
