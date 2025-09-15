@@ -20,17 +20,24 @@ const sheetVariants: Variants = {
 type OverlaySheetProps = {
   open: boolean;
   children?: React.ReactNode;
+  skipInitialAnimation?: boolean;
+  zIndex?: number;
 };
 
-export function OverlaySheet({ open, children }: OverlaySheetProps) {
+export function OverlaySheet({ open, children, skipInitialAnimation = false, zIndex }: OverlaySheetProps) {
+  const getInitialState = () => {
+    if (skipInitialAnimation && open) {
+      return "open";
+    }
+    return "closed";
+  };
+
   return (
     <motion.div
       animate={open ? "open" : "closed"}
       variants={sheetVariants}
-      initial="closed"
-      className={`absolute inset-0 bg-background border-t-2 border-border flex flex-col ${
-        open ? "z-40" : "z-10"
-      }`}>
+      initial={getInitialState()}
+      className={`absolute inset-0 bg-background border-t-2 border-border flex flex-col z-[1000]`}>
       <div className="flex-1 overflow-hidden">{children}</div>
     </motion.div>
   );

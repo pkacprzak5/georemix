@@ -16,6 +16,7 @@ export const moduleIdMap = {
   TITLE: "TITLE",
   INTRO: "INTRO",
   LEVEL_START: "LEVEL_START",
+  GAMEPLAY: "GAMEPLAY" ,
   LEVEL_END: "LEVEL_END",
   FINAL: "FINAL",
 } as const;

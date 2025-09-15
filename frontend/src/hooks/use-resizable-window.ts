@@ -96,20 +96,26 @@ export function useResizableWindow({
   }, []);
 
   const handleOpen = useCallback(() => {
-    setIsClosing(false);
-    setIsOpening(true);
-    setIsOpened(true);
     setIsVisible(true);
+    setIsClosing(false);
+    
+    // Small delay to ensure the element is rendered before starting animation
+    setTimeout(() => {
+      setIsOpening(true);
+      setIsOpened(true);
+    }, 10);
 
     setTimeout(() => {
       setIsOpening(false);
     }, 300);
   }, []);
 
-  const windowClass = cn(
-    isResizing && `transition-[width,height,left,top,transform] duration-${animationDuration} sharp-ease`,
-    (isClosing || isOpening) && "transition-transform duration-300 sharp-ease"
-  );
+  // const windowClass = cn(
+  //   isResizing && `transition-[width,height,left,top,transform] duration-${animationDuration} sharp-ease`,
+  //   (isClosing || isOpening) && "transition-transform duration-300 sharp-ease"
+  // );
+
+  const windowClass = `${isResizing ? "transition-[width,height,left,top,transform] duration-400 sharp-ease" : ""} ${isClosing || isOpening ? "transition-transform duration-300 sharp-ease" : ""}`;
 
   const style = {
     width: isMaximized ? getSizes().maximized.width : minimizedSize.width,

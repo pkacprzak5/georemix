@@ -1,3 +1,4 @@
+import { Gameplay } from "@/pages/gameplay";
 import { LevelStart } from "@/pages/level-start";
 import { MockPage } from "@/pages/mock";
 import { PlayerNameInput } from "@/pages/player-name-input";
@@ -28,6 +29,11 @@ export const levelStartGroup: Module = {
   pages: [{ id: "level-start", component: LevelStart, title: "Start the Level" }],
 };
 
+export const gameplayGroup: Module = {
+  id: moduleIdMap.GAMEPLAY,
+  pages: [{ id: "gameplay", component: Gameplay, title: "Game" }],
+};
+
 export const levelEndGroup: Module = {
   id: moduleIdMap.LEVEL_END,
   pages: [{ id: "level-results", component: MockPage, title: "Level Results" }],
@@ -44,4 +50,5 @@ export const modulesMap = {
   [levelStartGroup.id]: levelStartGroup,
   [levelEndGroup.id]: levelEndGroup,
   [gameEndGroup.id]: gameEndGroup,
+  [gameplayGroup.id]: gameplayGroup
 } as const;

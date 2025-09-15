@@ -56,7 +56,9 @@ const PanoramaViewer = () => {
       gameStateManager.setCoordinates(location);
     });
 
-    eventBridge.emit("viewerLoaded", {});
+    setTimeout(() => {
+      eventBridge.emit("viewerLoaded", {});
+    }, 1000);
   };
 
   const plugins = [
