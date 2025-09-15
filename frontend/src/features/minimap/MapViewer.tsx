@@ -16,7 +16,7 @@ interface MapClickHandlerProps {
 }
 
 const mapLayer: MapLayer = {
-  url: "https://tiles.stadiamaps.com/tiles/stamen_toner_background/{z}/{x}/{y}{r}.png",
+  url: "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png",
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 };
@@ -76,7 +76,8 @@ export default function MapViewer() {
     <>
       <MapContainer
         center={[51.505, -0.09]}
-        zoom={13}
+        zoom={2}
+        attributionControl={false}
         style={{ height: "100%", width: "100%", cursor: "default" }}>
         <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
         <MapClickHandler onPositionSelect={setPosition} />

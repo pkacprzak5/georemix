@@ -34,4 +34,6 @@ export type RoundInfo = LevelInfo[];
 export type LevelResultInfo = {
   timeTaken: number;
   distance: number;
+  submittedPosition: MapCoordinates;
+  answerPosition: MapCoordinates;
 }

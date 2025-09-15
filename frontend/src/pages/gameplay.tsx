@@ -5,12 +5,15 @@ import PanoramaViewer from "@/features/game/PanoramaViewer";
 import { LoadingScreen } from "@/pages/loading-screen";
 import { PauseMenu } from "@/components/layout/pause-menu";
 import { useEventBridge } from "@/context/game-state";
+import { useNavigation } from "@/lib/navigation-system/navigation-provider";
+import { moduleIdMap } from "@/lib/navigation-system/types";
 
 export function Gameplay() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(true);
   const [resultOverlayOpen, setResultOverlayOpen] = useState(false);
   const eventBridge = useEventBridge();
+  const { navigateTo } = useNavigation();
 
   // const toggleMenu = () => setMenuOpen((old) => !old);
 
@@ -33,6 +36,11 @@ export function Gameplay() {
 
     const resultSubscriptionCleanup = eventBridge.addEventListener("resultSubmitted", () => {
       setResultOverlayOpen(true);
+      
+      // Navigate to results after showing overlay for 2 seconds
+      setTimeout(() => {
+        navigateTo(moduleIdMap.LEVEL_END, "level-results");
+      }, 2000);
     });
 
     return () => {

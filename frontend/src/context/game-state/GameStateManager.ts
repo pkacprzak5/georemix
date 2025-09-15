@@ -13,7 +13,9 @@ export class GameStateManager {
 
   // Current Gameplay
   private _currentCoordinates: MapCoordinates | null = null;
-  private _timeTaken: number | null = null;
+  private _submittedCoordinates: MapCoordinates | null = null;
+  // TODO UPDATE TO NOT BE CONSTANT VALUE
+  private _timeTaken: number | null = 12;
   private _currentDistance: number | null = null;
 
   // Getters
@@ -43,14 +45,28 @@ export class GameStateManager {
     return this._levels[this._currentLevelNumber]
   }
 
+  get numberOfLevels(): number {
+    if (this._levels.length === 0) {
+      throw new Error("No levels loaded");
+    }
+    return this._levels.length;
+  }
+
   get levelResult(): LevelResultInfo {
-    if(!this._currentDistance || !this._timeTaken){
+    if (
+      !this._currentDistance ||
+      !this._timeTaken ||
+      !this._currentCoordinates ||
+      !this._submittedCoordinates
+    ) {
       throw new Error("No distance or no time taken")
     }
 
     return {
       distance: this._currentDistance,
-      timeTaken: this._timeTaken
+      timeTaken: this._timeTaken,
+      answerPosition: this._currentCoordinates,
+      submittedPosition: this._submittedCoordinates,
     }
   }
 
@@ -76,9 +92,12 @@ export class GameStateManager {
     if (!this._currentCoordinates) {
       throw new Error("No current coordinates set");
     }
+
+    this._submittedCoordinates = submittedPosition;
+
     const toRad = (value: number) => value * Math.PI / 180;
-    const {lng: lng1, lat: lat1} = this._currentCoordinates;
-    const {lng: lng2, lat: lat2} = submittedPosition;
+    const { lng: lng1, lat: lat1 } = this._currentCoordinates;
+    const { lng: lng2, lat: lat2 } = submittedPosition;
 
     const R = 6371e3; // Earth radius in meters
     const φ1 = toRad(lat1);

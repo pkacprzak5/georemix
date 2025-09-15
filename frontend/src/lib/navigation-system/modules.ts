@@ -1,5 +1,6 @@
 import { Gameplay } from "@/pages/gameplay";
 import { LevelStart } from "@/pages/level-start";
+import { LevelResults } from "@/pages/level-results";
 import { MockPage } from "@/pages/mock";
 import { PlayerNameInput } from "@/pages/player-name-input";
 import { StagePicker } from "@/pages/stage-picker";
@@ -36,7 +37,7 @@ export const gameplayGroup: Module = {
 
 export const levelEndGroup: Module = {
   id: moduleIdMap.LEVEL_END,
-  pages: [{ id: "level-results", component: MockPage, title: "Level Results" }],
+  pages: [{ id: "level-results", component: LevelResults, title: "Level Results" }],
 };
 
 export const gameEndGroup: Module = {
