@@ -2,13 +2,11 @@ import { createPortal } from "react-dom";
 import { useState } from "react";
 import { OverlaySheet } from "@/components/layout/overlay-sheet";
 import { Button } from "@/components/ui/button";
-import { PanoramaViewer } from "@/features/game/PanoramaViewer";
+import PanoramaViewer from "@/features/game/PanoramaViewer";
 import { Minimap } from "@/features/minimap/Minimap";
-import type { MapPosition } from "@/types/project";
+import type { MapCoordinates } from "@/types/project";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
-
-const TEST_IMAGE_ID = "164095525622425";
 
 export function LevelStart() {
   const { navigateTo } = useNavigation();
@@ -16,7 +14,7 @@ export function LevelStart() {
 
   const toggleMenu = () => setMenuOpen((old) => !old);
 
-  const handlePositionSubmit = (position: MapPosition) => {
+  const handlePositionSubmit = (position: MapCoordinates) => {
     // TODO: Reflect position submittion in the game state.
     console.log(position);
     navigateTo(moduleIdMap.LEVEL_END, "level-results");
@@ -24,7 +22,7 @@ export function LevelStart() {
 
   return (
     <>
-      <PanoramaViewer imageId={TEST_IMAGE_ID} className="w-full h-full absolute" />
+      <PanoramaViewer />
       <OverlaySheet open={menuOpen}>Hello from sheet!</OverlaySheet>
 
       <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-background z-50">

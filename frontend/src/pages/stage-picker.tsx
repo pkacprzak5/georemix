@@ -4,12 +4,12 @@ import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 
 export function StagePicker() {
-  const { navigateTo } = useNavigation();
+  const { navigateWithLoading } = useNavigation();
   const gameStateManager = useGameStateManager();
 
   const handleRoundSelect = (roundIndex: number) => {
-    gameStateManager.selectedRound = roundIndex;
-    navigateTo(moduleIdMap.LEVEL_START, "level-start");
+    const promise = gameStateManager.loadRound(roundIndex)
+    navigateWithLoading(moduleIdMap.LEVEL_START, "level-start", promise);
   };
 
   return (
@@ -21,15 +21,15 @@ export function StagePicker() {
         </div>
 
         <div className="space-y-4">
-          <Button onClick={() => handleRoundSelect(0)} variant="default" className="w-full">
+          <Button onClick={() => handleRoundSelect(1)} variant="default" className="w-full">
             Round 1: Cyberpunk City
           </Button>
 
-          <Button onClick={() => handleRoundSelect(1)} variant="default" className="w-full">
+          <Button disabled onClick={() => handleRoundSelect(2)} variant="default" className="w-full">
             Round 2: Coming Soon
           </Button>
 
-          <Button onClick={() => handleRoundSelect(2)} variant="default" className="w-full">
+          <Button disabled onClick={() => handleRoundSelect(3)} variant="default" className="w-full">
             Round 3: Coming Soon
           </Button>
         </div>

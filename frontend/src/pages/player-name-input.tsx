@@ -12,7 +12,7 @@ export function PlayerNameInput() {
 
   const handleSubmit = () => {
     if (playerName.trim()) {
-      gameStateManager.playerName = playerName.trim();
+      gameStateManager.setPlayerName(playerName.trim());
       navigateTo(moduleIdMap.INTRO, "stage-picker");
     }
   };

@@ -7,8 +7,6 @@ import type { ModuleId } from "@/lib/navigation-system/types";
 interface GameStateContextType {
   eventBridge: EventBridge;
   gameStateManager: GameStateManager;
-  startGameplay: () => void;
-  endGameplay: () => void;
   navigateToNewGroup: (newGroup: ModuleId) => void;
 }
 
@@ -20,23 +18,14 @@ interface GameStateProviderProps {
 
 export function GameStateProvider({ children }: GameStateProviderProps) {
   const eventBridge = useMemo(() => new EventBridge(), []);
-  const gameStateManager = useMemo(() => new GameStateManager(eventBridge), []);
+  const gameStateManager = useMemo(() => new GameStateManager(), []);
   const { navigateToNewGroup } = useNavigation();
 
-  function startGameplay() {
-    eventBridge.emit("gameplayStarted", { timestamp: Date.now() });
-  }
-
-  function endGameplay() {
-    eventBridge.emit("gameplayEnded", { timestamp: Date.now() });
-  }
 
   const contextValue = useMemo(
     () => ({
       eventBridge,
       gameStateManager,
-      startGameplay,
-      endGameplay,
       navigateToNewGroup,
     }),
     [eventBridge, gameStateManager]
