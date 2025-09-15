@@ -19,6 +19,7 @@ export function useDrag({
   ref,
   dragHandleRef,
   clampToViewport = true,
+  style
 }: UseDragOptions) {
   const [internalPosition, setInternalPosition] = useState<Position>({
     x: initialPosition?.x || 0,
@@ -37,16 +38,19 @@ export function useDrag({
         return { x, y };
       }
 
-      const rect = ref.current.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
+    const rect = ref.current.getBoundingClientRect();
+    const windowWidth = Number(style?.width) || rect.width;
+    const windowHeight = Number(style?.height) || rect.height;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
 
-      const clampedX = Math.max(0, Math.min(x, viewportWidth - rect.width));
-      const clampedY = Math.max(0, Math.min(y, viewportHeight - rect.height));
+    // Ensure window stays within viewport bounds
+    const clampedX = Math.max(0, Math.min(x, viewportWidth - windowWidth));
+    const clampedY = Math.max(0, Math.min(y, viewportHeight - windowHeight));
 
-      return { x: clampedX, y: clampedY };
+    return { x: clampedX, y: clampedY };
     },
-    [ref, clampToViewport]
+    [ref, clampToViewport, style?.width, style?.height]
   );
 
   const handleMouseDown = useCallback(

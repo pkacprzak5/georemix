@@ -8,6 +8,8 @@ type UseResizableWindowOptions = {
   maximizedRatio: { width: number; height: number }; // fraction of viewport
   initialPosition?: Position;
   animationDuration?: number;
+  initialVisibility?: boolean;
+  initialOpened?: boolean;
 };
 
 export function useResizableWindow({
@@ -15,15 +17,19 @@ export function useResizableWindow({
   maximizedRatio,
   initialPosition,
   animationDuration = 400,
+  initialVisibility = true,
+  initialOpened = false,
 }: UseResizableWindowOptions) {
   const [isMaximized, setIsMaximized] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isOpening, setIsOpening] = useState(false);
+  const [isVisible, setIsVisible] = useState(initialVisibility);
+  const [isOpened, setIsOpened] = useState(initialOpened);
   const [position, setPosition] = useState<Position>(
     initialPosition ?? {
-      x: window.innerWidth - minimizedSize.width,
-      y: window.innerHeight - minimizedSize.height,
+      x: window.innerWidth * 0.98 - minimizedSize.width,
+      y: window.innerHeight * 0.98 - minimizedSize.height,
     }
   );
 
@@ -76,19 +82,39 @@ export function useResizableWindow({
   }, [isMaximized, position, animationDuration]);
 
   const handleClose = useCallback(() => {
+    setIsOpening(false);
     setIsClosing(true);
-    setTimeout(() => setIsVisible(false), 300); // close anim shorter
+    setIsOpened(false);
+    // Don't change position - just scale to 0 from current position
+    // The transformOrigin: 'center' will make it shrink from its center point
+
+    // Unmount after animation completes (faster timing)
+    setTimeout(() => {
+      setIsVisible(false);
+      setIsClosing(false);
+    }, 300);
+  }, []);
+
+  const handleOpen = useCallback(() => {
+    setIsClosing(false);
+    setIsOpening(true);
+    setIsOpened(true);
+    setIsVisible(true);
+
+    setTimeout(() => {
+      setIsOpening(false);
+    }, 300);
   }, []);
 
   const windowClass = cn(
-    isResizing && `transition-[width,height,left,top] duration-${animationDuration} sharp-ease`,
-    isClosing && "transition-transform duration-300 sharp-ease"
+    isResizing && `transition-[width,height,left,top,transform] duration-${animationDuration} sharp-ease`,
+    (isClosing || isOpening) && "transition-transform duration-300 sharp-ease"
   );
 
   const style = {
     width: isMaximized ? getSizes().maximized.width : minimizedSize.width,
     height: isMaximized ? getSizes().maximized.height : minimizedSize.height,
-    transform: isClosing ? "scale(0)" : "scale(1)",
+    transform: isOpened ? "scale(1)" : "scale(0)",
     transformOrigin: "center",
   };
 
@@ -99,10 +125,13 @@ export function useResizableWindow({
     isMaximized,
     isResizing,
     isClosing,
+    isOpening,
+    isOpened,
     style,
     windowClass,
     handleMaximize,
     handleMinimize,
     handleClose,
+    handleOpen,
   };
 }
