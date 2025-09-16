@@ -40,7 +40,6 @@ const PanoramaViewer = () => {
 
   const handleReady = (instance: Viewer) => {
     const virtualTour = instance.getPlugin(VirtualTourPlugin) as VirtualTourPlugin;
-    console.log("Virtual Tour Plugin:", virtualTour);
 
     if (!virtualTour) {
       return;
@@ -56,7 +55,9 @@ const PanoramaViewer = () => {
       gameStateManager.setCoordinates(location);
     });
 
-    eventBridge.emit("viewerLoaded", {});
+    setTimeout(() => {
+      eventBridge.emit("viewerLoaded", {});
+    }, 1000);
   };
 
   const plugins = [
@@ -73,7 +74,7 @@ const PanoramaViewer = () => {
           showLoader: false,
           speed: "20rpm",
           effect: "fade",
-          rotation: false,
+          rotation: true,
         },
       },
     ],
