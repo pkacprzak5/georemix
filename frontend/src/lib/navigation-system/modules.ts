@@ -1,10 +1,14 @@
+import { Gameplay } from "@/pages/gameplay";
 import { LevelStart } from "@/pages/level-start";
+import { LevelSummary } from "@/pages/level-summary";
+import { LevelMap } from "@/pages/level-map";
 import { MockPage } from "@/pages/mock";
 import { PlayerNameInput } from "@/pages/player-name-input";
 import { StagePicker } from "@/pages/stage-picker";
 import { TitlePage } from "@/pages/title";
 import type { Module } from "./types";
 import { moduleIdMap } from "./types";
+import { FinalResult } from "@/pages/final-result";
 
 export const titleGroup: Module = {
   id: moduleIdMap.TITLE,
@@ -28,14 +32,22 @@ export const levelStartGroup: Module = {
   pages: [{ id: "level-start", component: LevelStart, title: "Start the Level" }],
 };
 
+export const gameplayGroup: Module = {
+  id: moduleIdMap.GAMEPLAY,
+  pages: [{ id: "gameplay", component: Gameplay, title: "Game" }],
+};
+
 export const levelEndGroup: Module = {
   id: moduleIdMap.LEVEL_END,
-  pages: [{ id: "level-results", component: MockPage, title: "Level Results" }],
+  pages: [
+    { id: "level-summary", component: LevelSummary, title: "Level Results" },
+    { id: "level-map", component: LevelMap, title: "Result Map" },
+  ],
 };
 
 export const gameEndGroup: Module = {
   id: moduleIdMap.FINAL,
-  pages: [{ id: "final", component: MockPage, title: "Summary" }],
+  pages: [{ id: "final-result", component: FinalResult, title: "Summary" }],
 };
 
 export const modulesMap = {
@@ -44,4 +56,5 @@ export const modulesMap = {
   [levelStartGroup.id]: levelStartGroup,
   [levelEndGroup.id]: levelEndGroup,
   [gameEndGroup.id]: gameEndGroup,
+  [gameplayGroup.id]: gameplayGroup
 } as const;

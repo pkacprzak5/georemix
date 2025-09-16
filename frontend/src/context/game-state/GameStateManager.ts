@@ -19,7 +19,9 @@ export class GameStateManager {
 
   // Current Gameplay
   private _currentCoordinates: MapCoordinates | null = null;
-  private _timeTaken: number | null = null;
+  private _submittedCoordinates: MapCoordinates | null = null;
+  // TODO UPDATE TO NOT BE CONSTANT VALUE
+  private _timeTaken: number | null = 12;
   private _currentDistance: number | null = null;
 
   constructor(private readonly _eventBridge: EventBridge) {}
@@ -47,19 +49,33 @@ export class GameStateManager {
     if (this._levels.length === 0) {
       throw new Error("No levels loaded");
     }
+    console.log(this._currentLevelNumber, "mleko")
+    return this._levels[this._currentLevelNumber]
+  }
 
-    return this._levels[this._currentLevelNumber];
+  get numberOfLevels(): number {
+    if (this._levels.length === 0) {
+      throw new Error("No levels loaded");
+    }
+    return this._levels.length;
   }
 
   get levelResult(): LevelResultInfo {
-    if (!this._currentDistance || !this._timeTaken) {
-      throw new Error("No distance or no time taken");
+    if (
+      !this._currentDistance ||
+      !this._timeTaken ||
+      !this._currentCoordinates ||
+      !this._submittedCoordinates
+    ) {
+      throw new Error("No distance or no time taken")
     }
 
     return {
       distance: this._currentDistance,
       timeTaken: this._timeTaken,
-    };
+      answerPosition: this._currentCoordinates,
+      submittedPosition: this._submittedCoordinates,
+    }
   }
 
   setTimeTaken(time: number) {
@@ -84,7 +100,10 @@ export class GameStateManager {
     if (!this._currentCoordinates) {
       throw new Error("No current coordinates set");
     }
-    const toRad = (value: number) => (value * Math.PI) / 180;
+
+    this._submittedCoordinates = submittedPosition;
+
+    const toRad = (value: number) => value * Math.PI / 180;
     const { lng: lng1, lat: lat1 } = this._currentCoordinates;
     const { lng: lng2, lat: lat2 } = submittedPosition;
 
@@ -125,8 +144,8 @@ export class GameStateManager {
           theme: level.theme,
           name: level.name,
           thumbnail: level.thumbnail,
-          number: i + 1,
-        }));
+          number: i + 1
+        }))
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -134,7 +153,7 @@ export class GameStateManager {
   }
 
   async loadLevel(levelNumber: number | null = this._currentLevelNumber) {
-    if (!levelNumber) {
+    if (levelNumber === null) {
       throw new Error("No current round set");
     }
     const level = this._levels[levelNumber];
@@ -155,9 +174,14 @@ export class GameStateManager {
 
   loadNextLevel(): Promise<null> {
     return new Promise(() => {
-      // Async function to fetch the next level info
-      // The LevelProviderStrategy should somehow handle passing
-      // the level needed info to the game
+      if (this._currentLevelNumber === null) {
+        throw new Error("No current level set");
+      }
+      this._currentLevelNumber += 1;
+      const level = this._levels[this._currentLevelNumber]
+      this._currentTheme = level.theme;
+      console.log(this._currentLevelNumber)
+
     });
   }
 

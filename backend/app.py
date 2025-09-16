@@ -114,7 +114,7 @@ def get_level_node(round_num, level_num, node_id):
         "panorama": IMAGE_ENDPOINT + str(node_data["panorama"]),
         "links": links,
         "gps": node_data["gps"],
-        "panoData": {"poseHeading": (node_data["sphereCorrection"]["pan"]) / 180 * 3.14},
+        "sphereCorrection": {"pan": str(node_data["sphereCorrection"]["pan"]) + 'deg'}
     }
     
     return jsonify(response_node)
