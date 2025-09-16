@@ -37,7 +37,7 @@ export function OverlaySheet({ open, children, skipInitialAnimation = false }: O
       animate={open ? "open" : "closed"}
       variants={sheetVariants}
       initial={getInitialState()}
-      className={`absolute inset-0 bg-background border-t-2 border-border flex flex-col z-[1000]`}>
+      className={`absolute w-[105%] inset-0 bg-background border-t-2 border-border flex flex-col z-[1000]`}>
       <div className="flex-1 overflow-hidden">{children}</div>
     </motion.div>
   );

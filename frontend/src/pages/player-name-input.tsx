@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGameStateManager } from "@/context/game-state";
@@ -9,6 +9,10 @@ export function PlayerNameInput() {
   const gameStateManager = useGameStateManager();
   const { navigateTo } = useNavigation();
   const [playerName, setPlayerName] = useState("");
+
+  useEffect(() => {
+    gameStateManager.resetAll();
+  }, [])
 
   const handleSubmit = () => {
     if (playerName.trim()) {

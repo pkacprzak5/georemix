@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { OverlaySheet } from "@/components/layout/overlay-sheet";
-import { Button } from "@/components/ui/button";
 import PanoramaViewer from "@/features/game/PanoramaViewer";
 import { LoadingScreen } from "@/pages/loading-screen";
 import { PauseMenu } from "@/components/layout/pause-menu";
@@ -8,6 +7,7 @@ import { useEventBridge } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 import { useProgressiveLoading } from "@/hooks/use-progressive-loading";
+import { GameplayOverlay } from "@/components/ui/gameplay-overlay";
 
 export function Gameplay() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -31,29 +31,20 @@ export function Gameplay() {
 
   // const toggleMenu = () => setMenuOpen((old) => !old);
 
-  // If there are problems with state management, use arrow function inside setMenuOpen
-  const toggleMenu = () => {
-    if (menuOpen) {
-      eventBridge.emit("gameUnpaused", {});
-      setMenuOpen(false);
-    } else {
-      eventBridge.emit("gamePaused", {});
-      setMenuOpen(true);
-    }
-  };
+  
 
   useEffect(() => {
-    const loadedSubscriptionCleanup = eventBridge.addEventListener("viewerLoaded", () => {
+    const loadedCleanup = eventBridge.addEventListener("viewerLoaded", () => {
       startLoading.executeWithProgress(
         undefined, // No async operation to wait for
         () => {
           setLoadingOverlayOpen(false);
-          eventBridge.emit("gameUnpaused", {});
+          eventBridge.emit("gameStarted", {});
         }
       );
     });
 
-    const resultSubscriptionCleanup = eventBridge.addEventListener("resultSubmitted", () => {
+    const resultCleanup = eventBridge.addEventListener("resultSubmitted", () => {
       setResultOverlayOpen(true);
       endLoading.executeWithProgress(
         undefined, // No async operation to wait for
@@ -64,9 +55,18 @@ export function Gameplay() {
       );
     });
 
+    const pauseCleanup = eventBridge.addEventListener("gamePaused", () => {
+      setMenuOpen(true);
+    })
+    const unpauseCleanup = eventBridge.addEventListener("gameUnpaused", () => {
+      setMenuOpen(false);
+    })
+
     return () => {
-      loadedSubscriptionCleanup();
-      resultSubscriptionCleanup();
+      loadedCleanup();
+      resultCleanup();
+      pauseCleanup();
+      unpauseCleanup();
     };
   }, [eventBridge, startLoading.executeWithProgress, endLoading.executeWithProgress, navigateTo]);
 
@@ -81,7 +81,7 @@ export function Gameplay() {
 
       {/* Menu overlay - toggleable by button */}
       <OverlaySheet open={menuOpen}>
-        <PauseMenu onUnpause={toggleMenu} />
+        <PauseMenu />
       </OverlaySheet>
 
       {/* Result overlay - shown after resultSubmitted event */}
@@ -89,11 +89,7 @@ export function Gameplay() {
         <LoadingScreen progress={endLoading.progress} />
       </OverlaySheet>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-background z-50">
-        <Button onClick={toggleMenu} className="w-[200px]">
-          {menuOpen ? "Resume" : "Pause"}
-        </Button>
-      </div>
+      <GameplayOverlay/>
     </>
   );
 }

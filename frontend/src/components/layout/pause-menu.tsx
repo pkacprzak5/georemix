@@ -1,20 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
-import { useGameStateManager } from "@/context/game-state";
+import { useEventBridge } from "@/context/game-state";
 
-type PauseMenuProps = {
-  onUnpause: () => void;
-};
 
-export function PauseMenu({ onUnpause }: PauseMenuProps) {
+
+export function PauseMenu() {
+  const eventBridge = useEventBridge();
   const { navigateTo } = useNavigation();
-  const gameStateManager = useGameStateManager();
 
   const handleLeaveGame = () => {
-    gameStateManager.resetAll();
     navigateTo(moduleIdMap.INTRO, "player-name-input");
   };
+
+  const onUnpause = () => {
+    eventBridge.emit("gameUnpaused", {});
+  }
 
   return (
     <div className="w-full h-full flex items-center justify-center bg-background/95">
