@@ -6,6 +6,7 @@ import {
 } from "@/types/project";
 import { BASE_URL } from "@/constants";
 import type { EventBridge } from "./EventBridge";
+import type ThemeManager from "@/lib/theme-management/ThemeManager";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
@@ -24,7 +25,15 @@ export class GameStateManager {
   private _timeTaken: number | null = 12;
   private _currentDistance: number | null = null;
 
-  constructor(private readonly _eventBridge: EventBridge) {}
+  constructor(
+    private readonly _eventBridge: EventBridge,
+    private readonly _themeManager: ThemeManager
+  ) {
+    this._eventBridge.addEventListener("themeChanged", (data) => {
+      const { theme } = data as { theme: "light" | "dark" };
+      this._themeManager.setTheme(theme);
+    });
+  }
 
   // Getters
   get currentRoundNumber(): number {
@@ -49,8 +58,7 @@ export class GameStateManager {
     if (this._levels.length === 0) {
       throw new Error("No levels loaded");
     }
-    console.log(this._currentLevelNumber, "mleko")
-    return this._levels[this._currentLevelNumber]
+    return this._levels[this._currentLevelNumber];
   }
 
   get numberOfLevels(): number {
@@ -67,7 +75,7 @@ export class GameStateManager {
       !this._currentCoordinates ||
       !this._submittedCoordinates
     ) {
-      throw new Error("No distance or no time taken")
+      throw new Error("No distance or no time taken");
     }
 
     return {
@@ -75,7 +83,7 @@ export class GameStateManager {
       timeTaken: this._timeTaken,
       answerPosition: this._currentCoordinates,
       submittedPosition: this._submittedCoordinates,
-    }
+    };
   }
 
   setTimeTaken(time: number) {
@@ -103,7 +111,7 @@ export class GameStateManager {
 
     this._submittedCoordinates = submittedPosition;
 
-    const toRad = (value: number) => value * Math.PI / 180;
+    const toRad = (value: number) => (value * Math.PI) / 180;
     const { lng: lng1, lat: lat1 } = this._currentCoordinates;
     const { lng: lng2, lat: lat2 } = submittedPosition;
 
@@ -144,8 +152,8 @@ export class GameStateManager {
           theme: level.theme,
           name: level.name,
           thumbnail: level.thumbnail,
-          number: i + 1
-        }))
+          number: i + 1,
+        }));
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -158,7 +166,7 @@ export class GameStateManager {
     }
     const level = this._levels[levelNumber];
     this._currentTheme = level.theme;
-    this._eventBridge.emit("themeChanged", { theme: level.theme });
+    this._eventBridge.emit("themeChanged", { theme: this._currentTheme });
   }
 
   get currentLevelResult(): LevelResult[] {
@@ -178,10 +186,9 @@ export class GameStateManager {
         throw new Error("No current level set");
       }
       this._currentLevelNumber += 1;
-      const level = this._levels[this._currentLevelNumber]
+      const level = this._levels[this._currentLevelNumber];
       this._currentTheme = level.theme;
-      console.log(this._currentLevelNumber)
-
+      this._eventBridge.emit("themeChanged", { theme: this._currentTheme });
     });
   }
 
