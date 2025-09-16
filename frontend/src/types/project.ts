@@ -8,6 +8,7 @@ export type GameEvent =
   | "resultSubmitted"
   | "gamePaused"
   | "gameUnpaused"
+  | "themeChanged"
 
 export type LevelPhoto = {
   lat: number;

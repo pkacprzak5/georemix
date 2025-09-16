@@ -1,12 +1,18 @@
-import { type LevelInfo, type LevelResult, type LevelResultInfo, type MapCoordinates } from "@/types/project";
+import {
+  type LevelInfo,
+  type LevelResult,
+  type LevelResultInfo,
+  type MapCoordinates,
+} from "@/types/project";
 import { BASE_URL } from "@/constants";
+import type { EventBridge } from "./EventBridge";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
   // TODO: remove mock static level / round numbers
   private _currentRoundNumber: number | null = null;
   private _currentLevelNumber: number | null = null;
-  private _levels: LevelInfo[] = []
+  private _levels: LevelInfo[] = [];
   private _levelResults: LevelResult[] = [];
   private _currentTheme: "light" | "dark" = "light";
   private _playerName: string = "";
@@ -15,6 +21,8 @@ export class GameStateManager {
   private _currentCoordinates: MapCoordinates | null = null;
   private _timeTaken: number | null = null;
   private _currentDistance: number | null = null;
+
+  constructor(private readonly _eventBridge: EventBridge) {}
 
   // Getters
   get currentRoundNumber(): number {
@@ -40,18 +48,18 @@ export class GameStateManager {
       throw new Error("No levels loaded");
     }
 
-    return this._levels[this._currentLevelNumber]
+    return this._levels[this._currentLevelNumber];
   }
 
   get levelResult(): LevelResultInfo {
-    if(!this._currentDistance || !this._timeTaken){
-      throw new Error("No distance or no time taken")
+    if (!this._currentDistance || !this._timeTaken) {
+      throw new Error("No distance or no time taken");
     }
 
     return {
       distance: this._currentDistance,
-      timeTaken: this._timeTaken
-    }
+      timeTaken: this._timeTaken,
+    };
   }
 
   setTimeTaken(time: number) {
@@ -76,9 +84,9 @@ export class GameStateManager {
     if (!this._currentCoordinates) {
       throw new Error("No current coordinates set");
     }
-    const toRad = (value: number) => value * Math.PI / 180;
-    const {lng: lng1, lat: lat1} = this._currentCoordinates;
-    const {lng: lng2, lat: lat2} = submittedPosition;
+    const toRad = (value: number) => (value * Math.PI) / 180;
+    const { lng: lng1, lat: lat1 } = this._currentCoordinates;
+    const { lng: lng2, lat: lat2 } = submittedPosition;
 
     const R = 6371e3; // Earth radius in meters
     const φ1 = toRad(lat1);
@@ -86,9 +94,9 @@ export class GameStateManager {
     const Δφ = toRad(lat2 - lat1);
     const Δλ = toRad(lng2 - lng1);
 
-    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) *
-      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const a =
+      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     const distance = R * c; // in meters
@@ -102,13 +110,13 @@ export class GameStateManager {
     }
 
     return fetch(`${BASE_URL}/round${roundNumber}/metadata`)
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error(`Round ${roundNumber} - Network response was not ok`);
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         this._currentLevelNumber = 0;
         this._currentRoundNumber = roundNumber;
         const metadataArray = data;
@@ -117,12 +125,11 @@ export class GameStateManager {
           theme: level.theme,
           name: level.name,
           thumbnail: level.thumbnail,
-          number: i + 1
-        }))
-
+          number: i + 1,
+        }));
       })
-      .catch(error => {
-        console.error('Fetch error:', error);
+      .catch((error) => {
+        console.error("Fetch error:", error);
       });
   }
 
@@ -130,10 +137,10 @@ export class GameStateManager {
     if (!levelNumber) {
       throw new Error("No current round set");
     }
-    const level = this._levels[levelNumber]
+    const level = this._levels[levelNumber];
     this._currentTheme = level.theme;
+    this._eventBridge.emit("themeChanged", { theme: level.theme });
   }
-
 
   get currentLevelResult(): LevelResult[] {
     if (this._currentLevelNumber === null) {
