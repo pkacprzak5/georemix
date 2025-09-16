@@ -19,6 +19,7 @@ export const moduleIdMap = {
   GAMEPLAY: "GAMEPLAY" ,
   LEVEL_END: "LEVEL_END",
   FINAL: "FINAL",
+  LOADING: "LOADING",
 } as const;
 
 export type ModuleId = (typeof moduleIdMap)[keyof typeof moduleIdMap];

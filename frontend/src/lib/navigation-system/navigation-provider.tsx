@@ -15,25 +15,27 @@ export type NavigationAction =
   | { type: "SHOW_MENU" }
   | { type: "HIDE_MENU" }
   | { type: "NAVIGATE"; groupId: ModuleId; pageId: PageId }
-  | { type: "SET_LOADING"; loading: boolean }
-  | { type: "NAVIGATE_WITH_LOADING"; groupId: ModuleId; pageId: PageId; promise: Promise<unknown> };
+  | { type: "NAVIGATE_WITH_LOADING"; groupId: ModuleId; pageId: PageId; promise: Promise<unknown>; targetGroupId: ModuleId; targetPageId: PageId };
 
 export type NavigationState = {
   currentModule: ModuleId | null;
   currentPage: PageId | null;
-  isLoading: boolean;
+  loadingData?: {
+    promise: Promise<unknown>;
+    targetModuleId: ModuleId;
+    targetPageId: PageId;
+  };
 };
 
 const initialState: NavigationState = {
   currentModule: null,
   currentPage: null,
-  isLoading: false,
 };
 
 export type NavigationContextType = {
   state: NavigationState;
   navigateTo: (groupId: ModuleId, pageId: PageId) => void;
-  navigateWithLoading: (groupId: ModuleId, pageId: PageId, promise: Promise<unknown>) => void;
+  navigateWithLoading: (targetGroupId: ModuleId, targetPageId: PageId, promise: Promise<unknown>) => void;
   navigateToNewGroup: (groupId: ModuleId) => void;
   modules: Map<ModuleId, Module>;
 };
@@ -47,16 +49,18 @@ function navigationReducer(state: NavigationState, action: NavigationAction): Na
         ...state,
         currentModule: action.groupId,
         currentPage: action.pageId,
-        isLoading: false,
+        loadingData: undefined,
       };
-    case "SET_LOADING":
-      return { ...state, isLoading: action.loading };
     case "NAVIGATE_WITH_LOADING":
       return {
         ...state,
         currentModule: action.groupId,
         currentPage: action.pageId,
-        isLoading: true,
+        loadingData: {
+          promise: action.promise,
+          targetModuleId: action.targetGroupId,
+          targetPageId: action.targetPageId,
+        },
       };
     default:
       return state;
@@ -104,14 +108,15 @@ export function NavigationProvider({ children }: PropsWithChildren) {
   }, []);
 
   const navigateWithLoading = useCallback(
-    async (groupId: ModuleId, pageId: PageId, promise: Promise<unknown>) => {
-      navigationStateDispatch({ type: "NAVIGATE_WITH_LOADING", groupId, pageId, promise });
-
-      try {
-        await promise;
-      } finally {
-        navigationStateDispatch({ type: "SET_LOADING", loading: false });
-      }
+    (targetGroupId: ModuleId, targetPageId: PageId, promise: Promise<unknown>) => {
+      navigationStateDispatch({ 
+        type: "NAVIGATE_WITH_LOADING", 
+        groupId: "LOADING", 
+        pageId: "navigation-loading", 
+        promise,
+        targetGroupId,
+        targetPageId 
+      });
     },
     []
   );

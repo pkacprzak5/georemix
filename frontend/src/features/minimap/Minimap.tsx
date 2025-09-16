@@ -38,13 +38,11 @@ export function Minimap() {
   });
 
   useEffect(() => {
-    const loadedSubscriptionCleanup = eventBridge.addEventListener("viewerLoaded", handleOpen);
     const pausedCleanup = eventBridge.addEventListener("gamePaused", handleClose);
     const unloadedSubscriptionCleanup = eventBridge.addEventListener("resultSubmitted", handleClose);
     const unpausedCleanup = eventBridge.addEventListener("gameUnpaused", handleOpen);
 
     return () => {
-      loadedSubscriptionCleanup();
       unloadedSubscriptionCleanup();
       pausedCleanup();
       unpausedCleanup();
