@@ -28,7 +28,7 @@ export function useProgressiveLoading({
 
   const getRandomizedDelay = useCallback((baseDelay: number): number => {
     const randomFactor = 1 + (Math.random() - 0.5) * 2 * randomizationFactor;
-    return Math.floor(baseDelay * randomFactor);
+    return Math.floor(baseDelay * (1+randomFactor));
   }, [randomizationFactor]);
 
   const executeWithProgress = useCallback(async (

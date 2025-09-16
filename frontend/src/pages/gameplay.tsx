@@ -19,14 +19,14 @@ export function Gameplay() {
   // Progressive loading hooks for start and end loading
   const startLoading = useProgressiveLoading({
     initialProgress: 33,
-    baseDelayMs: 500,
-    randomizationFactor: 0.5,
+    baseDelayMs: 300,
+    randomizationFactor: 0.2,
   });
 
   const endLoading = useProgressiveLoading({
     initialProgress: 33,
     baseDelayMs: 400,
-    randomizationFactor: 1, // More variation for end loading
+    randomizationFactor: 0.6, // More variation for end loading
   });
 
   // const toggleMenu = () => setMenuOpen((old) => !old);

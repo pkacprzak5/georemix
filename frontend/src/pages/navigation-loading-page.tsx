@@ -8,7 +8,7 @@ export function NavigationLoadingPage() {
   const { state, navigateTo } = useNavigation();
   const { progress, executeWithProgress } = useProgressiveLoading({
     initialProgress: 33,
-    baseDelayMs: 500,
+    baseDelayMs: 300,
     randomizationFactor: 1, // 40% randomization for variety
   });
 
