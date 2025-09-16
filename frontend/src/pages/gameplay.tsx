@@ -64,7 +64,7 @@ export function Gameplay() {
       </OverlaySheet>
 
       {/* Result overlay - shown after resultSubmitted event */}
-      <OverlaySheet open={resultOverlayOpen} zIndex={45}>
+      <OverlaySheet open={resultOverlayOpen} zIndex={50}>
         <LoadingScreen />
       </OverlaySheet>
 

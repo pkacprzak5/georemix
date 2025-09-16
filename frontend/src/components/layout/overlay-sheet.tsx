@@ -9,7 +9,7 @@ const sheetVariants: Variants = {
     },
   },
   open: {
-    y: 0,
+    y: "-1%",
     transition: {
       type: "tween" as const,
       duration: 0.3,
@@ -24,7 +24,7 @@ type OverlaySheetProps = {
   zIndex?: number;
 };
 
-export function OverlaySheet({ open, children, skipInitialAnimation = false, zIndex }: OverlaySheetProps) {
+export function OverlaySheet({ open, children, skipInitialAnimation = false }: OverlaySheetProps) {
   const getInitialState = () => {
     if (skipInitialAnimation && open) {
       return "open";
