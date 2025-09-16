@@ -74,7 +74,7 @@ const PanoramaViewer = () => {
           showLoader: false,
           speed: "20rpm",
           effect: "fade",
-          rotation: false,
+          rotation: true,
         },
       },
     ],

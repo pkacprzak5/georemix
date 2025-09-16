@@ -41,7 +41,7 @@ export class GameStateManager {
     if (this._levels.length === 0) {
       throw new Error("No levels loaded");
     }
-
+    console.log(this._currentLevelNumber, "mleko")
     return this._levels[this._currentLevelNumber]
   }
 
@@ -145,7 +145,7 @@ export class GameStateManager {
   }
 
   async loadLevel(levelNumber: number | null = this._currentLevelNumber) {
-    if (!levelNumber) {
+    if (levelNumber === null) {
       throw new Error("No current round set");
     }
     const level = this._levels[levelNumber]
@@ -166,9 +166,14 @@ export class GameStateManager {
 
   loadNextLevel(): Promise<null> {
     return new Promise(() => {
-      // Async function to fetch the next level info
-      // The LevelProviderStrategy should somehow handle passing
-      // the level needed info to the game
+      if (this._currentLevelNumber === null) {
+        throw new Error("No current level set");
+      }
+      this._currentLevelNumber += 1;
+      const level = this._levels[this._currentLevelNumber]
+      this._currentTheme = level.theme;
+      console.log(this._currentLevelNumber)
+
     });
   }
 

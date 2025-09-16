@@ -101,6 +101,7 @@ export function LevelMap() {
       const loadingPromise = new Promise((resolve) => {
         gameStateManager.loadNextLevel();
         resolve(null);
+        console.log("test")
       })
       navigateWithLoading(moduleIdMap.LEVEL_START, "level-start", loadingPromise);
     }
