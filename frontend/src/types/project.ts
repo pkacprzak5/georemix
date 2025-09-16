@@ -1,9 +1,13 @@
-export interface MapPosition {
+export interface MapCoordinates {
   lat: number;
   lng: number;
 }
 
-export type GameEvent = "gameplayStarted" | "gameplayEnded" | "loadingFinished";
+export type GameEvent =
+  | "viewerLoaded"
+  | "resultSubmitted"
+  | "gamePaused"
+  | "gameUnpaused"
 
 export type LevelPhoto = {
   lat: number;
@@ -12,10 +16,11 @@ export type LevelPhoto = {
 };
 
 export type LevelInfo = {
-  levelName: string;
-  levelId: string;
-  level_theme: "light" | "dark";
-  level_photos: LevelPhoto[];
+  initialNode: string,
+  name: string;
+  theme: "light" | "dark";
+  thumbnail: string,
+  number: number
 };
 
 export type LevelResult = {
@@ -26,13 +31,9 @@ export type LevelResult = {
 
 export type RoundInfo = LevelInfo[];
 
-export const ROUNDS: RoundInfo[] = [
-  [
-    {
-      levelName: "Cyberpunk City",
-      levelId: "cyberpunk_city",
-      level_theme: "light",
-      level_photos: [],
-    },
-  ],
-];
+export type LevelResultInfo = {
+  timeTaken: number;
+  distance: number;
+  submittedPosition: MapCoordinates;
+  answerPosition: MapCoordinates;
+}
