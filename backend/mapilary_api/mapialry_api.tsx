@@ -183,34 +183,3 @@ const API_testing = async (mode: API_mode) => {
 
 }
 export { API_testing };
-
-
-/*
-
-  console.log("a");
-  const API_ACCESSTOKEN = "MLY|25029665826641263|11a89c920225f029a3179155d78aef55";
-  const APP_ID = "25029665826641263";
-  const AUTORISED_URL = "https://www.mapillary.com/connect?client_id=25029665826641263";
-  const CLIENT_SECRET = "MLY|25029665826641263|24a870571e4a2cbff7e2c3f03b5cb528";   // SECRET
-
-  //console.log('curl.exe "https://graph.mapillary.com/1156350815484235?fields=id,thumb_original_url,computed_geometry" -H "Authorization: OAuth MLY|25029665826641263|11a89c920225f029a3179155d78aef55"');
-
-
-  $token = "MLY|25029665826641263|24a870571e4a2cbff7e2c3f03b5cb528"
-$imageId = "1156350815484235"
-
-$url = "https://graph.mapillary.com/$imageId?fields=key,thumb_1024_url,computed_geometry,captured_at"
-$headers = @{ Authorization = "Bearer $token" }
-
-Invoke-WebRequest -Uri $url -Headers $headers -Method Get | Select-Object -ExpandProperty Content
-
-    {"id":"1156350815484235","thumb_1024_url":"https:\/\/scontent-waw2-1.xx.fbcdn.net\/m1\/v\/t6\/An-ROUIgztGd2mChwqObgy4_nYyJNGFOwlTTVfnxHtXHdiVDtadJk9YOX7cK4osi57zTvOf5xHJxVpCWQmiXv0bLK84jMBSJTtqKMVitPjMO5azvInA7cgM7PaKEF7RViJJCX6ojdeCzzCt7sX6H-w?stp=s1024x512&edm=ALXxkZ8EAAAA&_nc_gid=qHVWUJkFnSI0c5oYHke0lw&_nc_oc=AdkcsLiiZetWFVNgiT1dRrRCgE4x3xwcrxzWg0j30uRsOKBHZ007OfFdRTo3D1_P-LSJQACtPPcFkkmgnOtCLJrF&ccb=10-5&oh=00_Afbwwk-bU7P8ZS7VPvVrwIFWVjSiHkIbZ8ZGlgTwUb94Ig&oe=68EFE6EC&_nc_sid=201bca","computed_geometry":{"type":"Point","coordinates":[2.3013506935803,48.848225624039]},"captured_at":1718004551000}
-
-    curl.exe "https://graph.mapillary.com/1156350815484235?fields=id,thumb_original_url,computed_geometry" -H "Authorization: OAuth MLY|25029665826641263|11a89c920225f029a3179155d78aef55"
-  
-    https:\/\/scontent-waw2-1.xx.fbcdn.net\/m1\/v\/t6\/An-ROUIgztGd2mChwqObgy4_nYyJNGFOwlTTVfnxHtXHdiVDtadJk9YOX7cK4osi57zTvOf5xHJxVpCWQmiXv0bLK84jMBSJTtqKMVitPjMO5azvInA7cgM7PaKEF7RViJJCX6ojdeCzzCt7sX6H-w?edm=ALXxkZ8EAAAA&_nc_gid=XcvgmuzDKQyiaSufHOxEdw&_nc_oc=AdkcsLiiZetWFVNgiT1dRrRCgE4x3xwcrxzWg0j30uRsOKBHZ007OfFdRTo3D1_P-LSJQACtPPcFkkmgnOtCLJrF&ccb=10-5&oh=00_AfbqGhyk4Bte9oe63XbcEvgCyBs1LpgLEUs0Yu7A8gy8FA&oe=68EFE6EC&_nc_sid=201bca
-    
-    https://scontent-waw2-1.xx.fbcdn.net/m1/v/t6/An-ROUIgztGd2mChwqObgy4_nYyJNGFOwlTTVfnxHtXHdiVDtadJk9YOX7cK4osi57zTvOf5xHJxVpCWQmiXv0bLK84jMBSJTtqKMVitPjMO5azvInA7cgM7PaKEF7RViJJCX6ojdeCzzCt7sX6H-w?edm=ALXxkZ8EAAAA&_nc_gid=XcvgmuzDKQyiaSufHOxEdw&_nc_oc=AdkcsLiiZetWFVNgiT1dRrRCgE4x3xwcrxzWg0j30uRsOKBHZ007OfFdRTo3D1_P-LSJQACtPPcFkkmgnOtCLJrF&ccb=10-5&oh=00_AfbqGhyk4Bte9oe63XbcEvgCyBs1LpgLEUs0Yu7A8gy8FA&oe=68EFE6EC&_nc_sid=201bca
-    
-
-    */
