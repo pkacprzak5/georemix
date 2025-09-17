@@ -12,7 +12,7 @@ export function TextParticle(props: TextParticleProps) {
   return (
     <div
       key={id}
-      className="pointer-events-none fixed z-50 select-none animate-[float-up_0.8s_ease-out_forwards] text-secondary-background font-heading text-3xl text-shadow-lg"
+      className="pointer-events-none fixed z-50 select-none animate-[float-up_0.8s_ease-out_forwards] text-white font-heading text-3xl text-shadow-lg"
       style={
         {
           WebkitTextStroke: "0.5px var(--border)",

@@ -20,8 +20,8 @@ export class GameStateManager {
   // Current Gameplay
   private _currentCoordinates: MapCoordinates | null = null;
   private _submittedCoordinates: MapCoordinates | null = null;
-  // TODO UPDATE TO NOT BE CONSTANT VALUE
-  private _timeTaken: number | null = 12;
+  // time taken in seconds
+  private _timeTaken: number | null = 0;
   private _currentDistance: number | null = null;
 
   constructor(
