@@ -5,7 +5,7 @@ import {
   type MapCoordinates,
 } from "@/types/project";
 import { BASE_URL } from "@/constants";
-import type ThemeManager from "@/lib/theme-management/ThemeManager";
+import type ThemeManager from "@/context/game-state/ThemeManager";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {

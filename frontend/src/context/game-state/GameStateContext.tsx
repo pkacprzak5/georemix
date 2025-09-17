@@ -3,7 +3,7 @@ import { EventBridge } from "@/context/game-state/EventBridge";
 import { GameStateManager } from "@/context/game-state/GameStateManager";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import type { ModuleId } from "@/lib/navigation-system/types";
-import ThemeManager from "@/lib/theme-management/ThemeManager";
+import ThemeManager from "@/context/game-state/ThemeManager";
 
 interface GameStateContextType {
   eventBridge: EventBridge;
