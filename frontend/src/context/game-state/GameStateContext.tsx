@@ -3,6 +3,7 @@ import { EventBridge } from "@/context/game-state/EventBridge";
 import { GameStateManager } from "@/context/game-state/GameStateManager";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import type { ModuleId } from "@/lib/navigation-system/types";
+import ThemeManager from "@/context/game-state/ThemeManager";
 
 interface GameStateContextType {
   eventBridge: EventBridge;
@@ -17,10 +18,10 @@ interface GameStateProviderProps {
 }
 
 export function GameStateProvider({ children }: GameStateProviderProps) {
+  const themeManager = useMemo(() => new ThemeManager(), []);
   const eventBridge = useMemo(() => new EventBridge(), []);
-  const gameStateManager = useMemo(() => new GameStateManager(), []);
+  const gameStateManager = useMemo(() => new GameStateManager(themeManager), []);
   const { navigateToNewGroup } = useNavigation();
-
 
   const contextValue = useMemo(
     () => ({

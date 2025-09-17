@@ -1,12 +1,18 @@
-import { type LevelInfo, type LevelResult, type LevelResultInfo, type MapCoordinates } from "@/types/project";
+import {
+  type LevelInfo,
+  type LevelResult,
+  type LevelResultInfo,
+  type MapCoordinates,
+} from "@/types/project";
 import { BASE_URL } from "@/constants";
+import type ThemeManager from "@/context/game-state/ThemeManager";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
   // TODO: remove mock static level / round numbers
   private _currentRoundNumber: number | null = null;
   private _currentLevelNumber: number | null = null;
-  private _levels: LevelInfo[] = []
+  private _levels: LevelInfo[] = [];
   private _levelResults: LevelResult[] = [];
   private _currentTheme: "light" | "dark" = "light";
   private _playerName: string = "";
@@ -17,6 +23,10 @@ export class GameStateManager {
   // TODO UPDATE TO NOT BE CONSTANT VALUE
   private _timeTaken: number | null = 12;
   private _currentDistance: number | null = null;
+
+  constructor(
+    private readonly _themeManager: ThemeManager
+  ) { }
 
   // Getters
   get currentRoundNumber(): number {
@@ -41,8 +51,7 @@ export class GameStateManager {
     if (this._levels.length === 0) {
       throw new Error("No levels loaded");
     }
-    console.log(this._currentLevelNumber, "mleko")
-    return this._levels[this._currentLevelNumber]
+    return this._levels[this._currentLevelNumber];
   }
 
   get numberOfLevels(): number {
@@ -59,7 +68,7 @@ export class GameStateManager {
       !this._currentCoordinates ||
       !this._submittedCoordinates
     ) {
-      throw new Error("No distance or no time taken")
+      throw new Error("No distance or no time taken");
     }
 
     return {
@@ -67,7 +76,7 @@ export class GameStateManager {
       timeTaken: this._timeTaken,
       answerPosition: this._currentCoordinates,
       submittedPosition: this._submittedCoordinates,
-    }
+    };
   }
 
   setTimeTaken(time: number) {
@@ -95,7 +104,7 @@ export class GameStateManager {
 
     this._submittedCoordinates = submittedPosition;
 
-    const toRad = (value: number) => value * Math.PI / 180;
+    const toRad = (value: number) => (value * Math.PI) / 180;
     const { lng: lng1, lat: lat1 } = this._currentCoordinates;
     const { lng: lng2, lat: lat2 } = submittedPosition;
 
@@ -105,9 +114,9 @@ export class GameStateManager {
     const Δφ = toRad(lat2 - lat1);
     const Δλ = toRad(lng2 - lng1);
 
-    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) *
-      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const a =
+      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     const distance = R * c; // in meters
@@ -121,14 +130,13 @@ export class GameStateManager {
     }
 
     return fetch(`${BASE_URL}/round${roundNumber}/metadata`)
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error(`Round ${roundNumber} - Network response was not ok`);
         }
         return response.json();
       })
-      .then(data => {
-        this._currentLevelNumber = 0;
+      .then((data) => {
         this._currentRoundNumber = roundNumber;
         const metadataArray = data;
         this._levels = metadataArray.map((level: LevelInfo, i: number) => ({
@@ -136,11 +144,12 @@ export class GameStateManager {
           theme: level.theme,
           name: level.name,
           thumbnail: level.thumbnail,
-          number: i + 1
-        }))
+          number: i + 1,
+        }));
+        this.loadLevel(0);
       })
-      .catch(error => {
-        console.error('Fetch error:', error);
+      .catch((error) => {
+        console.error("Fetch error:", error);
       });
   }
 
@@ -148,10 +157,11 @@ export class GameStateManager {
     if (levelNumber === null) {
       throw new Error("No current round set");
     }
-    const level = this._levels[levelNumber]
+    this._currentLevelNumber = levelNumber;
+    const level = this._levels[levelNumber];
     this._currentTheme = level.theme;
+    this._themeManager.setTheme(this._currentTheme);
   }
-
 
   get currentLevelResult(): LevelResult[] {
     if (this._currentLevelNumber === null) {
@@ -170,10 +180,9 @@ export class GameStateManager {
         throw new Error("No current level set");
       }
       this._currentLevelNumber += 1;
-      const level = this._levels[this._currentLevelNumber]
+      const level = this._levels[this._currentLevelNumber];
       this._currentTheme = level.theme;
-      console.log(this._currentLevelNumber)
-
+      this._themeManager.setTheme(this._currentTheme);
     });
   }
 
