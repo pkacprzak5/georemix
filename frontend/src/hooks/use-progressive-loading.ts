@@ -1,3 +1,4 @@
+import { useGameStateManager, useThemeManager } from "@/context/game-state";
 import { useState, useCallback } from "react";
 
 interface UseProgressiveLoadingOptions {
@@ -25,6 +26,8 @@ export function useProgressiveLoading({
   randomizationFactor = 0.3, // 30% randomization by default
 }: UseProgressiveLoadingOptions = {}): ProgressiveLoadingResult {
   const [progress, setProgress] = useState(initialProgress);
+  const gameStateManager = useGameStateManager();
+  const themeManager = useThemeManager();
 
   const getRandomizedDelay = useCallback((baseDelay: number): number => {
     const randomFactor = 1 + (Math.random() - 0.5) * 2 * randomizationFactor;
@@ -40,10 +43,12 @@ export function useProgressiveLoading({
       if (asyncOperation) {
         await asyncOperation;
       }
-      
+
       // Progress to 66%
       await new Promise(resolve => setTimeout(resolve, getRandomizedDelay(baseDelayMs)));
       setProgress(66);
+
+      themeManager.setTheme(gameStateManager.gameTheme);
       
       // Progress to 100%
       await new Promise(resolve => setTimeout(resolve, getRandomizedDelay(baseDelayMs)));

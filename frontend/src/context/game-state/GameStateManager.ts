@@ -20,8 +20,8 @@ export class GameStateManager {
   // Current Gameplay
   private _currentCoordinates: MapCoordinates | null = null;
   private _submittedCoordinates: MapCoordinates | null = null;
-  // TODO UPDATE TO NOT BE CONSTANT VALUE
-  private _timeTaken: number | null = 12;
+  // time taken in seconds
+  private _timeTaken: number | null = 0;
   private _currentDistance: number | null = null;
 
   constructor(
@@ -160,7 +160,7 @@ export class GameStateManager {
     this._currentLevelNumber = levelNumber;
     const level = this._levels[levelNumber];
     this._currentTheme = level.theme;
-    this._themeManager.setTheme(this._currentTheme);
+    
   }
 
   get currentLevelResult(): LevelResult[] {
@@ -182,7 +182,7 @@ export class GameStateManager {
       this._currentLevelNumber += 1;
       const level = this._levels[this._currentLevelNumber];
       this._currentTheme = level.theme;
-      this._themeManager.setTheme(this._currentTheme);
+      
     });
   }
 
