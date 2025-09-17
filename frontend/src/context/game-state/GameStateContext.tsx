@@ -20,7 +20,7 @@ interface GameStateProviderProps {
 export function GameStateProvider({ children }: GameStateProviderProps) {
   const themeManager = useMemo(() => new ThemeManager(), []);
   const eventBridge = useMemo(() => new EventBridge(), []);
-  const gameStateManager = useMemo(() => new GameStateManager(eventBridge, themeManager), []);
+  const gameStateManager = useMemo(() => new GameStateManager(themeManager), []);
   const { navigateToNewGroup } = useNavigation();
 
   const contextValue = useMemo(

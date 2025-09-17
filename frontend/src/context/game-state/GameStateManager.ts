@@ -5,7 +5,6 @@ import {
   type MapCoordinates,
 } from "@/types/project";
 import { BASE_URL } from "@/constants";
-import type { EventBridge } from "./EventBridge";
 import type ThemeManager from "@/lib/theme-management/ThemeManager";
 
 // TODO:  I truly grieve that this is not a zustand store.
@@ -26,15 +25,8 @@ export class GameStateManager {
   private _currentDistance: number | null = null;
 
   constructor(
-    private readonly _eventBridge: EventBridge,
     private readonly _themeManager: ThemeManager
-  ) {
-    this._eventBridge.addEventListener("themeChanged", (data) => {
-      console.log("AAAA")
-      const { theme } = data as { theme: "light" | "dark" };
-      this._themeManager.setTheme(theme);
-    });
-  }
+  ) { }
 
   // Getters
   get currentRoundNumber(): number {
@@ -168,7 +160,7 @@ export class GameStateManager {
     this._currentLevelNumber = levelNumber;
     const level = this._levels[levelNumber];
     this._currentTheme = level.theme;
-    this._eventBridge.emit("themeChanged", { theme: this._currentTheme });
+    this._themeManager.setTheme(this._currentTheme);
   }
 
   get currentLevelResult(): LevelResult[] {
@@ -190,8 +182,7 @@ export class GameStateManager {
       this._currentLevelNumber += 1;
       const level = this._levels[this._currentLevelNumber];
       this._currentTheme = level.theme;
-      console.log('aaa')
-      this._eventBridge.emit("themeChanged", { theme: this._currentTheme });
+      this._themeManager.setTheme(this._currentTheme);
     });
   }
 
