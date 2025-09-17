@@ -1,7 +1,8 @@
 import L from "leaflet";
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
-import { pinpoint } from "pepicons/print";
+import { MapPin } from "lucide-react";
+import { renderToString } from "react-dom/server";
 import { Button } from "@/components/ui/button";
 import { type MapCoordinates } from "@/types/project";
 import { useEventBridge, useGameStateManager } from "@/context/game-state";
@@ -63,10 +64,10 @@ export default function MapViewer() {
     eventBridge.emit("resultSubmitted", {});
   };
 
-  // Custom icon for selected position using Pepicons pinpoint
+  // Custom icon for selected position using Lucide MapPin
   const customIcon = L.divIcon({
-    html: `${pinpoint}`,
-    className: "custom-pinpoint-icon",
+    html: renderToString(<MapPin size={32} color="var(--main)" />),
+    className: "custom-mappin-icon",
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],

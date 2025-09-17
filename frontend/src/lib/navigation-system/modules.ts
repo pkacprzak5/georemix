@@ -6,6 +6,7 @@ import { MockPage } from "@/pages/mock";
 import { PlayerNameInput } from "@/pages/player-name-input";
 import { StagePicker } from "@/pages/stage-picker";
 import { TitlePage } from "@/pages/title";
+import { NavigationLoadingPage } from "@/pages/navigation-loading-page";
 import type { Module } from "./types";
 import { moduleIdMap } from "./types";
 import { FinalResult } from "@/pages/final-result";
@@ -50,11 +51,17 @@ export const gameEndGroup: Module = {
   pages: [{ id: "final-result", component: FinalResult, title: "Summary" }],
 };
 
+export const loadingGroup: Module = {
+  id: moduleIdMap.LOADING,
+  pages: [{ id: "navigation-loading", component: NavigationLoadingPage, title: "Loading..." }],
+};
+
 export const modulesMap = {
   [titleGroup.id]: titleGroup,
   [introGroup.id]: introGroup,
   [levelStartGroup.id]: levelStartGroup,
   [levelEndGroup.id]: levelEndGroup,
   [gameEndGroup.id]: gameEndGroup,
-  [gameplayGroup.id]: gameplayGroup
+  [gameplayGroup.id]: gameplayGroup,
+  [loadingGroup.id]: loadingGroup
 } as const;

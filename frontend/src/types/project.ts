@@ -5,9 +5,12 @@ export interface MapCoordinates {
 
 export type GameEvent =
   | "viewerLoaded"
+  | "gameStarted"
   | "resultSubmitted"
   | "gamePaused"
   | "gameUnpaused"
+  | "openMapButtonClicked"
+  | "closeMapButtonClicked"
 
 export type LevelPhoto = {
   lat: number;

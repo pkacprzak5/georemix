@@ -9,7 +9,7 @@ const sheetVariants: Variants = {
     },
   },
   open: {
-    y: 0,
+    y: "-1%",
     transition: {
       type: "tween" as const,
       duration: 0.3,
@@ -24,7 +24,7 @@ type OverlaySheetProps = {
   zIndex?: number;
 };
 
-export function OverlaySheet({ open, children, skipInitialAnimation = false, zIndex }: OverlaySheetProps) {
+export function OverlaySheet({ open, children, skipInitialAnimation = false }: OverlaySheetProps) {
   const getInitialState = () => {
     if (skipInitialAnimation && open) {
       return "open";
@@ -37,7 +37,7 @@ export function OverlaySheet({ open, children, skipInitialAnimation = false, zIn
       animate={open ? "open" : "closed"}
       variants={sheetVariants}
       initial={getInitialState()}
-      className={`absolute inset-0 bg-background border-t-2 border-border flex flex-col z-[1000]`}>
+      className={`absolute w-[105%] inset-0 bg-background border-t-2 border-border flex flex-col z-[1000]`}>
       <div className="flex-1 overflow-hidden">{children}</div>
     </motion.div>
   );
