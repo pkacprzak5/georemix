@@ -160,7 +160,7 @@ export class GameStateManager {
     this._currentLevelNumber = levelNumber;
     const level = this._levels[levelNumber];
     this._currentTheme = level.theme;
-    this._themeManager.setTheme(this._currentTheme);
+    
   }
 
   get currentLevelResult(): LevelResult[] {
@@ -182,7 +182,7 @@ export class GameStateManager {
       this._currentLevelNumber += 1;
       const level = this._levels[this._currentLevelNumber];
       this._currentTheme = level.theme;
-      this._themeManager.setTheme(this._currentTheme);
+      
     });
   }
 

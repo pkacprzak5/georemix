@@ -8,6 +8,7 @@ import ThemeManager from "@/context/game-state/ThemeManager";
 interface GameStateContextType {
   eventBridge: EventBridge;
   gameStateManager: GameStateManager;
+  themeManager: ThemeManager;
   navigateToNewGroup: (newGroup: ModuleId) => void;
 }
 
@@ -27,6 +28,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
     () => ({
       eventBridge,
       gameStateManager,
+      themeManager,
       navigateToNewGroup,
     }),
     [eventBridge, gameStateManager]
@@ -48,6 +50,11 @@ export function useGameState(): GameStateContextType {
 export function useEventBridge(): EventBridge {
   const { eventBridge } = useGameState();
   return eventBridge;
+}
+
+export function useThemeManager(): ThemeManager {
+  const { themeManager } = useGameState();
+  return themeManager;
 }
 
 export function useGameStateManager(): GameStateManager {
