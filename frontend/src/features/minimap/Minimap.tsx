@@ -85,8 +85,7 @@ export function Minimap() {
         onMaximize={handleMaximize}
         onMinimize={handleMinimize}
         onClose={handleForceClose}>
-        <WindowContent className="w-full h-full relative">
-          <div className="absolute top-2 left-2  bg-white p-2 rounded shadow z-[1000]"></div>
+        <WindowContent  className="w-full h-full relative">
           <MapViewer />
         </WindowContent>
       </Window>

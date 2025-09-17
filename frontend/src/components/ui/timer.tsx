@@ -62,7 +62,7 @@ export function Timer({ className, onTimeUpdate }: TimerProps) {
 
   return (
     <Card 
-      className={`flex flex-row items-center justify-between gap-3 px-3 py-2 cursor-pointer transition-all ease-in-out hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none overflow-hidden ${
+      className={`flex flex-row items-center justify-between gap-3 px-[10px] py-2 cursor-pointer transition-all ease-in-out hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none overflow-hidden ${
         isCompact 
           ? 'aspect-square h-10 w-10' 
           : 'h-10 w-24 '

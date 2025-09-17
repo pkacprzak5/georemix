@@ -119,7 +119,7 @@ function WindowLayout({
             {/* Minimize */}
             <button
               onClick={(e) => handleIconClick(e, onMinimize)}
-              className="w-6 h-6 flex items-center justify-center rounded-sm border-2 border-black bg-white text-black transition-all duration-75 hover:bg-black hover:text-white active:translate-x-px active:translate-y-px"
+              className="window-button"
               aria-label="Minimize">
               <span className="text-xs font-bold">–</span>
             </button>
@@ -127,7 +127,7 @@ function WindowLayout({
             {/* Maximize */}
             <button
               onClick={(e) => handleIconClick(e, onMaximize)}
-              className="w-6 h-6 flex items-center justify-center rounded-sm border-2 border-black bg-white text-black transition-all duration-75 hover:bg-black hover:text-white active:translate-x-px active:translate-y-px"
+              className="window-button"
               aria-label="Maximize">
               <span className="text-xs font-bold">□</span>
             </button>
@@ -135,7 +135,7 @@ function WindowLayout({
             {/* Close */}
             <button
               onClick={(e) => handleIconClick(e, onClose)}
-              className="w-6 h-6 flex items-center justify-center rounded-sm border-2 border-black bg-white text-black transition-all duration-75 hover:bg-black hover:text-white active:translate-x-px active:translate-y-px"
+              className="window-button"
               aria-label="Close">
               <span className="text-xs font-bold">✕</span>
             </button>
