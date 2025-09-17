@@ -30,6 +30,7 @@ export class GameStateManager {
     private readonly _themeManager: ThemeManager
   ) {
     this._eventBridge.addEventListener("themeChanged", (data) => {
+      console.log("AAAA")
       const { theme } = data as { theme: "light" | "dark" };
       this._themeManager.setTheme(theme);
     });
@@ -144,7 +145,6 @@ export class GameStateManager {
         return response.json();
       })
       .then((data) => {
-        this._currentLevelNumber = 0;
         this._currentRoundNumber = roundNumber;
         const metadataArray = data;
         this._levels = metadataArray.map((level: LevelInfo, i: number) => ({
@@ -154,6 +154,7 @@ export class GameStateManager {
           thumbnail: level.thumbnail,
           number: i + 1,
         }));
+        this.loadLevel(0);
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -164,6 +165,7 @@ export class GameStateManager {
     if (levelNumber === null) {
       throw new Error("No current round set");
     }
+    this._currentLevelNumber = levelNumber;
     const level = this._levels[levelNumber];
     this._currentTheme = level.theme;
     this._eventBridge.emit("themeChanged", { theme: this._currentTheme });
@@ -188,6 +190,7 @@ export class GameStateManager {
       this._currentLevelNumber += 1;
       const level = this._levels[this._currentLevelNumber];
       this._currentTheme = level.theme;
+      console.log('aaa')
       this._eventBridge.emit("themeChanged", { theme: this._currentTheme });
     });
   }
