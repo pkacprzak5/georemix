@@ -110,3 +110,28 @@ button {
   height: 32px;
   color: var(--main) !important;
 }
+
+/* Jumping dots animation */
+@keyframes bounce-dots {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-bounce-delay-0 {
+  animation: bounce-dots 0.75s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  animation-delay: 0s;
+}
+
+.animate-bounce-delay-1 {
+  animation: bounce-dots 0.75s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  animation-delay: 0.1s;
+}
+
+.animate-bounce-delay-2 {
+  animation: bounce-dots 0.75s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  animation-delay: 0.2s;
+}
