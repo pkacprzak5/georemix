@@ -4,7 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --secondary-background: oklch(95.37% 0.0549 125.19);
+  --secondary-background: oklch(95.618% 0.05406 122.129);
   --background: #fcf4e9;
   --foreground: oklch(0% 0 0);
   --main-foreground: oklch(0% 0 0);
@@ -65,7 +65,7 @@
   
 @layer base {
   body {
-    @apply text-foreground font-base bg-background;
+    @apply text-foreground font-base bg-secondary-background;
   }
 
   h1,
