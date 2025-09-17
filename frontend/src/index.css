@@ -140,6 +140,30 @@ button {
   animation-delay: 0.2s;
 }
 
+/* Fade-in animation for NVIDIA logo */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+}
+
  .leaflet-tile-container img {
   filter: sepia(200%)  contrast(95%)  hue-rotate(-25deg);
+}
+
+* {
+  user-select: none;
+}
+
+.psv-virtual-tour-arrow svg, .psv-virtual-tour-link {
+  @apply dark:text-foreground text-background
 }

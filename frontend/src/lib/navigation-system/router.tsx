@@ -21,7 +21,8 @@ const pageVariants: Variants = {
 
 const pageTransition: Transition = {
   type: "tween",
-  duration: 0.3,
+  ease: 'easeOut',
+  duration: 0.5,
 };
 
 export function Router() {
@@ -52,20 +53,6 @@ export function Router() {
 
   // Determine what to render based on loading state
   const renderContent = () => {
-    if (state.isLoading) {
-      return (
-        <motion.div
-          key="loading"
-          variants={pageVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={pageTransition}
-          className="absolute inset-0">
-          <LoadingScreen />
-        </motion.div>
-      );
-    }
 
     // For initial page, render without motion animation
     if (isInitialPage) {

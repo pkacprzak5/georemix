@@ -14,7 +14,7 @@ import { FinalResult } from "@/pages/final-result";
 export const titleGroup: Module = {
   id: moduleIdMap.TITLE,
   pages: [{ id: "title", component: TitlePage, title: "NVIDIA Geo-Guessing" }],
-  initialPage: "title",
+  // initialPage: "title",
 };
 
 export const introGroup: Module = {
@@ -25,7 +25,7 @@ export const introGroup: Module = {
     { id: "leader-board", component: MockPage, title: "Leader Board" },
     { id: "stage-picker", component: StagePicker, title: "Pick the Stage" },
   ],
-  initialPage: "player-name-input",
+  // initialPage: "player-name-input",
 };
 
 export const levelStartGroup: Module = {
