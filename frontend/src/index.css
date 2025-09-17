@@ -78,7 +78,7 @@
   }
 }
 
-.theme-change * {
+.theme-change *:not([data-slot="progress"]):not([data-slot="progress-indicator"]) {
   @apply transition-colors duration-1000 ease-in-out;
 }
 
@@ -122,16 +122,16 @@ button {
 }
 
 .animate-bounce-delay-0 {
-  animation: bounce-dots 0.75s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  animation: bounce-dots 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
   animation-delay: 0s;
 }
 
 .animate-bounce-delay-1 {
-  animation: bounce-dots 0.75s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  animation: bounce-dots 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
   animation-delay: 0.1s;
 }
 
 .animate-bounce-delay-2 {
-  animation: bounce-dots 0.75s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  animation: bounce-dots 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
   animation-delay: 0.2s;
 }

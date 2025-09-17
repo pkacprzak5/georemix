@@ -85,13 +85,13 @@ export default function MapViewer() {
         <MapResizer />
         {position && <Marker position={position} icon={customIcon} />}
       </MapContainer>
-      {position && (
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-[1000] pointer-events-auto">
-          <Button onClick={handleSubmit} className="relative z-[1000]">
-            Submit
-          </Button>
-        </div>
-      )}
+      <div
+        style={{ opacity: position ? 1 : 0, pointerEvents: position ? "auto" : "none" }}
+        className="absolute bottom-4 left-1/2 transform transition-opacity duration-200 ease-in-out -translate-x-1/2 z-[1000]">
+        <Button onClick={handleSubmit} className="relative z-[1000]">
+          Submit
+        </Button>
+      </div>
     </>
   );
 }
