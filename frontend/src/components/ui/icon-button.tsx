@@ -4,7 +4,7 @@ import { type LucideIcon } from "lucide-react";
 import { Button, buttonVariants } from "./button";
 import { cn } from "@/lib/utils";
 
-export interface IconButtonProps 
+export interface IconButtonProps
   extends Omit<React.ComponentProps<"button">, "children">,
     VariantProps<typeof buttonVariants> {
   icon: LucideIcon;
@@ -12,15 +12,22 @@ export interface IconButtonProps
   asChild?: boolean;
 }
 
-function IconButton({ className, variant, size = "icon", icon: Icon, iconSize = 16, asChild = false, ...props }: IconButtonProps) {
+function IconButton({
+  className,
+  variant,
+  size = "icon",
+  icon: Icon,
+  iconSize = 16,
+  asChild = false,
+  ...props
+}: IconButtonProps) {
   return (
     <Button
       className={cn("aspect-square", className)}
       variant={variant}
       size={size}
       asChild={asChild}
-      {...props}
-    >
+      {...props}>
       <Icon size={iconSize} />
     </Button>
   );

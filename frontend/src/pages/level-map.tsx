@@ -95,17 +95,15 @@ export function LevelMap() {
   };
 
   const handleNextLevel = () => {
-    if(gameStateManager.numberOfLevels === gameStateManager.currentLevelInfo.number){
+    if (gameStateManager.numberOfLevels === gameStateManager.currentLevelInfo.number) {
       navigateTo(moduleIdMap.FINAL, "final-result");
     } else {
       const loadingPromise = new Promise((resolve) => {
         gameStateManager.loadNextLevel();
         resolve(null);
-      })
+      });
       navigateWithLoading(moduleIdMap.LEVEL_START, "level-start", loadingPromise);
     }
-
-    
   };
 
   const formatDistance = (distance: number) => {

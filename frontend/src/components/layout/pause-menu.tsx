@@ -3,19 +3,17 @@ import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 import { useEventBridge } from "@/context/game-state";
 
-
-
 export function PauseMenu() {
   const eventBridge = useEventBridge();
   const { navigateTo } = useNavigation();
 
   const handleLeaveGame = () => {
-    navigateTo(moduleIdMap.INTRO, "player-name-input");
+    navigateTo(moduleIdMap.INTRO, "welcome-page");
   };
 
   const onUnpause = () => {
     eventBridge.emit("gameUnpaused", {});
-  }
+  };
 
   return (
     <div className="w-full h-full flex items-center justify-center bg-background/95">

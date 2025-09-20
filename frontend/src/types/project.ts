@@ -10,7 +10,7 @@ export type GameEvent =
   | "gamePaused"
   | "gameUnpaused"
   | "openMapButtonClicked"
-  | "closeMapButtonClicked"
+  | "closeMapButtonClicked";
 
 export type LevelPhoto = {
   lat: number;
@@ -19,11 +19,11 @@ export type LevelPhoto = {
 };
 
 export type LevelInfo = {
-  initialNode: string,
+  initialNode: string;
   name: string;
   theme: "light" | "dark";
-  thumbnail: string,
-  number: number
+  thumbnail: string;
+  number: number;
 };
 
 export type LevelResult = {
@@ -39,4 +39,4 @@ export type LevelResultInfo = {
   distance: number;
   submittedPosition: MapCoordinates;
   answerPosition: MapCoordinates;
-}
+};

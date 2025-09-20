@@ -12,7 +12,7 @@ export function GameplayOverlay() {
 
   const handleTimeChange = (time: number) => {
     gameStateManager.setTimeTaken(time);
-  }
+  };
 
   const handlePauseButton = () => {
     eventBridge.emit("gamePaused", {});
@@ -66,7 +66,10 @@ export function GameplayOverlay() {
       <div className="flex items-start gap-2 p-4 absolute right-0 bottom-0 transition-opacity ease-in-out duration-200">
         <IconButton
           disabled={disabled}
-          style={{ opacity: mapForceHidden ? "1" : "0", pointerEvents: mapForceHidden ? 'auto' : 'none' }}
+          style={{
+            opacity: mapForceHidden ? "1" : "0",
+            pointerEvents: mapForceHidden ? "auto" : "none",
+          }}
           onClick={handleOpenMapButton}
           icon={Map}
           className="pointer-events-auto"

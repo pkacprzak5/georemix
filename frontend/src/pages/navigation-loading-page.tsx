@@ -18,12 +18,9 @@ export function NavigationLoadingPage() {
       return;
     }
 
-    executeWithProgress(
-      loadingData.promise,
-      () => {
-        navigateTo(loadingData.targetModuleId, loadingData.targetPageId);
-      }
-    );
+    executeWithProgress(loadingData.promise, () => {
+      navigateTo(loadingData.targetModuleId, loadingData.targetPageId);
+    });
   }, [state.loadingData, navigateTo, executeWithProgress]);
 
   return <LoadingScreen progress={progress} />;

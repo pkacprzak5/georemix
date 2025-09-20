@@ -97,7 +97,7 @@ export function useResizableWindow({
   const handleOpen = useCallback(() => {
     setIsVisible(true);
     setIsClosing(false);
-    
+
     // Small delay to ensure the element is rendered before starting animation
     setTimeout(() => {
       setIsOpening(true);

@@ -21,7 +21,7 @@ const pageVariants: Variants = {
 
 const pageTransition: Transition = {
   type: "tween",
-  ease: 'easeOut',
+  ease: "easeOut",
   duration: 0.5,
 };
 
@@ -53,7 +53,6 @@ export function Router() {
 
   // Determine what to render based on loading state
   const renderContent = () => {
-
     // For initial page, render without motion animation
     if (isInitialPage) {
       return (

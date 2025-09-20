@@ -15,7 +15,14 @@ export type NavigationAction =
   | { type: "SHOW_MENU" }
   | { type: "HIDE_MENU" }
   | { type: "NAVIGATE"; groupId: ModuleId; pageId: PageId }
-  | { type: "NAVIGATE_WITH_LOADING"; groupId: ModuleId; pageId: PageId; promise: Promise<unknown>; targetGroupId: ModuleId; targetPageId: PageId };
+  | {
+      type: "NAVIGATE_WITH_LOADING";
+      groupId: ModuleId;
+      pageId: PageId;
+      promise: Promise<unknown>;
+      targetGroupId: ModuleId;
+      targetPageId: PageId;
+    };
 
 export type NavigationState = {
   currentModule: ModuleId | null;
@@ -35,7 +42,11 @@ const initialState: NavigationState = {
 export type NavigationContextType = {
   state: NavigationState;
   navigateTo: (groupId: ModuleId, pageId: PageId) => void;
-  navigateWithLoading: (targetGroupId: ModuleId, targetPageId: PageId, promise: Promise<unknown>) => void;
+  navigateWithLoading: (
+    targetGroupId: ModuleId,
+    targetPageId: PageId,
+    promise: Promise<unknown>
+  ) => void;
   navigateToNewGroup: (groupId: ModuleId) => void;
   modules: Map<ModuleId, Module>;
 };
@@ -109,13 +120,13 @@ export function NavigationProvider({ children }: PropsWithChildren) {
 
   const navigateWithLoading = useCallback(
     (targetGroupId: ModuleId, targetPageId: PageId, promise: Promise<unknown>) => {
-      navigationStateDispatch({ 
-        type: "NAVIGATE_WITH_LOADING", 
-        groupId: "LOADING", 
-        pageId: "navigation-loading", 
+      navigationStateDispatch({
+        type: "NAVIGATE_WITH_LOADING",
+        groupId: "LOADING",
+        pageId: "navigation-loading",
         promise,
         targetGroupId,
-        targetPageId 
+        targetPageId,
       });
     },
     []

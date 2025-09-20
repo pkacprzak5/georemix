@@ -16,15 +16,15 @@ export function LevelSummary() {
   useEffect(() => {
     try {
       const levelResult = gameStateManager.levelResult;
-      
+
       // Calculate score based on distance (simple scoring system)
       const maxScore = 5000;
       const score = Math.max(0, maxScore - Math.floor(levelResult.distance / 10));
-      
+
       setResultData({
         distance: levelResult.distance,
         timeTaken: levelResult.timeTaken,
-        score: score
+        score: score,
       });
     } catch (error) {
       console.error("Error loading result data:", error);
@@ -32,7 +32,7 @@ export function LevelSummary() {
       setResultData({
         distance: 1230,
         timeTaken: 45,
-        score: 3770
+        score: 3770,
       });
     }
   }, [gameStateManager]);
@@ -60,7 +60,7 @@ export function LevelSummary() {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const getScoreRating = (score: number) => {
@@ -87,17 +87,13 @@ export function LevelSummary() {
         {/* Header */}
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-2">Level Complete!</h1>
-          <p className={`text-xl font-semibold ${scoreRating.color}`}>
-            {scoreRating.text}
-          </p>
+          <p className={`text-xl font-semibold ${scoreRating.color}`}>{scoreRating.text}</p>
         </div>
 
         {/* Results Stats */}
         <div className="space-y-6">
           <div className="text-center p-6 border rounded-lg bg-card">
-            <div className="text-4xl font-bold text-blue-600 mb-2">
-              {resultData.score}
-            </div>
+            <div className="text-4xl font-bold text-blue-600 mb-2">{resultData.score}</div>
             <div className="text-sm text-muted-foreground">SCORE</div>
           </div>
 
