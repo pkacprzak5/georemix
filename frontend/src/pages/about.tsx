@@ -3,6 +3,7 @@ import { moduleIdMap } from "@/lib/navigation-system/types";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StylisedSpan from "@/components/ui/stylised-span";
+import { ArrowLeft } from "lucide-react";
 
 export function AboutPage() {
   const { navigateTo } = useNavigation();
@@ -42,6 +43,7 @@ export function AboutPage() {
           </Card>
 
           <ButtonLarge onClick={handleGoBack} className="w-full mt-8 ">
+            <ArrowLeft className="mt-1" />
             Powrót do Menu Głównego
           </ButtonLarge>
         </div>

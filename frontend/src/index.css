@@ -267,7 +267,6 @@ body {
   background: transparent;
 }
 
-
 /* Overwriting default walking-arrow animation from panorama-viewer */
 @keyframes psv-virtual-tour-link-button-in-custom {
   0% {

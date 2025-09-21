@@ -1,8 +1,4 @@
-import {
-  type LevelInfo,
-  type LevelResultInfo,
-  type MapCoordinates,
-} from "@/types/project";
+import { type LevelInfo, type LevelResultInfo, type MapCoordinates } from "@/types/project";
 import { BASE_URL } from "@/constants";
 import type ThemeManager from "@/context/game-state/ThemeManager";
 
@@ -26,13 +22,12 @@ export class GameStateManager {
 
   // Result calculation factors
   private readonly _maxPoints: number = 5000;
-  private readonly _distanceFactor: number = 2_000_000;// 2km
+  private readonly _distanceFactor: number = 2_000_000; // 2km
   private readonly _timeFactor: number = 120;
   private readonly _timeCap: number = 10; // 10secs
   private readonly _metersCap: number = 50;
 
-
-  constructor(private readonly _themeManager: ThemeManager) { }
+  constructor(private readonly _themeManager: ThemeManager) {}
 
   // Getters
   get currentRoundNumber(): number {
@@ -68,9 +63,7 @@ export class GameStateManager {
   }
 
   get levelResult(): LevelResultInfo {
-    if (
-      this._currentLevelNumber === null
-    ) {
+    if (this._currentLevelNumber === null) {
       throw new Error("No level set");
     }
 
@@ -100,7 +93,7 @@ export class GameStateManager {
       throw new Error("No current coordinates set");
     }
 
-    console.log(submittedPosition, this._currentCoordinates)
+    console.log(submittedPosition, this._currentCoordinates);
 
     if (this._currentLevelNumber === null) {
       throw new Error("No current level set");
@@ -126,32 +119,32 @@ export class GameStateManager {
     const distance = R * c; // in meters
     this._currentDistance = distance;
 
-    let distanceFactor: number
+    let distanceFactor: number;
     if (this._currentDistance <= this._metersCap) {
-      distanceFactor = 1.0
+      distanceFactor = 1.0;
     } else {
-      distanceFactor = Math.exp(- this._currentDistance / this._distanceFactor)
+      distanceFactor = Math.exp(-this._currentDistance / this._distanceFactor);
     }
 
     // --- Time contribution ---
-    let timeFactor: number
+    let timeFactor: number;
     if (this._timeTaken <= this._timeCap) {
-      timeFactor = 1.0
+      timeFactor = 1.0;
     } else {
-      timeFactor = Math.exp(- (this._timeTaken - this._timeCap) / this._timeFactor)
+      timeFactor = Math.exp(-(this._timeTaken - this._timeCap) / this._timeFactor);
     }
 
     const levelScore = Math.round(this._maxPoints * distanceFactor * timeFactor);
 
-    this._currentScore = Math.max(0, levelScore)
+    this._currentScore = Math.max(0, levelScore);
 
     this._levelResults[this._currentLevelNumber] = {
       distance: this._currentDistance,
       timeTaken: this._timeTaken,
       answerPosition: this._currentCoordinates,
       submittedPosition: this._submittedCoordinates,
-      score: this._currentScore
-    }
+      score: this._currentScore,
+    };
   }
 
   async loadRound(roundNumber: number | null) {

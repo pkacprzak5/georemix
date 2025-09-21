@@ -2,7 +2,6 @@ import { Window, WindowContent } from "@/components/layout/window";
 import { Router } from "@/lib/navigation-system/router";
 import { Minimap } from "./features/minimap/Minimap";
 
-
 function App() {
   return (
     <>

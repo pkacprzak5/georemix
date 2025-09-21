@@ -3,6 +3,7 @@ import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 import { THUMBNAIL_ENDPOINT } from "@/constants";
 import { ButtonLarge } from "@/components/ui/button";
+import { MapPin } from "lucide-react";
 
 export function LevelStart() {
   const { navigateTo } = useNavigation();
@@ -38,7 +39,7 @@ export function LevelStart() {
               </figure>
             </div>
             <ButtonLarge className="mt-8" onClick={handleStartGameplay}>
-              Rozpocznij Zgadywanie!
+              Rozpocznij Zgadywanie! <MapPin className="mt-1" />
             </ButtonLarge>
           </>
         )}

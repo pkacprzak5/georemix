@@ -1,15 +1,21 @@
 import { ButtonLarge } from "@/components/ui/button";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
-import { useEventBridge } from "@/context/game-state";
+import { useEventBridge, useGameStateManager } from "@/context/game-state";
 import { TriangleAlert } from "lucide-react";
 
 export function PauseMenu() {
   const eventBridge = useEventBridge();
+  const gameStateManager = useGameStateManager();
   const { navigateTo } = useNavigation();
 
   const handleLeaveGame = () => {
     navigateTo(moduleIdMap.INTRO, "welcome-page");
+    eventBridge.emit("closeMapButtonClicked", {});
+    // Hacky but works
+    setTimeout(() => {
+      gameStateManager.resetAll();
+    }, 1000);
   };
 
   const onUnpause = () => {

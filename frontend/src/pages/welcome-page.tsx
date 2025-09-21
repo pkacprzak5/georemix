@@ -5,6 +5,7 @@ import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 import StylisedSpan from "@/components/ui/stylised-span";
 import { InputButton } from "@/components/ui/input-button";
+import { BookText } from "lucide-react";
 
 export function WelcomePage() {
   const gameStateManager = useGameStateManager();
@@ -48,7 +49,9 @@ export function WelcomePage() {
             className="w-full"
           />
 
-          <ButtonLarge onClick={handleAbout}>O projekcie</ButtonLarge>
+          <ButtonLarge onClick={handleAbout}>
+            O projekcie <BookText className="mt-1" />
+          </ButtonLarge>
         </div>
       </div>
     </div>

@@ -28,7 +28,7 @@ const useCountUp = (target: number, duration: number = 5000) => {
 
       // Easing function for smooth animation
       // const easeOut = Math.sqrt(1 - (Math.pow(1 - progress, 4)));
-      const easeOut = progress === 1 ? 1 : 1 - Math.pow(3, -10 * progress)
+      const easeOut = progress === 1 ? 1 : 1 - Math.pow(3, -10 * progress);
       const currentValue = Math.floor(startValue + (target - startValue) * easeOut);
 
       setCount(currentValue);

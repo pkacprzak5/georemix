@@ -165,8 +165,7 @@ export function LevelMap() {
                   zoom={13}
                   style={{ height: "100%", width: "100%" }}
                   zoomControl={false}
-                  attributionControl={false}
-                >
+                  attributionControl={false}>
                   <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
 
                   {/* Actual location marker (blue) */}

@@ -86,10 +86,7 @@ export default function MapViewer() {
         <MapClickHandler onPositionSelect={setPosition} />
         <MapResizer />
         {position && <Marker position={position} icon={customIcon} />}
-        <MapZoomControls 
-          className="absolute bottom-4 right-4 z-[999]" 
-          size="sm"
-        />
+        <MapZoomControls className="absolute bottom-4 right-4 z-[999]" size="sm" />
       </MapContainer>
       <div
         style={{ opacity: position ? 1 : 0, pointerEvents: position ? "auto" : "none" }}
