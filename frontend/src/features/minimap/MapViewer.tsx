@@ -79,13 +79,17 @@ export default function MapViewer() {
       <MapContainer
         center={[51.505, -0.09]}
         zoom={2}
+        zoomControl={false}
         attributionControl={false}
         style={{ height: "100%", width: "100%", cursor: "default" }}>
         <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
         <MapClickHandler onPositionSelect={setPosition} />
         <MapResizer />
         {position && <Marker position={position} icon={customIcon} />}
-        <MapZoomControls className="absolute top-4 right-4 z-[999]" />
+        <MapZoomControls 
+          className="absolute bottom-4 right-4 z-[999]" 
+          size="sm"
+        />
       </MapContainer>
       <div
         style={{ opacity: position ? 1 : 0, pointerEvents: position ? "auto" : "none" }}
