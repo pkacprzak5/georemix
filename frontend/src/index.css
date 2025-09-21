@@ -208,3 +208,38 @@ body {
     filter: drop-shadow(4px 4px 0px rgba(0, 0, 0));
   }
 }
+
+
+/* SCROLLBAR */
+.scrollbar-neobrutalist::-webkit-scrollbar {
+  width: 12px;
+  scrollbar-color: var(--background);
+  
+}
+.scrollbar-neobrutalist::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+.scrollbar-neobrutalist::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-neobrutalist::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: var(--background);
+  background-clip: padding-box;
+  border: 1px solid var(--foreground); 
+  outline: solid 3px transparent;
+}
+
+.scrollbar-neobrutalist::-webkit-scrollbar-thumb:hover {
+  background-color: var(--main);
+  border: 1px solid var(--foreground); 
+  outline: solid 3px transparent;
+}
+
+.scrollbar-neobrutalist::-webkit-scrollbar-corner {
+  background: transparent;
+}

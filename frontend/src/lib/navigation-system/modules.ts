@@ -6,6 +6,7 @@ import { MockPage } from "@/pages/mock";
 import { WelcomePage } from "@/pages/welcome-page";
 import { StagePicker } from "@/pages/stage-picker";
 import { TitlePage } from "@/pages/title";
+import { AboutPage } from "@/pages/about";
 import { NavigationLoadingPage } from "@/pages/navigation-loading-page";
 import type { Module } from "./types";
 import { moduleIdMap } from "./types";
@@ -21,7 +22,7 @@ export const introGroup: Module = {
   id: moduleIdMap.INTRO,
   pages: [
     { id: "welcome-page", component: WelcomePage, title: "Welcome to GeoRemix" },
-    { id: "about", component: MockPage, title: "About" },
+    { id: "about", component: AboutPage, title: "About" },
     { id: "leader-board", component: MockPage, title: "Leader Board" },
     { id: "stage-picker", component: StagePicker, title: "Pick the Stage" },
   ],

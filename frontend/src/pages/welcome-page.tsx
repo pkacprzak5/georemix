@@ -31,7 +31,7 @@ export function WelcomePage() {
       <div className="w-full max-w-4xl space-y-8">
         <div className="text-center">
           <h1 className="leading-normal">
-            Witaj w <StylisedSpan>GeoRemix</StylisedSpan>
+            Witaj w <StylisedSpan showStars>GeoRemix</StylisedSpan>
           </h1>
           <p className="leading-snug w-full md:mt-[50px] md:mb-[60px] sm:mt-12 my-5 sm:mb-10 2xl:text-3xl xl:text-2xl lg:text-2xl xl:w-full lg:w-2/3 md:w-full md:text-2xl sm:text-xl text-xl">
             Od futurystycznych metropolii po fantastyczne krainy - Spradź, czy potrafisz rozpoznać

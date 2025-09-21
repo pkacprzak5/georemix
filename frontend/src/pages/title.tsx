@@ -7,7 +7,7 @@ import BitLogo from "../../public/bitv4.svg?react";
 import NvidiaLogo from "../../public/Nvidia_logo.svg?react";
 import { X } from "lucide-react";
 
-const INTRO_DURATION = 5000; // 5 seconds
+const INTRO_DURATION = 1; // 5 seconds
 const LOGO_DELAY = 500; // 0.5 seconds
 
 export function TitlePage() {
