@@ -4,7 +4,7 @@ import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 import StylisedSpan from "@/components/ui/stylised-span";
-import { BrutalistInput } from "@/components/ui/brutalist-input";
+import { InputButton } from "@/components/ui/input-button";
 
 export function WelcomePage() {
   const gameStateManager = useGameStateManager();
@@ -40,7 +40,7 @@ export function WelcomePage() {
         </div>
 
         <div className="space-y-4 max-w-md mx-auto">
-          <BrutalistInput
+          <InputButton
             placeholder="Wprowadź nazwę gracza"
             value={playerName}
             onChange={setPlayerName}
