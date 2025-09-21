@@ -20,7 +20,7 @@ export function LevelStart() {
         {levelInfo.thumbnail && (
           <>
             <div className="relative">
-              <div className="absolute -top-2 z-[100] -left-2 bg-secondary-background border-2 border-border rounded-base px-4 py-2 shadow-shadow text-xl font-base">
+              <div className="absolute -top-2 z-[100] -left-2 bg-secondary-background gradient border-2 border-border rounded-base px-4 py-2 shadow-shadow text-xl font-base">
                 Runda {gameStateManager.currentRoundNumber}
               </div>
               <figure className="overflow-hidden rounded-base border-2 border-border bg-secondary-background font-base shadow-shadow transition-all">
@@ -32,7 +32,7 @@ export function LevelStart() {
                   />
                   {/* Round number card overlay */}
                 </div>
-                <figcaption className="border-t-2 text-2xl text-main-foreground border-border p-4 text-center">
+                <figcaption className="border-t-2 text-2xl gradient text-main-foreground border-border p-4 text-center">
                   {levelInfo.name}
                 </figcaption>
               </figure>

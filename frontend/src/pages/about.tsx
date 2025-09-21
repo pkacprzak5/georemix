@@ -54,7 +54,7 @@ export function AboutPage() {
               <StylisedSpan>Zasady Gry</StylisedSpan>
             </CardTitle>
             <div>
-              <h3 className="text-lg font-bold text-foreground mb-2">Przebieg rozgrywki</h3>
+              <h3 className="text-lg font-bold text-foreground mb-2 mt-6">Przebieg rozgrywki</h3>
               <p className="text-foreground leading-relaxed mt-2">
                 Rozgrywka składa się z 5 rund, z których każda odbywa się w innej lokalizacji oraz w
                 odmiennym stylu wizualnym.
@@ -67,7 +67,7 @@ export function AboutPage() {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-foreground mb-2">Punktacja</h3>
+              <h3 className="text-lg font-bold text-foreground mb-2 mt-4">Punktacja</h3>
               <p className="text-foreground leading-relaxed">
                 Po wyborze wskazane miejsce porównywane jest z faktyczną lokalizacją.
               </p>
@@ -81,7 +81,7 @@ export function AboutPage() {
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-foreground mb-2">Zakończenie rozgrywki</h3>
+              <h3 className="text-lg font-bold text-foreground mb-2 mt-4">Zakończenie rozgrywki</h3>
               <p className="text-foreground leading-relaxed">
                 Po rozegraniu wszystkich 5 rund gra prezentuje końcowy wynik gracza, obliczany na
                 podstawie:
