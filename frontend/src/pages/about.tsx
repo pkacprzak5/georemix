@@ -12,9 +12,9 @@ export function AboutPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-full px-4 py-8">
+    <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
       {/* Cards Container */}
-      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <div className="w-full max-w-6xl h-[calc(100%-2rem)] grid grid-cols-2 gap-8">
         {/* Project Creation Card */}
         <div>
           <Card className="h-fit bg-secondary-background gradient">
@@ -25,14 +25,14 @@ export function AboutPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-foreground leading-relaxed">
-                <span className="font-bold">GeoRemix</span> to gra powstała w ramach współpracy Koła Naukowego BIT i NVIDIA,
-                łącząca zaawansowane technologie przetwarzania obrazu z wykorzystaniem AI z klasyczną rozrywką znaną z gry GeoGuesser.
+                <span className="font-bold">GeoRemix</span> to gra powstała w ramach współpracy Koła
+                Naukowego BIT i NVIDIA, łącząca zaawansowane technologie przetwarzania obrazu z
+                wykorzystaniem AI z klasyczną rozrywką znaną z gry GeoGuesser.
               </p>
               <p className="text-foreground leading-relaxed">
-                PLACEHOLDERY DALEJ 
-                Projekt wykorzystuje nowoczesne technologie webowe oraz zaawansowane renderowanie
-                graficzne, aby zapewnić płynne i immersyjne doświadczenie podczas eksploracji
-                różnych zakątków świata.
+                PLACEHOLDERY DALEJ Projekt wykorzystuje nowoczesne technologie webowe oraz
+                zaawansowane renderowanie graficzne, aby zapewnić płynne i immersyjne doświadczenie
+                podczas eksploracji różnych zakątków świata.
               </p>
               <p className="text-foreground leading-relaxed">
                 Gra została stworzona z myślą o łączeniu edukacji z rozrywką, pozwalając graczom na
@@ -47,13 +47,12 @@ export function AboutPage() {
         </div>
 
         {/* Game Rules Card */}
-        <Card className="h-[80vh] overflow-auto scrollbar-neobrutalist bg-secondary-background gradient">
-          <CardHeader>
+        {/* Has to be styled like that because of overflowing issues */}
+        <Card className="h-full py-0 flex flex-col bg-secondary-background gradient overflow-hidden">
+          <CardContent className="py-6 overflow-auto scrollbar-neobrutalist flex-1 min-h-0">
             <CardTitle className="text-3xl font-heading">
               <StylisedSpan>Zasady Gry</StylisedSpan>
             </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
             <div>
               <h3 className="text-lg font-bold text-foreground mb-2">Przebieg rozgrywki</h3>
               <p className="text-foreground leading-relaxed mt-2">
