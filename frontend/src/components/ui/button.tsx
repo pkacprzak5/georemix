@@ -92,7 +92,7 @@ function ButtonLarge({ className, children, onClick, ...props }: React.Component
     <button
       data-slot="button-large"
       className={cn(
-        "flex items-center gap-2.5 w-full text-center justify-center text-main-foreground rounded-base border-2 border-border bg-main md:px-10 px-4 md:py-3 py-2 md:text-[22px] text-base shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none disabled:pointer-events-none disabled:opacity-50",
+        "flex items-center gap-2.5 w-full text-center justify-center text-foreground dark:text-border rounded-base border-2 border-border bg-main md:px-10 px-4 md:py-3 py-2 md:text-[22px] text-base shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none disabled:pointer-events-none disabled:opacity-50",
         className
       )}
       onClick={onClick}

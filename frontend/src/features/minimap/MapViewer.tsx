@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-lea
 import { MapPin } from "lucide-react";
 import { renderToString } from "react-dom/server";
 import { Button } from "@/components/ui/button";
+import { MapZoomControls } from "@/components/ui/map-zoom-controls";
 import { type MapCoordinates } from "@/types/project";
 import { useEventBridge, useGameStateManager } from "@/context/game-state";
 
@@ -84,12 +85,13 @@ export default function MapViewer() {
         <MapClickHandler onPositionSelect={setPosition} />
         <MapResizer />
         {position && <Marker position={position} icon={customIcon} />}
+        <MapZoomControls className="absolute top-4 right-4 z-[999]" />
       </MapContainer>
       <div
         style={{ opacity: position ? 1 : 0, pointerEvents: position ? "auto" : "none" }}
         className="absolute bottom-4 left-1/2 transform transition-opacity duration-200 ease-in-out -translate-x-1/2 z-[1000]">
         <Button onClick={handleSubmit} className="relative z-[1000]">
-          Submit
+          To tutaj!
         </Button>
       </div>
     </>

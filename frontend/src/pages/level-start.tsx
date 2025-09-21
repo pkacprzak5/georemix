@@ -32,7 +32,7 @@ export function LevelStart() {
                   />
                   {/* Round number card overlay */}
                 </div>
-                <figcaption className="border-t-2 text-2xl gradient text-main-foreground border-border p-4 text-center">
+                <figcaption className="border-t-2 text-2xl gradient text-foreground border-border p-4 text-center">
                   {levelInfo.name}
                 </figcaption>
               </figure>

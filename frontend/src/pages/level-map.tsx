@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { Button } from "@/components/ui/button";
+import { ButtonLarge } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { MapZoomControls } from "@/components/ui/map-zoom-controls";
 import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
+import { ArrowLeft, Gamepad2 } from "lucide-react";
 
 // Fix for default markers in React Leaflet
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl: unknown })._getIconUrl;
@@ -110,7 +113,7 @@ export function LevelMap() {
     if (distance < 1000) {
       return `${Math.round(distance)}m`;
     } else {
-      return `${(distance / 1000).toFixed(1)}km`;
+      return `${(distance / 1000).toFixed(1)} km`;
     }
   };
 
@@ -123,67 +126,86 @@ export function LevelMap() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background">
-      {/* Header */}
-      <div className="text-center py-4 border-b">
-        <h1 className="text-2xl font-bold mb-1">Result Map</h1>
-        <p className="text-sm text-muted-foreground">
-          You were {formatDistance(resultData.distance)} away
-        </p>
-      </div>
+    <div className="flex items-center h-full justify-center min-h-full bg-background p-4">
+      <div className="max-w-4xl w-full flex flex-col justify-center h-full space-y-6">
+        {/* Map Container with Legend Card Overlay */}
+        <div className="relative flex-1 max-h-[80%] min-h-[400px]">
+          {/* Legend Card - positioned outside bounds with higher z-index */}
+          <div className=" absolute -top-2 z-[2000] p-0 -left-2">
+            <Card className="p-0 bg-secondary-background gradient">
+              <CardContent className="px-3 py-2">
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                    <span className="text-foreground font-base">Faktyczna lokalizacja</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-red-600 rounded-full"></div>
+                    <span className="text-foreground font-base">Twoja odpowiedź</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            {/* Distance Card - positioned below legend */}
+            <Card className="mt-4 z-[2000] p-0 bg-secondary-background gradient">
+              <CardContent className="px-3 py-2">
+                <div className="text-2xl font-bold text-background dark:text-foreground font-outline-1">
+                  Dystans: {formatDistance(resultData.distance)}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
-      {/* Map */}
-      <div className="h-[500px] p-4">
-        <div className="w-full h-full border rounded-lg overflow-hidden">
-          <MapContainer
-            center={resultData.actualPosition}
-            zoom={13}
-            style={{ height: "100%", width: "100%" }}
-            zoomControl={true}
-            attributionControl={false}>
-            <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
+          {/* Map Card */}
+          <Card className="bg-secondary-background h-full gradient relative overflow-hidden p-0">
+            <CardContent className="p-0 h-full">
+              <div className="h-full relative">
+                <MapContainer
+                  center={resultData.actualPosition}
+                  zoom={13}
+                  style={{ height: "100%", width: "100%" }}
+                  zoomControl={false}
+                  attributionControl={false}
+                >
+                  <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
 
-            {/* Actual location marker (blue) */}
-            <Marker position={resultData.actualPosition} icon={actualLocationIcon} />
+                  {/* Actual location marker (blue) */}
+                  <Marker position={resultData.actualPosition} icon={actualLocationIcon} />
 
-            {/* Guess location marker (red) */}
-            <Marker position={resultData.guessPosition} icon={guessLocationIcon} />
+                  {/* Guess location marker (red) */}
+                  <Marker position={resultData.guessPosition} icon={guessLocationIcon} />
 
-            {/* Line connecting the two points */}
-            <Polyline
-              positions={[resultData.actualPosition, resultData.guessPosition]}
-              color="red"
-              weight={3}
-              opacity={0.7}
-              dashArray="5, 10"
-            />
+                  {/* Line connecting the two points */}
+                  <Polyline
+                    positions={[resultData.actualPosition, resultData.guessPosition]}
+                    color="red"
+                    weight={3}
+                    opacity={0.7}
+                    dashArray="5, 10"
+                  />
 
-            {/* Auto-fit bounds to show both markers */}
-            <MapBounds
-              actualPosition={resultData.actualPosition}
-              guessPosition={resultData.guessPosition}
-            />
-          </MapContainer>
+                  {/* Auto-fit bounds to show both markers */}
+                  <MapBounds
+                    actualPosition={resultData.actualPosition}
+                    guessPosition={resultData.guessPosition}
+                  />
+
+                  {/* Custom Zoom Controls */}
+                  <MapZoomControls />
+                </MapContainer>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Legend */}
-        <div className="flex justify-center mt-4 space-x-8">
-          <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-blue-600 rounded-full"></div>
-            <span className="text-sm">Actual Location</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-red-600 rounded-full"></div>
-            <span className="text-sm">Your Guess</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="p-4 border-t">
-        <div className="flex justify-center space-x-4 mb-4">
-          <Button onClick={handleBackToSummary}>← Back to Summary</Button>
-          <Button onClick={handleNextLevel}>Next Level</Button>
+        {/* Action Buttons - Same line */}
+        <div className="flex space-x-4">
+          <ButtonLarge onClick={handleBackToSummary} className="flex-1">
+            <ArrowLeft className="mt-1" /> Powrót do Podsumowania
+          </ButtonLarge>
+          <ButtonLarge onClick={handleNextLevel} className="flex-1">
+            Następna Runda <Gamepad2 className="mt-1" />
+          </ButtonLarge>
         </div>
       </div>
     </div>

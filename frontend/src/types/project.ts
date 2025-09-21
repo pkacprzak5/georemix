@@ -39,4 +39,5 @@ export type LevelResultInfo = {
   distance: number;
   submittedPosition: MapCoordinates;
   answerPosition: MapCoordinates;
+  score: number;
 };

@@ -1,6 +1,5 @@
 import {
   type LevelInfo,
-  type LevelResult,
   type LevelResultInfo,
   type MapCoordinates,
 } from "@/types/project";
@@ -13,7 +12,7 @@ export class GameStateManager {
   private _currentRoundNumber: number | null = null;
   private _currentLevelNumber: number | null = null;
   private _levels: LevelInfo[] = [];
-  private _levelResults: LevelResult[] = [];
+  private _levelResults: LevelResultInfo[] = [];
   private _currentTheme: "light" | "dark" = "light";
   private _playerName: string = "";
 
@@ -23,8 +22,17 @@ export class GameStateManager {
   // time taken in seconds
   private _timeTaken: number | null = 0;
   private _currentDistance: number | null = null;
+  private _currentScore: number | null = null;
 
-  constructor(private readonly _themeManager: ThemeManager) {}
+  // Result calculation factors
+  private readonly _maxPoints: number = 5000;
+  private readonly _distanceFactor: number = 2_000_000;// 2km
+  private readonly _timeFactor: number = 120;
+  private readonly _timeCap: number = 10; // 10secs
+  private readonly _metersCap: number = 50;
+
+
+  constructor(private readonly _themeManager: ThemeManager) { }
 
   // Getters
   get currentRoundNumber(): number {
@@ -61,20 +69,12 @@ export class GameStateManager {
 
   get levelResult(): LevelResultInfo {
     if (
-      !this._currentDistance ||
-      !this._timeTaken ||
-      !this._currentCoordinates ||
-      !this._submittedCoordinates
+      this._currentLevelNumber === null
     ) {
-      throw new Error("No distance or no time taken");
+      throw new Error("No level set");
     }
 
-    return {
-      distance: this._currentDistance,
-      timeTaken: this._timeTaken,
-      answerPosition: this._currentCoordinates,
-      submittedPosition: this._submittedCoordinates,
-    };
+    return this._levelResults[this._currentLevelNumber];
   }
 
   setTimeTaken(time: number) {
@@ -96,8 +96,14 @@ export class GameStateManager {
 
   calculateResult(submittedPosition: MapCoordinates) {
     // Calculate straight-line (Haversine) distance between submittedPosition and _currentCoordinates
-    if (!this._currentCoordinates) {
+    if (!this._currentCoordinates || this._timeTaken === null) {
       throw new Error("No current coordinates set");
+    }
+
+    console.log(submittedPosition, this._currentCoordinates)
+
+    if (this._currentLevelNumber === null) {
+      throw new Error("No current level set");
     }
 
     this._submittedCoordinates = submittedPosition;
@@ -118,8 +124,34 @@ export class GameStateManager {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     const distance = R * c; // in meters
-
     this._currentDistance = distance;
+
+    let distanceFactor: number
+    if (this._currentDistance <= this._metersCap) {
+      distanceFactor = 1.0
+    } else {
+      distanceFactor = Math.exp(- this._currentDistance / this._distanceFactor)
+    }
+
+    // --- Time contribution ---
+    let timeFactor: number
+    if (this._timeTaken <= this._timeCap) {
+      timeFactor = 1.0
+    } else {
+      timeFactor = Math.exp(- (this._timeTaken - this._timeCap) / this._timeFactor)
+    }
+
+    const levelScore = Math.round(this._maxPoints * distanceFactor * timeFactor);
+
+    this._currentScore = Math.max(0, levelScore)
+
+    this._levelResults[this._currentLevelNumber] = {
+      distance: this._currentDistance,
+      timeTaken: this._timeTaken,
+      answerPosition: this._currentCoordinates,
+      submittedPosition: this._submittedCoordinates,
+      score: this._currentScore
+    }
   }
 
   async loadRound(roundNumber: number | null) {
@@ -160,13 +192,6 @@ export class GameStateManager {
     this._currentTheme = level.theme;
   }
 
-  get currentLevelResult(): LevelResult[] {
-    if (this._currentLevelNumber === null) {
-      throw new Error("No current level set");
-    }
-    return [this._levelResults[this._currentLevelNumber]];
-  }
-
   setCurrentRound(round: number): void {
     this._currentRoundNumber = round;
   }
@@ -180,13 +205,6 @@ export class GameStateManager {
       const level = this._levels[this._currentLevelNumber];
       this._currentTheme = level.theme;
     });
-  }
-
-  setLevelResult(result: LevelResult): void {
-    if (this._currentLevelNumber === null) {
-      throw new Error("No current level set");
-    }
-    this._levelResults[this._currentLevelNumber] = result;
   }
 
   resetAll() {
