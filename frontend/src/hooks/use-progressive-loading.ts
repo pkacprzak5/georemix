@@ -29,48 +29,51 @@ export function useProgressiveLoading({
   const gameStateManager = useGameStateManager();
   const themeManager = useThemeManager();
 
-  const getRandomizedDelay = useCallback((baseDelay: number): number => {
-    const randomFactor = 1 + (Math.random() - 0.5) * 2 * randomizationFactor;
-    return Math.floor(baseDelay * (1+randomFactor));
-  }, [randomizationFactor]);
+  const getRandomizedDelay = useCallback(
+    (baseDelay: number): number => {
+      const randomFactor = 1 + (Math.random() - 0.5) * 2 * randomizationFactor;
+      return Math.floor(baseDelay * (1 + randomFactor));
+    },
+    [randomizationFactor]
+  );
 
-  const executeWithProgress = useCallback(async (
-    asyncOperation?: Promise<unknown>,
-    onComplete?: () => void
-  ): Promise<void> => {
-    try {
-      // Wait for the async operation if provided
-      if (asyncOperation) {
-        await asyncOperation;
-      }
+  const executeWithProgress = useCallback(
+    async (asyncOperation?: Promise<unknown>, onComplete?: () => void): Promise<void> => {
+      try {
+        // Wait for the async operation if provided
+        if (asyncOperation) {
+          await asyncOperation;
+        }
 
-      // Progress to 66%
-      await new Promise(resolve => setTimeout(resolve, getRandomizedDelay(baseDelayMs)));
-      setProgress(66);
+        // Progress to 66%
+        await new Promise((resolve) => setTimeout(resolve, getRandomizedDelay(baseDelayMs)));
+        setProgress(66);
 
-      themeManager.setTheme(gameStateManager.gameTheme);
-      
-      // Progress to 100%
-      await new Promise(resolve => setTimeout(resolve, getRandomizedDelay(baseDelayMs)));
-      setProgress(100);
-      
-      // Final delay before completion
-      await new Promise(resolve => setTimeout(resolve, getRandomizedDelay(baseDelayMs * 1.6)));
-      
-      // Execute completion callback
-      if (onComplete) {
-        onComplete();
+        themeManager.setTheme(gameStateManager.gameTheme);
+
+        // Progress to 100%
+        await new Promise((resolve) => setTimeout(resolve, getRandomizedDelay(baseDelayMs)));
+        setProgress(100);
+
+        // Final delay before completion
+        await new Promise((resolve) => setTimeout(resolve, getRandomizedDelay(baseDelayMs * 1.6)));
+
+        // Execute completion callback
+        if (onComplete) {
+          onComplete();
+        }
+      } catch (error) {
+        console.error("Progressive loading error:", error);
+        // Still complete the loading process on error
+        setProgress(100);
+        await new Promise((resolve) => setTimeout(resolve, getRandomizedDelay(baseDelayMs)));
+        if (onComplete) {
+          onComplete();
+        }
       }
-    } catch (error) {
-      console.error("Progressive loading error:", error);
-      // Still complete the loading process on error
-      setProgress(100);
-      await new Promise(resolve => setTimeout(resolve, getRandomizedDelay(baseDelayMs)));
-      if (onComplete) {
-        onComplete();
-      }
-    }
-  }, [baseDelayMs, getRandomizedDelay]);
+    },
+    [baseDelayMs, getRandomizedDelay]
+  );
 
   const resetProgress = useCallback(() => {
     setProgress(initialProgress);

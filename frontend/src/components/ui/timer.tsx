@@ -40,7 +40,7 @@ export function Timer({ className, onTimeUpdate }: TimerProps) {
     }
 
     const interval = setInterval(() => {
-      setSeconds(prev => {
+      setSeconds((prev) => {
         const newTime = prev + 1;
         onTimeUpdate?.(newTime);
         return newTime;
@@ -57,25 +57,18 @@ export function Timer({ className, onTimeUpdate }: TimerProps) {
   const formatTime = (totalSeconds: number): string => {
     const minutes = Math.floor(totalSeconds / 60);
     const remainingSeconds = totalSeconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
   return (
-    <Card 
-      className={`flex flex-row items-center justify-between gap-3 px-3 py-2 cursor-pointer transition-all ease-in-out hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none overflow-hidden ${
-        isCompact 
-          ? 'aspect-square h-10 w-10' 
-          : 'h-10 w-24 '
-      } ${className || ''}`}
-      onClick={handleClick}
-    >
-      <Clock 
-        size={16} 
-        className={`text-foreground flex-shrink-0 transition-all ease-out`} 
-      />
-      <span 
-        className={`text-sm mt-auto mb-auto font-mono tabular-nums text-foreground whitespace-nowrap `}
-      >
+    <Card
+      className={`flex flex-row items-center justify-between gap-3 px-[10px] py-2 cursor-pointer transition-all ease-in-out hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none overflow-hidden ${
+        isCompact ? "aspect-square h-10 w-10" : "h-10 w-24 "
+      } ${className || ""}`}
+      onClick={handleClick}>
+      <Clock size={16} className={`text-foreground flex-shrink-0 transition-all ease-out`} />
+      <span
+        className={`text-sm mt-auto mb-auto font-mono tabular-nums text-foreground whitespace-nowrap `}>
         {formatTime(seconds)}
       </span>
     </Card>

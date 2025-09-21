@@ -50,10 +50,10 @@ export function Minimap() {
   };
 
   const internalHandleOpen = () => {
-    if(!forceHidden){
+    if (!forceHidden) {
       handleOpen();
     }
-  }
+  };
 
   useEffect(() => {
     const pausedCleanup = eventBridge.addEventListener("gamePaused", handleClose);
@@ -86,7 +86,6 @@ export function Minimap() {
         onMinimize={handleMinimize}
         onClose={handleForceClose}>
         <WindowContent className="w-full h-full relative">
-          <div className="absolute top-2 left-2  bg-white p-2 rounded shadow z-[1000]"></div>
           <MapViewer />
         </WindowContent>
       </Window>

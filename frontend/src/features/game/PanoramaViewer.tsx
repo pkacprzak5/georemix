@@ -86,7 +86,7 @@ const PanoramaViewer = () => {
       <ReactPhotoSphereViewer
         ref={pSRef}
         height={"100%"}
-        width={"100%"}
+        width={"101%"}
         hideNavbarButton={true}
         navbar={false}
         onReady={handleReady}

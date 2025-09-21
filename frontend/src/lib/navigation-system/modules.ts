@@ -3,9 +3,10 @@ import { LevelStart } from "@/pages/level-start";
 import { LevelSummary } from "@/pages/level-summary";
 import { LevelMap } from "@/pages/level-map";
 import { MockPage } from "@/pages/mock";
-import { PlayerNameInput } from "@/pages/player-name-input";
+import { WelcomePage } from "@/pages/welcome-page";
 import { StagePicker } from "@/pages/stage-picker";
 import { TitlePage } from "@/pages/title";
+import { AboutPage } from "@/pages/about";
 import { NavigationLoadingPage } from "@/pages/navigation-loading-page";
 import type { Module } from "./types";
 import { moduleIdMap } from "./types";
@@ -14,18 +15,18 @@ import { FinalResult } from "@/pages/final-result";
 export const titleGroup: Module = {
   id: moduleIdMap.TITLE,
   pages: [{ id: "title", component: TitlePage, title: "NVIDIA Geo-Guessing" }],
-  initialPage: "title",
+  // initialPage: "title",
 };
 
 export const introGroup: Module = {
   id: moduleIdMap.INTRO,
   pages: [
-    { id: "player-name-input", component: PlayerNameInput, title: "Insert your name" },
-    { id: "about", component: MockPage, title: "About" },
+    { id: "welcome-page", component: WelcomePage, title: "Welcome to GeoRemix" },
+    { id: "about", component: AboutPage, title: "About" },
     { id: "leader-board", component: MockPage, title: "Leader Board" },
     { id: "stage-picker", component: StagePicker, title: "Pick the Stage" },
   ],
-  initialPage: "player-name-input",
+  // initialPage: "welcome-page",
 };
 
 export const levelStartGroup: Module = {
@@ -63,5 +64,5 @@ export const modulesMap = {
   [levelEndGroup.id]: levelEndGroup,
   [gameEndGroup.id]: gameEndGroup,
   [gameplayGroup.id]: gameplayGroup,
-  [loadingGroup.id]: loadingGroup
+  [loadingGroup.id]: loadingGroup,
 } as const;

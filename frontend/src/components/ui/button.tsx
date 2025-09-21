@@ -1,9 +1,10 @@
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
+// import { useBurstAnimation } from "@/hooks/use-burst-animation";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-base text-sm font-base ring-offset-white transition-all gap-2 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
@@ -29,28 +30,77 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  },
-)
+  }
+);
 
 function Button({
   className,
   variant,
   size,
   asChild = false,
+  onClick,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
+    asChild?: boolean;
   }) {
-  const Comp = asChild ? Slot : "button"
+  // const { createBurstAnimation, renderBurstAnimations } = useBurstAnimation();
+
+  // const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   createBurstAnimation(e);
+  //   if (onClick) {
+  //     setTimeout(() => {
+  //       onClick(e);
+  //     }, 300);
+  //   }
+  // };
+
+  if (asChild) {
+    return (
+      <Slot
+        data-slot="button"
+        className={cn(buttonVariants({ variant, size, className }))}
+        onClick={onClick}
+        {...props}
+      />
+    );
+  }
 
   return (
-    <Comp
+    <button
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      onClick={onClick}
       {...props}
     />
-  )
+  );
 }
 
-export { Button, buttonVariants }
+function ButtonLarge({ className, children, onClick, ...props }: React.ComponentProps<"button">) {
+  // const { createBurstAnimation, renderBurstAnimations } = useBurstAnimation();
+
+  // const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   createBurstAnimation(e);
+  //   if (onClick) {
+  //     setTimeout(() => {
+  //       onClick(e);
+  //     }, 300);
+  //   }
+  // };
+
+  return (
+    <button
+      data-slot="button-large"
+      className={cn(
+        "flex items-center gap-2.5 w-full text-center justify-center text-main-foreground rounded-base border-2 border-border bg-main md:px-10 px-4 md:py-3 py-2 md:text-[22px] text-base shadow-shadow transition-all hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none disabled:pointer-events-none disabled:opacity-50",
+        className
+      )}
+      onClick={onClick}
+      {...props}>
+      {children}
+    </button>
+  );
+  // Burst Animation Particles would go here: {renderBurstAnimations()}
+}
+
+export { Button, ButtonLarge, buttonVariants };

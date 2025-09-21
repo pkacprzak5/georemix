@@ -31,8 +31,6 @@ export function Gameplay() {
 
   // const toggleMenu = () => setMenuOpen((old) => !old);
 
-  
-
   useEffect(() => {
     const loadedCleanup = eventBridge.addEventListener("viewerLoaded", () => {
       startLoading.executeWithProgress(
@@ -57,10 +55,10 @@ export function Gameplay() {
 
     const pauseCleanup = eventBridge.addEventListener("gamePaused", () => {
       setMenuOpen(true);
-    })
+    });
     const unpauseCleanup = eventBridge.addEventListener("gameUnpaused", () => {
       setMenuOpen(false);
-    })
+    });
 
     return () => {
       loadedCleanup();
@@ -89,7 +87,7 @@ export function Gameplay() {
         <LoadingScreen progress={endLoading.progress} />
       </OverlaySheet>
 
-      <GameplayOverlay/>
+      <GameplayOverlay />
     </>
   );
 }

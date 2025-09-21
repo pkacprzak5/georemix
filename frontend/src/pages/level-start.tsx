@@ -1,9 +1,8 @@
-
-import { Button } from "@/components/ui/button";
 import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 import { THUMBNAIL_ENDPOINT } from "@/constants";
+import { ButtonLarge } from "@/components/ui/button";
 
 export function LevelStart() {
   const { navigateTo } = useNavigation();
@@ -16,25 +15,33 @@ export function LevelStart() {
   const levelInfo = gameStateManager.currentLevelInfo;
 
   return (
-    <div className="flex items-center justify-center min-h-full">
-      <div className="w-full max-w-md space-y-6">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-2">Level {levelInfo.number}</h1>
-          <p className="text-muted-foreground mb-4">{levelInfo.name}</p>
-          {levelInfo.thumbnail && (
-            <img
-              src={`${THUMBNAIL_ENDPOINT}/${levelInfo.thumbnail}`}
-              alt={levelInfo.name}
-              className="w-full h-48 object-cover rounded-lg mb-4"
-            />
-          )}
-        </div>
-
-        <div className="space-y-4">
-          <Button onClick={handleStartGameplay} variant="default" className="w-full">
-            Start Gameplay
-          </Button>
-        </div>
+    <div className="flex items-center justify-center min-h-full p-4">
+      <div className="w-full max-w-2xl">
+        {levelInfo.thumbnail && (
+          <>
+            <div className="relative">
+              <div className="absolute -top-2 z-[100] -left-2 bg-secondary-background border-2 border-border rounded-base px-4 py-2 shadow-shadow text-xl font-base">
+                Runda {gameStateManager.currentRoundNumber}
+              </div>
+              <figure className="overflow-hidden rounded-base border-2 border-border bg-secondary-background font-base shadow-shadow transition-all">
+                <div className="relative">
+                  <img
+                    className="w-full h-96 object-cover"
+                    src={`${THUMBNAIL_ENDPOINT}/${levelInfo.thumbnail}`}
+                    alt={levelInfo.name}
+                  />
+                  {/* Round number card overlay */}
+                </div>
+                <figcaption className="border-t-2 text-2xl text-main-foreground border-border p-4 text-center">
+                  {levelInfo.name}
+                </figcaption>
+              </figure>
+            </div>
+            <ButtonLarge className="mt-8" onClick={handleStartGameplay}>
+              Rozpocznij Zgadywanie!
+            </ButtonLarge>
+          </>
+        )}
       </div>
     </div>
   );
