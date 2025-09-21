@@ -36,7 +36,7 @@ export function PauseMenu() {
               Wyjdź do Menu
             </ButtonLarge>
             <div className="text-lg text-muted-foreground text-center flex items-center justify-between mt-8">
-              <TriangleAlert size={52} className="mr-8"/>{" "}
+              <TriangleAlert size={52} className="mr-8" />{" "}
               <p>Uwaga! Po powrocie do Głównego Menu wszystkie postępy zostaną utracone!</p>
             </div>
           </div>
