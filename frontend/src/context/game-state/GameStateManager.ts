@@ -1,6 +1,5 @@
 import { type LevelInfo, type LevelResultInfo, type MapCoordinates } from "@/types/project";
 import { BASE_URL } from "@/constants";
-import type ThemeManager from "@/context/game-state/ThemeManager";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
@@ -27,7 +26,7 @@ export class GameStateManager {
   private readonly _timeCap: number = 10; // 10secs
   private readonly _metersCap: number = 50;
 
-  constructor(private readonly _themeManager: ThemeManager) {}
+  constructor() {}
 
   // Getters
   get currentRoundNumber(): number {
