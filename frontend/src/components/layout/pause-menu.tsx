@@ -11,7 +11,7 @@ export function PauseMenu() {
 
   const handleLeaveGame = () => {
     navigateTo(moduleIdMap.INTRO, "welcome-page");
-    eventBridge.emit("closeMapButtonClicked", {});
+    eventBridge.emit("gameplayLeft", {});
     // Hacky but works
     setTimeout(() => {
       gameStateManager.resetAll();
