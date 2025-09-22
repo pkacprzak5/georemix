@@ -18,23 +18,31 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-// Custom icons for different markers
-const actualLocationIcon = new L.Icon({
-  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
+const actualLocationIcon = L.divIcon({
+  html: `
+    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"
+                      stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#77b900">
+                      <path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528" />
+                    </svg>
+  `,
+  className: "",
+  iconSize: [36, 36],
+  iconAnchor: [0, 36]
 });
 
-const guessLocationIcon = new L.Icon({
-  iconUrl:
-    "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iNDEiIHZpZXdCb3g9IjAgMCAyNSA0MSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyLjUgMEMxOS40MDM2IDAgMjUgNS41OTY0NCAyNSAxMi41QzI1IDE5LjQwMzYgMTkuNDAzNiAyNSAxMi41IDI1QzUuNTk2NDQgMjUgMCAxOS40MDM2IDAgMTIuNUMwIDUuNTk2NDQgNS41OTY0NCAwIDEyLjUgMFoiIGZpbGw9IiNkYzI2MjYiLz4KPHBhdGggZD0iTTEyLjUgNDBMMTIuNSAyNSIgc3Ryb2tlPSIjZGMyNjI2IiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+Cg==",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
+const guessLocationIcon = L.divIcon({
+  html: `
+    <svg width="36" height="36" viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                      fill="#77b900">
+                      <path d="M12.56 20.82a.96.96 0 0 1-1.12 0C6.611 17.378 1.486 10.298 6.667 5.182A7.6 7.6 0 0 1 12 3c2 0 3.919.785 5.333 2.181 5.181 5.116.056 12.196-4.773 15.64" />
+                      <path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                    </svg>
+  `,
+  className: "",
+  iconSize: [36, 36],
+  iconAnchor: [18, 36],
 });
 
 const mapLayer = {
@@ -136,11 +144,20 @@ export function LevelMap() {
               <CardContent className="px-3 py-2">
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                      stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#77b900">
+                      <path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528" />
+                    </svg>
                     <span className="text-foreground font-base">Faktyczna lokalizacja</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-red-600 rounded-full"></div>
+                    <svg width="24" height="24" viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                      fill="#77b900">
+                      <path d="M12.56 20.82a.96.96 0 0 1-1.12 0C6.611 17.378 1.486 10.298 6.667 5.182A7.6 7.6 0 0 1 12 3c2 0 3.919.785 5.333 2.181 5.181 5.116.056 12.196-4.773 15.64" />
+                      <path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                    </svg>
                     <span className="text-foreground font-base">Twoja odpowiedź</span>
                   </div>
                 </div>
@@ -168,16 +185,25 @@ export function LevelMap() {
                   attributionControl={false}>
                   <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
 
-                  {/* Actual location marker (blue) */}
+                  {/* Actual location marker */}
                   <Marker position={resultData.actualPosition} icon={actualLocationIcon} />
 
-                  {/* Guess location marker (red) */}
+                  {/* Guess location marker */}
                   <Marker position={resultData.guessPosition} icon={guessLocationIcon} />
+
+                  {/* White "border" line */}
+                  <Polyline
+                    positions={[resultData.actualPosition, resultData.guessPosition]}
+                    color="white"
+                    weight={5}
+                    opacity={0.7}
+                    dashArray="5, 10"
+                  />
 
                   {/* Line connecting the two points */}
                   <Polyline
                     positions={[resultData.actualPosition, resultData.guessPosition]}
-                    color="red"
+                    color="#77b900"
                     weight={3}
                     opacity={0.7}
                     dashArray="5, 10"
@@ -207,6 +233,6 @@ export function LevelMap() {
           </ButtonLarge>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
