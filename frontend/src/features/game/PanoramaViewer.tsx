@@ -40,7 +40,7 @@ const PanoramaViewer = () => {
 
   const handleReady = (instance: Viewer) => {
     const virtualTour = instance.getPlugin(VirtualTourPlugin) as VirtualTourPlugin;
-
+    
     if (!virtualTour) {
       return;
     }

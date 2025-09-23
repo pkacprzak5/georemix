@@ -5,6 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { useEventBridge } from "@/context/game-state";
 import { useResizableWindow } from "@/hooks/use-resizable-window";
 
+
 // Window size constants for calculations
 const WINDOW_WIDTH_MINIMIZED = 300;
 const WINDOW_HEIGHT_MINIMIZED = 200;
@@ -38,6 +39,17 @@ export function Minimap() {
     initialOpened: false,
   });
 
+  // Function to reset minimap to default state (minimized and default position)
+  const resetMinimapToDefault = () => {
+    handleMinimize();
+    // Reset to default position (bottom-right corner)
+    setPosition({
+      x: window.innerWidth * 0.98 - WINDOW_WIDTH_MINIMIZED,
+      y: window.innerHeight * 0.98 - WINDOW_HEIGHT_MINIMIZED,
+    });
+    // Minimize the window
+  };
+
   const handleForceClose = () => {
     eventBridge.emit("closeMapButtonClicked", {});
     setForceHidden(true);
@@ -55,15 +67,25 @@ export function Minimap() {
     }
   };
 
+  const handleLeaveGameplay = () => {
+    handleClose();
+  };
+
+  const handleGameStarted = () => {
+    resetMinimapToDefault();
+    handleOpen();
+  };
+
   useEffect(() => {
     const pausedCleanup = eventBridge.addEventListener("gamePaused", handleClose);
-    const startedCleanup = eventBridge.addEventListener("gameStarted", internalHandleOpen);
-    const unloadedCleanup = eventBridge.addEventListener("resultSubmitted", handleClose);
+    const startedCleanup = eventBridge.addEventListener("gameStarted", handleGameStarted);
+    const unloadedCleanup = eventBridge.addEventListener("resultSubmitted", handleLeaveGameplay);
     const unpausedCleanup = eventBridge.addEventListener("gameUnpaused", internalHandleOpen);
     const openMapButtonClickedCleanup = eventBridge.addEventListener(
       "openMapButtonClicked",
       handleForceOpen
     );
+    const gameplayLeftCleanup = eventBridge.addEventListener("gameplayLeft", handleLeaveGameplay);
 
     return () => {
       unloadedCleanup();
@@ -71,6 +93,7 @@ export function Minimap() {
       unpausedCleanup();
       startedCleanup();
       openMapButtonClickedCleanup();
+      gameplayLeftCleanup();
     };
   }, [eventBridge, handleOpen, handleClose, internalHandleOpen, forceHidden]);
 
