@@ -1,3 +1,5 @@
+import { type Colors, DEFAULT_COLORS } from "@/types/project";
+
 const THEME_CHANGE_CLASS = "theme-change";
 const THEME_CHANGE_DURATION = 1100;
 
@@ -17,6 +19,19 @@ class ThemeManager {
           this._document.classList.add("dark");
         }
     }
+  }
+
+  setColors(colors: Colors) {
+    this._document.classList.add(THEME_CHANGE_CLASS);
+    setTimeout(() => {
+      this._document.classList.remove(THEME_CHANGE_CLASS);
+    }, THEME_CHANGE_DURATION);
+    document.documentElement.style.setProperty("--main", colors.main);
+    document.documentElement.style.setProperty("--background", colors.background);
+  }
+
+  resetColors() {
+    this.setColors(DEFAULT_COLORS);
   }
 }
 

@@ -1,6 +1,5 @@
-import { type LevelInfo, type LevelResultInfo, type MapCoordinates } from "@/types/project";
+import { type Colors, type LevelInfo, type LevelResultInfo, type MapCoordinates, DEFAULT_COLORS } from "@/types/project";
 import { BASE_URL } from "@/constants";
-import type ThemeManager from "@/context/game-state/ThemeManager";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
@@ -10,6 +9,7 @@ export class GameStateManager {
   private _levels: LevelInfo[] = [];
   private _levelResults: LevelResultInfo[] = [];
   private _currentTheme: "light" | "dark" = "light";
+  private _currentColors: Colors = DEFAULT_COLORS;
   private _playerName: string = "";
 
   // Current Gameplay
@@ -27,7 +27,7 @@ export class GameStateManager {
   private readonly _timeCap: number = 10; // 10secs
   private readonly _metersCap: number = 50;
 
-  constructor(private readonly _themeManager: ThemeManager) {}
+  constructor() {}
 
   // Getters
   get currentRoundNumber(): number {
@@ -43,6 +43,10 @@ export class GameStateManager {
 
   get gameTheme(): "light" | "dark" {
     return this._currentTheme;
+  }
+
+  get colorTheme(): Colors {
+    return this._currentColors;
   }
 
   get currentLevelInfo(): LevelInfo {
@@ -82,18 +86,11 @@ export class GameStateManager {
     this._currentCoordinates = coordinates;
   }
 
-  resetGameplayeInfo() {
-    this._timeTaken = null;
-    this._currentCoordinates = null;
-  }
-
   calculateResult(submittedPosition: MapCoordinates) {
     // Calculate straight-line (Haversine) distance between submittedPosition and _currentCoordinates
     if (!this._currentCoordinates || this._timeTaken === null) {
       throw new Error("No current coordinates set");
     }
-
-    console.log(submittedPosition, this._currentCoordinates);
 
     if (this._currentLevelNumber === null) {
       throw new Error("No current level set");
@@ -168,6 +165,7 @@ export class GameStateManager {
           name: level.name,
           thumbnail: level.thumbnail,
           number: i + 1,
+          colors: level.colors
         }));
         this.loadLevel(0);
       })
@@ -183,10 +181,7 @@ export class GameStateManager {
     this._currentLevelNumber = levelNumber;
     const level = this._levels[levelNumber];
     this._currentTheme = level.theme;
-  }
-
-  setCurrentRound(round: number): void {
-    this._currentRoundNumber = round;
+    this._currentColors = level.colors;
   }
 
   loadNextLevel(): Promise<null> {
