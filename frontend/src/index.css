@@ -72,7 +72,7 @@
 
 @layer base {
   body {
-    --link-button-ring: green;
+    --link-button-ring: var(--main);
     @apply text-foreground font-base bg-secondary-background [background-size:20px_20px] [background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)];
   }
 
@@ -273,7 +273,7 @@ body {
     box-shadow: 0 0 0 0 rgba(97, 170, 242, 0);
   }
   20% {
-    box-shadow: 0 0 0 5px #77b900;
+    box-shadow: 0 0 0 5px var(--main);
   }
   100% {
     box-shadow: 0 0 0 20px rgba(97, 170, 242, 0);
