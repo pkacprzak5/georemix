@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useMemo } from "react";
+import React, { createContext, useContext, useEffect, useMemo } from "react";
 import { EventBridge } from "@/context/game-state/EventBridge";
 import { GameStateManager } from "@/context/game-state/GameStateManager";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import type { ModuleId } from "@/lib/navigation-system/types";
 import ThemeManager from "@/context/game-state/ThemeManager";
+import { DEFAULT_COLORS } from "@/types/project";
 
 interface GameStateContextType {
   eventBridge: EventBridge;
@@ -23,6 +24,16 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
   const eventBridge = useMemo(() => new EventBridge(), []);
   const gameStateManager = useMemo(() => new GameStateManager(), []);
   const { navigateToNewGroup } = useNavigation();
+
+  useEffect(() => {
+    const unsubscribeGameplayLeft = eventBridge.addEventListener("gameplayLeft", () => {
+      themeManager.setColors(DEFAULT_COLORS) 
+    })
+
+    return () => {
+      unsubscribeGameplayLeft();
+    }
+  }, [])
 
   const contextValue = useMemo(
     () => ({

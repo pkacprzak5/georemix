@@ -16,7 +16,7 @@ Thumbs.db
 .idea/
 
 .env
-
-images
-
 ignore*
+
+images*
+cracow
