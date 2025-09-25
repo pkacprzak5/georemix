@@ -5,11 +5,13 @@ import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import type { ModuleId } from "@/lib/navigation-system/types";
 import ThemeManager from "@/context/game-state/ThemeManager";
 import { DEFAULT_COLORS } from "@/types/project";
+import { DataSourceManager } from "@/context/game-state/DataSourceManager";
 
 interface GameStateContextType {
   eventBridge: EventBridge;
   gameStateManager: GameStateManager;
   themeManager: ThemeManager;
+  dataSourceManager: DataSourceManager;
   navigateToNewGroup: (newGroup: ModuleId) => void;
 }
 
@@ -23,6 +25,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
   const themeManager = useMemo(() => new ThemeManager(), []);
   const eventBridge = useMemo(() => new EventBridge(), []);
   const gameStateManager = useMemo(() => new GameStateManager(), []);
+  const dataSourceManager = useMemo(() => new DataSourceManager(), []);
   const { navigateToNewGroup } = useNavigation();
 
   useEffect(() => {
@@ -40,9 +43,10 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
       eventBridge,
       gameStateManager,
       themeManager,
+      dataSourceManager,
       navigateToNewGroup,
     }),
-    [eventBridge, gameStateManager]
+    [eventBridge, gameStateManager, dataSourceManager]
   );
 
   return <GameStateContext.Provider value={contextValue}>{children}</GameStateContext.Provider>;
@@ -71,4 +75,9 @@ export function useThemeManager(): ThemeManager {
 export function useGameStateManager(): GameStateManager {
   const { gameStateManager } = useGameState();
   return gameStateManager;
+}
+
+export function useDataSourceManager(): DataSourceManager {
+  const { dataSourceManager } = useGameState();
+  return dataSourceManager;
 }

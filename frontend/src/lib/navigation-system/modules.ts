@@ -2,7 +2,6 @@ import { Gameplay } from "@/pages/gameplay";
 import { LevelStart } from "@/pages/level-start";
 import { LevelSummary } from "@/pages/level-summary";
 import { LevelMap } from "@/pages/level-map";
-import { MockPage } from "@/pages/mock";
 import { WelcomePage } from "@/pages/welcome-page";
 import { StagePicker } from "@/pages/stage-picker";
 import { TitlePage } from "@/pages/title";
@@ -11,6 +10,7 @@ import { NavigationLoadingPage } from "@/pages/navigation-loading-page";
 import type { Module } from "./types";
 import { moduleIdMap } from "./types";
 import { FinalResult } from "@/pages/final-result";
+import { LeaderBoardPage } from "@/pages/leader-board";
 
 export const titleGroup: Module = {
   id: moduleIdMap.TITLE,
@@ -23,7 +23,7 @@ export const introGroup: Module = {
   pages: [
     { id: "welcome-page", component: WelcomePage, title: "Welcome to GeoRemix" },
     { id: "about", component: AboutPage, title: "About" },
-    { id: "leader-board", component: MockPage, title: "Leader Board" },
+    { id: "leader-board", component: LeaderBoardPage, title: "Leader Board" },
     { id: "stage-picker", component: StagePicker, title: "Pick the Stage" },
   ],
   // initialPage: "welcome-page",
