@@ -19,14 +19,13 @@ export type LevelPhoto = {
   name: string;
 };
 
-
 export const DEFAULT_COLORS = {
   background: "#eaf7cf",
-  main: "#77b900"
-}
+  main: "#77b900",
+};
 export interface Colors {
-  background: string,
-  main: string,
+  background: string;
+  main: string;
 }
 
 export type LevelInfo = {
@@ -35,7 +34,7 @@ export type LevelInfo = {
   theme: "light" | "dark";
   thumbnail: string;
   number: number;
-  colors: Colors
+  colors: Colors;
 };
 
 export type LevelResult = {

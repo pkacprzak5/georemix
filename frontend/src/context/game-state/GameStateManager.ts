@@ -1,4 +1,10 @@
-import { type Colors, type LevelInfo, type LevelResultInfo, type MapCoordinates, DEFAULT_COLORS } from "@/types/project";
+import {
+  type Colors,
+  type LevelInfo,
+  type LevelResultInfo,
+  type MapCoordinates,
+  DEFAULT_COLORS,
+} from "@/types/project";
 import { BASE_URL } from "@/constants";
 
 // TODO:  I truly grieve that this is not a zustand store.
@@ -165,7 +171,7 @@ export class GameStateManager {
           name: level.name,
           thumbnail: level.thumbnail,
           number: i + 1,
-          colors: level.colors
+          colors: level.colors,
         }));
         this.loadLevel(0);
       })

@@ -145,7 +145,11 @@ function WindowLayout({
               className="window-button"
               aria-label="Maximize">
               <span className="text-xs font-bold flex items-center justify-center">
-                {!maximized ? <Copy transform="scale(-1,1)" size={"60%"} /> : <Square size={"70%"} />}
+                {!maximized ? (
+                  <Copy transform="scale(-1,1)" size={"60%"} />
+                ) : (
+                  <Square size={"70%"} />
+                )}
               </span>
             </button>
 

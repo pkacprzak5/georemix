@@ -27,13 +27,13 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
 
   useEffect(() => {
     const unsubscribeGameplayLeft = eventBridge.addEventListener("gameplayLeft", () => {
-      themeManager.setColors(DEFAULT_COLORS) 
-    })
+      themeManager.setColors(DEFAULT_COLORS);
+    });
 
     return () => {
       unsubscribeGameplayLeft();
-    }
-  }, [])
+    };
+  }, []);
 
   const contextValue = useMemo(
     () => ({
