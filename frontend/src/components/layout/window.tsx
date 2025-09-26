@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { TextParticle, type TextParticleProps } from "../ui/text-particle";
 import { useDrag } from "@/hooks/use-drag";
+import { Square, Minus, Copy, X } from "lucide-react";
 
 const TEXT_PARTICLE_THROTTLE = 400;
 const TEXT_PARTICLE_REMOVE_DELAY = 800;
@@ -127,9 +128,7 @@ function WindowLayout({
               className="window-button"
               aria-label="Minimize">
               <span className="text-xs font-bold">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                  <path d='M6 12h12' />
-                </svg>
+                <Minus />
               </span>
             </button>
 
@@ -145,14 +144,8 @@ function WindowLayout({
               }}
               className="window-button"
               aria-label="Maximize">
-              <span className="text-xs font-bold">
-                {!maximized ?
-                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                    <path d='M9.4 21c-2.24 0-3.36 0-4.216-.436a4 4 0 0 1-1.748-1.748C3 17.96 3 16.84 3 14.6m18 0c0 2.24 0 3.36-.436 4.216a4 4 0 0 1-1.748 1.748C17.96 21 16.84 21 14.6 21m0-18c2.24 0 3.36 0 4.216.436a4 4 0 0 1 1.748 1.748C21 6.04 21 7.16 21 9.4M9.4 3c-2.24 0-3.36 0-4.216.436a4 4 0 0 0-1.748 1.748C3 6.04 3 7.16 3 9.4' />
-                  </svg> :
-                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                    <path d='M9.75 3.01c-.04 2.79-.247 4.37-1.308 5.432C7.38 9.502 5.799 9.71 3.01 9.75M9.75 21c-.04-2.79-.247-4.371-1.308-5.432S5.799 14.3 3.01 14.26M14.26 3.01c.04 2.79.247 4.37 1.308 5.432C16.629 9.502 18.211 9.71 21 9.75M14.26 21c.04-2.79.247-4.371 1.308-5.432S18.211 14.3 21 14.26' />
-                  </svg>}
+              <span className="text-xs font-bold flex items-center justify-center">
+                {!maximized ? <Copy transform="scale(-1,1)" size={"60%"} /> : <Square size={"70%"} />}
               </span>
             </button>
 
@@ -161,9 +154,7 @@ function WindowLayout({
               onClick={(e) => handleIconClick(e, onClose)}
               className="window-button"
               aria-label="Close">
-              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                <path d='M18 6 6 18M6 6l12 12' />
-              </svg>
+              <X />
             </button>
           </div>
         </div>
