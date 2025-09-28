@@ -38,7 +38,7 @@ type DefaultHeaders = Record<string, string>;
 
 const JSON_HEADERS: DefaultHeaders = {
   "Content-Type": "application/json",
-  Accept: "application/json",
+  "Accept": "application/json",
 };
 
 export class DataSourceManager {
@@ -57,7 +57,9 @@ export class DataSourceManager {
     }
 
     const params = new URLSearchParams({ username });
-    const data = await this.get<UsernameAvailabilityResponse>(`/players/availability?${params.toString()}`);
+    const data = await this.get<UsernameAvailabilityResponse>(
+      `/players/availability?${params.toString()}`
+    );
     return Boolean(data?.available);
   }
 
@@ -111,7 +113,9 @@ export class DataSourceManager {
 
     this.stageLeaderboardCacheById.set(normalized.stageId, normalized);
     if (this.stageLeaderboardsCache) {
-      const remaining = this.stageLeaderboardsCache.filter((item) => item.stageId !== normalized.stageId);
+      const remaining = this.stageLeaderboardsCache.filter(
+        (item) => item.stageId !== normalized.stageId
+      );
       const merged = [...remaining, normalized];
       merged.sort((a, b) => a.stageId.localeCompare(b.stageId));
       this.stageLeaderboardsCache = merged;
@@ -142,7 +146,10 @@ export class DataSourceManager {
           return b.overallScore - a.overallScore;
         }
         if (a.overallTime || b.overallTime) {
-          return (a.overallTime || Number.POSITIVE_INFINITY) - (b.overallTime || Number.POSITIVE_INFINITY);
+          return (
+            (a.overallTime || Number.POSITIVE_INFINITY) -
+            (b.overallTime || Number.POSITIVE_INFINITY)
+          );
         }
         return a.username.localeCompare(b.username);
       });
@@ -158,7 +165,9 @@ export class DataSourceManager {
     }
 
     try {
-      const data = await this.get<PlayerScoreResponse>(`/scores/players/${encodeURIComponent(username)}`);
+      const data = await this.get<PlayerScoreResponse>(
+        `/scores/players/${encodeURIComponent(username)}`
+      );
       if (!data?.player) {
         return null;
       }
@@ -195,25 +204,40 @@ export class DataSourceManager {
       .map((score) => ({
         ...score,
         totalScore: Number(score.totalScore) || 0,
-        totalTime: typeof score.totalTime === "number" ? score.totalTime : score.totalTime ? Number(score.totalTime) : null,
+        totalTime:
+          typeof score.totalTime === "number"
+            ? score.totalTime
+            : score.totalTime
+              ? Number(score.totalTime)
+              : null,
         totalDistance:
           typeof score.totalDistance === "number"
             ? score.totalDistance
             : score.totalDistance
-            ? Number(score.totalDistance)
-            : null,
+              ? Number(score.totalDistance)
+              : null,
         completedLevels: Number(score.completedLevels) || 0,
         levels: Array.isArray(score.levels)
           ? score.levels.map((level) => ({
               ...level,
-              score: typeof level.score === "number" ? level.score : level.score ? Number(level.score) : null,
-              time: typeof level.time === "number" ? level.time : level.time ? Number(level.time) : null,
+              score:
+                typeof level.score === "number"
+                  ? level.score
+                  : level.score
+                    ? Number(level.score)
+                    : null,
+              time:
+                typeof level.time === "number"
+                  ? level.time
+                  : level.time
+                    ? Number(level.time)
+                    : null,
               distance:
                 typeof level.distance === "number"
                   ? level.distance
                   : level.distance
-                  ? Number(level.distance)
-                  : null,
+                    ? Number(level.distance)
+                    : null,
             }))
           : undefined,
       }))

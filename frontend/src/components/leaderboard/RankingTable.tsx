@@ -14,7 +14,6 @@ export interface RankingTableProps<Row> {
   rows: Row[];
   columns: RankingColumn<Row>[];
   getRowKey?: (row: Row, index: number) => string | number;
-  emptyState?: ReactNode;
   className?: string;
   caption?: ReactNode;
 }
@@ -29,21 +28,20 @@ export function RankingTable<Row>({
   rows,
   columns,
   getRowKey,
-  emptyState,
   className,
   caption,
 }: RankingTableProps<Row>) {
-  if (!rows.length) {
-    return (
-      <div className={cn("rounded-base border-2 border-border bg-secondary-background px-6 py-8 text-center shadow-shadow", className)}>
-        {emptyState ?? <p className="text-sm font-base text-foreground/70">Brak wynikow do wyswietlenia.</p>}
-      </div>
-    );
-  }
-
   return (
-    <div className={cn("rounded-base border-2 border-border bg-background shadow-shadow overflow-hidden", className)}>
-      {caption ? <div className="border-b-2 border-border bg-secondary-background px-6 py-4 text-sm font-heading uppercase tracking-wide text-foreground">{caption}</div> : null}
+    <div
+      className={cn(
+        "rounded-base border-2 border-border bg-background shadow-shadow overflow-hidden",
+        className
+      )}>
+      {caption ? (
+        <div className="border-b-2 border-border bg-secondary-background px-6 py-4 text-sm font-heading uppercase tracking-wide text-foreground">
+          {caption}
+        </div>
+      ) : null}
       <table className="w-full border-collapse">
         <thead className="bg-secondary-background border-b-2 border-border">
           <tr className="text-left text-xs font-heading uppercase tracking-[0.15em] text-foreground/80">
@@ -66,10 +64,13 @@ export function RankingTable<Row>({
           {rows.map((row, index) => {
             const rowKey = getRowKey ? getRowKey(row, index) : index;
             const rank = index + 1;
-            const rankAccent = rankAccentClasses[index] ?? "bg-background text-foreground border-border";
+            const rankAccent =
+              rankAccentClasses[index] ?? "bg-background text-foreground border-border";
 
             return (
-              <tr key={rowKey} className="border-b border-border last:border-b-0 odd:bg-background even:bg-secondary-background/30">
+              <tr
+                key={rowKey}
+                className="border-b border-border last:border-b-0 odd:bg-background even:bg-secondary-background/30">
                 <td className="px-6 py-4">
                   <span
                     className={cn(
@@ -88,7 +89,9 @@ export function RankingTable<Row>({
                       column.align === "center" && "text-center",
                       column.cellClassName
                     )}>
-                    {column.render ? column.render(row, index) : (row as Record<string, ReactNode>)[column.key]}
+                    {column.render
+                      ? column.render(row, index)
+                      : (row as Record<string, ReactNode>)[column.key]}
                   </td>
                 ))}
               </tr>

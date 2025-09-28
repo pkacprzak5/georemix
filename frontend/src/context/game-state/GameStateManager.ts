@@ -1,5 +1,12 @@
-import { type Colors, type LevelInfo, type LevelResultInfo, type MapCoordinates, DEFAULT_COLORS } from "@/types/project";
+import {
+  type Colors,
+  type LevelInfo,
+  type LevelResultInfo,
+  type MapCoordinates,
+  DEFAULT_COLORS,
+} from "@/types/project";
 import { BASE_URL } from "@/constants";
+import { mockLeaderboard, type PlayerResults } from "@/lib/api-mock";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
@@ -11,6 +18,9 @@ export class GameStateManager {
   private _currentTheme: "light" | "dark" = "light";
   private _currentColors: Colors = DEFAULT_COLORS;
   private _playerName: string = "";
+
+  /** Whether currently selected stage is finished. */
+  private _isRoundFinished: boolean = false;
 
   // Current Gameplay
   private _currentCoordinates: MapCoordinates | null = null;
@@ -30,6 +40,11 @@ export class GameStateManager {
   constructor() {}
 
   // Getters
+
+  get isRoundFinished(): boolean {
+    return this._isRoundFinished;
+  }
+
   get currentRoundNumber(): number {
     if (this._currentRoundNumber === null) {
       throw new Error("No current round set");
@@ -165,7 +180,7 @@ export class GameStateManager {
           name: level.name,
           thumbnail: level.thumbnail,
           number: i + 1,
-          colors: level.colors
+          colors: level.colors,
         }));
         this.loadLevel(0);
       })
@@ -195,7 +210,59 @@ export class GameStateManager {
     });
   }
 
+  /** Uploads user's stage results to the server. */
+  submitRoundResults() {
+    this._isRoundFinished = true;
+
+    // Find leaderboard for the round.
+
+    const roundLeaderboard = mockLeaderboard.find(
+      (stage) => stage.roundNumber === this.currentRoundNumber
+    );
+
+    if (!roundLeaderboard) {
+      console.error(`Round ${this.currentRoundNumber} doesn't have mock leaderboard.`);
+      return;
+    }
+
+    // Overwrite last result for the player with the current one.
+
+    roundLeaderboard.results = roundLeaderboard.results.filter(
+      ({ playerName }) => playerName !== this._playerName
+    );
+
+    const roundResults = this.computeRoundResults();
+    roundLeaderboard.results.push(roundResults);
+
+    // Save mock leaderboard to localstorage.
+    localStorage.setItem("leaderboard-mock", JSON.stringify(mockLeaderboard));
+  }
+
+  /** Computes stats included in the leaderboard from finished round. */
+  private computeRoundResults(): PlayerResults {
+    // Reduce over level results and gather essential stats.
+    const results: PlayerResults = this._levelResults.reduce(
+      (prev, curr) => {
+        return {
+          ...prev,
+          totalTime: prev.totalTime + curr.timeTaken,
+          totalScore: prev.totalScore + curr.score,
+          closestCall: Math.min(prev.closestCall, curr.distance),
+        };
+      },
+      {
+        playerName: this.playerName,
+        totalTime: 0,
+        totalScore: 0,
+        closestCall: Infinity,
+      } satisfies PlayerResults
+    );
+
+    return results;
+  }
+
   resetAll() {
+    this._isRoundFinished = false;
     this._currentRoundNumber = null;
     this._currentLevelNumber = null;
     this._levelResults = [];

@@ -19,14 +19,13 @@ export type LevelPhoto = {
   name: string;
 };
 
-
 export const DEFAULT_COLORS = {
   background: "#eaf7cf",
-  main: "#77b900"
-}
+  main: "#77b900",
+};
 export interface Colors {
-  background: string,
-  main: string,
+  background: string;
+  main: string;
 }
 
 export type LevelInfo = {
@@ -35,13 +34,7 @@ export type LevelInfo = {
   theme: "light" | "dark";
   thumbnail: string;
   number: number;
-  colors: Colors
-};
-
-export type LevelResult = {
-  levelId: string;
-  score: number;
-  timeTaken: number;
+  colors: Colors;
 };
 
 export type RoundInfo = LevelInfo[];
@@ -53,3 +46,7 @@ export type LevelResultInfo = {
   answerPosition: MapCoordinates;
   score: number;
 };
+
+// Place | Username | Total Time | Total Score | Closest Call (meters)
+// final-result -> ranking
+// welcome-page -> ranking

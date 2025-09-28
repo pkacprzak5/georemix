@@ -65,12 +65,7 @@ export function WelcomePage() {
   };
 
   const handleShowLeaderboard = () => {
-    const promise = Promise.all([
-      dataSourceManager.fetchStageLeaderboards(),
-      dataSourceManager.fetchOverallLeaderboard(),
-    ]);
-
-    navigateWithLoading(moduleIdMap.INTRO, "leader-board", promise);
+    navigateTo(moduleIdMap.INTRO, "leader-board");
   };
 
   const handleConfirmExistingPlayer = () => {
@@ -98,7 +93,8 @@ export function WelcomePage() {
             Witaj w <StylisedSpan showStars>GeoRemix</StylisedSpan>
           </h1>
           <p className="leading-snug mx-auto w-full md:mt-[50px] md:mb-[60px] sm:mt-12 my-5 sm:mb-10 2xl:text-3xl xl:text-2xl lg:text-2xl xl:w-full lg:w-2/3 md:w-full md:text-2xl sm:text-xl text-xl">
-            Od futurystycznych metropolii po fantastyczne krainy - sprawdz czy potrafisz rozpoznac znajome miejsca w nowej odslonie!
+            Od futurystycznych metropolii po fantastyczne krainy - sprawdz czy potrafisz rozpoznac
+            znajome miejsca w nowej odslonie!
           </p>
         </div>
 
@@ -122,14 +118,17 @@ export function WelcomePage() {
             {!isCheckingName && existingPlayerName && (
               <div className="space-y-3 rounded-base border-2 border-border bg-secondary-background px-5 py-4 text-sm font-base text-foreground shadow-shadow">
                 <p>
-                  Nazwa <span className="font-heading uppercase">{existingPlayerName}</span> jest juz aktywna.
-                  Kontynuuj jako ten gracz, aby nadpisac jego aktualne wyniki, lub wybierz inna nazwe.
+                  Nazwa <span className="font-heading uppercase">{existingPlayerName}</span> jest
+                  juz aktywna. Kontynuuj jako ten gracz, aby nadpisac jego aktualne wyniki, lub
+                  wybierz inna nazwe.
                 </p>
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
                   <ButtonLarge onClick={handleConfirmExistingPlayer} className="sm:w-auto">
                     Kontynuuj jako {existingPlayerName}
                   </ButtonLarge>
-                  <ButtonLarge onClick={handleRejectExistingPlayer} className="sm:w-auto bg-secondary-background text-foreground">
+                  <ButtonLarge
+                    onClick={handleRejectExistingPlayer}
+                    className="sm:w-auto bg-secondary-background text-foreground">
                     Wybierz inną
                   </ButtonLarge>
                 </div>
@@ -143,7 +142,9 @@ export function WelcomePage() {
             )}
           </div>
 
-          <ButtonLarge onClick={handleShowLeaderboard} className="bg-secondary-background text-foreground">
+          <ButtonLarge
+            onClick={handleShowLeaderboard}
+            className="bg-secondary-background text-foreground">
             Zobacz ranking <Trophy className="mt-1" />
           </ButtonLarge>
 
