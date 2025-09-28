@@ -1,25 +1,32 @@
 from datetime import datetime
 import json
 import os
-
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request, send_from_directory
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
-from typing import Optional
 
-load_dotenv()
+if not load_dotenv():
+    print(".env file not detected.")
 
-BASE_URL = os.getenv("BASE_URL", "http://localhost:5000")
+PORT = os.getenv("API_PORT", "5000")
+HOST = os.getenv("API_HOST", "http://localhost")
+BASE_URL = f"{HOST}:{PORT}"
 IMAGE_ENDPOINT = f"{BASE_URL}/images/"
+
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///scores.db")
 STAGE_SCORE_LIMIT = int(os.getenv("STAGE_SCORE_LIMIT", "50"))
+CLIENT_ORIGIN = os.getenv("CLIENT_ORIGIN", "http://localhost:5173")
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-CORS(app)
+
+cors = CORS(
+    app, resources={r"/*": {"origins": CLIENT_ORIGIN}}, supports_credentials=True
+)
+
 db = SQLAlchemy(app)
 
 
@@ -30,7 +37,9 @@ class Player(db.Model):
     username = db.Column(db.String(64), unique=True, nullable=False, index=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
-    stage_scores = db.relationship("StageScore", back_populates="player", cascade="all, delete-orphan")
+    stage_scores = db.relationship(
+        "StageScore", back_populates="player", cascade="all, delete-orphan"
+    )
 
     def to_dict(self, include_scores: bool = False):
         completed_scores = [score for score in self.stage_scores if score.is_complete]
@@ -49,7 +58,9 @@ class Player(db.Model):
         }
 
         if include_scores:
-            data["stageScores"] = [score.to_dict(include_levels=True) for score in completed_scores]
+            data["stageScores"] = [
+                score.to_dict(include_levels=True) for score in completed_scores
+            ]
 
         return data
 
@@ -63,7 +74,9 @@ class Stage(db.Model):
     total_levels = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
-    stage_scores = db.relationship("StageScore", back_populates="stage", cascade="all, delete-orphan")
+    stage_scores = db.relationship(
+        "StageScore", back_populates="stage", cascade="all, delete-orphan"
+    )
 
     def to_dict(self, include_scores: bool = False):
         data = {
@@ -76,12 +89,18 @@ class Stage(db.Model):
 
         if include_scores:
             ordered_scores = (
-                StageScore.query
-                .filter(StageScore.stage_id == self.id, StageScore.is_complete.is_(True))
-                .order_by(StageScore.total_score.desc(), func.coalesce(StageScore.total_time, 1e9))
+                StageScore.query.filter(
+                    StageScore.stage_id == self.id, StageScore.is_complete.is_(True)
+                )
+                .order_by(
+                    StageScore.total_score.desc(),
+                    func.coalesce(StageScore.total_time, 1e9),
+                )
                 .limit(STAGE_SCORE_LIMIT)
             )
-            data["scores"] = [score.to_dict(include_levels=True) for score in ordered_scores]
+            data["scores"] = [
+                score.to_dict(include_levels=True) for score in ordered_scores
+            ]
 
         return data
 
@@ -98,7 +117,9 @@ class StageScore(db.Model):
     completed_levels = db.Column(db.Integer, default=0, nullable=False)
     is_complete = db.Column(db.Boolean, default=False, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    updated_at = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
+    )
 
     player = db.relationship("Player", back_populates="stage_scores")
     stage = db.relationship("Stage", back_populates="stage_scores")
@@ -138,7 +159,9 @@ class LevelScore(db.Model):
     )
 
     id = db.Column(db.Integer, primary_key=True)
-    stage_score_id = db.Column(db.Integer, db.ForeignKey("stage_scores.id"), nullable=False)
+    stage_score_id = db.Column(
+        db.Integer, db.ForeignKey("stage_scores.id"), nullable=False
+    )
     level_code = db.Column(db.String(64), nullable=False)
     level_name = db.Column(db.String(128))
     order_index = db.Column(db.Integer)
@@ -177,12 +200,16 @@ def _parse_int(value):
         return None
 
 
-def _get_player(username: str) -> Optional[Player]:
+def _get_player(username: str) -> Player | None:
     return Player.query.filter_by(username=username).first()
 
 
-def _get_or_create_stage(stage_payload: dict) -> Optional[Stage]:
-    stage_identifier = stage_payload.get("id") or stage_payload.get("stageId") or stage_payload.get("code")
+def _get_or_create_stage(stage_payload: dict) -> Stage | None:
+    stage_identifier = (
+        stage_payload.get("id")
+        or stage_payload.get("stageId")
+        or stage_payload.get("code")
+    )
     if not stage_identifier:
         return None
 
@@ -197,7 +224,9 @@ def _get_or_create_stage(stage_payload: dict) -> Optional[Stage]:
             stage.total_levels = total_levels
         return stage
 
-    stage = Stage(code=stage_identifier, display_name=display_name, total_levels=total_levels)
+    stage = Stage(
+        code=stage_identifier, display_name=display_name, total_levels=total_levels
+    )
     db.session.add(stage)
     return stage
 
@@ -290,7 +319,11 @@ def submit_stage_score():
     db.session.add(stage_score)
 
     for index, level_payload in enumerate(levels_payload, start=1):
-        level_identifier = level_payload.get("id") or level_payload.get("levelId") or level_payload.get("code")
+        level_identifier = (
+            level_payload.get("id")
+            or level_payload.get("levelId")
+            or level_payload.get("code")
+        )
         if not level_identifier:
             continue
 
@@ -323,9 +356,12 @@ def get_stage_scoreboard(stage_code: str):
         return jsonify({"error": "Stage not found"}), 404
 
     stage_scores = (
-        StageScore.query
-        .filter(StageScore.stage_id == stage.id, StageScore.is_complete.is_(True))
-        .order_by(StageScore.total_score.desc(), func.coalesce(StageScore.total_time, 1e9))
+        StageScore.query.filter(
+            StageScore.stage_id == stage.id, StageScore.is_complete.is_(True)
+        )
+        .order_by(
+            StageScore.total_score.desc(), func.coalesce(StageScore.total_time, 1e9)
+        )
         .limit(STAGE_SCORE_LIMIT)
         .all()
     )
@@ -344,7 +380,11 @@ def get_level_scoreboard(stage_code: str, level_code: str):
         .join(LevelScore.stage_score)
         .join(StageScore.player)
         .join(StageScore.stage)
-        .filter(Stage.code == stage_code, LevelScore.level_code == level_code, StageScore.is_complete.is_(True))
+        .filter(
+            Stage.code == stage_code,
+            LevelScore.level_code == level_code,
+            StageScore.is_complete.is_(True),
+        )
         .order_by(
             func.coalesce(LevelScore.score, -1).desc(),
             func.coalesce(LevelScore.time_taken, 1e9),
@@ -380,9 +420,15 @@ def get_overall_scoreboard():
             Player.id.label("player_id"),
             Player.username.label("username"),
             func.coalesce(func.sum(StageScore.total_score), 0).label("overall_score"),
-            func.coalesce(func.sum(func.coalesce(StageScore.total_time, 0)), 0).label("overall_time"),
-            func.coalesce(func.sum(func.coalesce(StageScore.total_distance, 0)), 0).label("overall_distance"),
-            func.count(func.nullif(StageScore.is_complete, False)).label("stages_completed"),
+            func.coalesce(func.sum(func.coalesce(StageScore.total_time, 0)), 0).label(
+                "overall_time"
+            ),
+            func.coalesce(
+                func.sum(func.coalesce(StageScore.total_distance, 0)), 0
+            ).label("overall_distance"),
+            func.count(func.nullif(StageScore.is_complete, False)).label(
+                "stages_completed"
+            ),
             func.max(StageScore.created_at).label("last_played_at"),
         )
         .outerjoin(Player.stage_scores)
@@ -403,7 +449,9 @@ def get_overall_scoreboard():
                 "overallTime": float(entry.overall_time or 0),
                 "overallDistance": float(entry.overall_distance or 0),
                 "stagesCompleted": int(entry.stages_completed or 0),
-                "lastPlayedAt": entry.last_played_at.isoformat() if entry.last_played_at else None,
+                "lastPlayedAt": entry.last_played_at.isoformat()
+                if entry.last_played_at
+                else None,
             }
         )
 
@@ -417,8 +465,9 @@ def get_player_scores(username: str):
         return jsonify({"error": "Player not found"}), 404
 
     completed_scores = (
-        StageScore.query
-        .filter(StageScore.player_id == player.id, StageScore.is_complete.is_(True))
+        StageScore.query.filter(
+            StageScore.player_id == player.id, StageScore.is_complete.is_(True)
+        )
         .order_by(StageScore.created_at.desc())
         .all()
     )
@@ -426,12 +475,15 @@ def get_player_scores(username: str):
     return jsonify(
         {
             "player": player.to_dict(),
-            "scores": [score.to_dict(include_levels=True) for score in completed_scores],
+            "scores": [
+                score.to_dict(include_levels=True) for score in completed_scores
+            ],
         }
     )
 
 
 # Existing content endpoints remain below.
+
 
 def load_round_level_data(round_num, level_num, file_type):
     """Load data from specific round/level folder"""
@@ -520,7 +572,9 @@ def get_level_node(round_num, level_num, node_id):
 
     links = []
     for linked_node_id in node_links:
-        linked_node = next((node for node in nodes if str(node["id"]) == str(linked_node_id)), None)
+        linked_node = next(
+            (node for node in nodes if str(node["id"]) == str(linked_node_id)), None
+        )
         if linked_node:
             links.append(
                 {
@@ -557,7 +611,9 @@ def get_level_nodes(round_num, level_num):
 
         links = []
         for linked_node_id in node_links:
-            linked_node = next((node for node in nodes if str(node["id"]) == str(linked_node_id)), None)
+            linked_node = next(
+                (node for node in nodes if str(node["id"]) == str(linked_node_id)), None
+            )
             if linked_node:
                 links.append(
                     {
@@ -571,7 +627,9 @@ def get_level_nodes(round_num, level_num):
             "panorama": IMAGE_ENDPOINT + str(node_data["panorama"]),
             "links": links,
             "gps": node_data["gps"],
-            "panoData": {"poseHeading": (node_data["sphereCorrection"]["pan"]) / 180 * 3.14},
+            "panoData": {
+                "poseHeading": (node_data["sphereCorrection"]["pan"]) / 180 * 3.14
+            },
         }
         response_nodes.append(response_node)
 
@@ -579,6 +637,7 @@ def get_level_nodes(round_num, level_num):
 
 
 @app.route("/images/<path:filename>")
+@cross_origin(origins=CLIENT_ORIGIN, supports_credentials=True)
 def get_image(filename):
     """Serve images from the images directory"""
     return send_from_directory("images", filename)
@@ -595,4 +654,4 @@ with app.app_context():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=PORT)
