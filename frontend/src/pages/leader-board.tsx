@@ -1,11 +1,11 @@
+import { useMemo } from "react";
 import { RankingTable, type RankingColumn } from "@/components/leaderboard/RankingTable";
 import { mockLeaderboard, type PlayerResults } from "@/lib/api-mock";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useMemo } from "react";
 import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
-import { Button, ButtonLarge } from "@/components/ui/button";
+import { ButtonLarge } from "@/components/ui/button";
 
 function formatScore(value: number): string {
   return Number.isFinite(value) ? Math.round(value).toLocaleString() : "0";
@@ -84,7 +84,7 @@ export function LeaderBoardPage() {
               ))}
           </TabsList>
           {rounds.map((round) => (
-            <TabsContent className="border-t-0 mt-0" value={round.toString()}>
+            <TabsContent className="border-t-0 mt-0" value={round.toString()} key={round}>
               <RankingTable
                 className="rounded-t-none shadow-none"
                 rows={mockLeaderboard

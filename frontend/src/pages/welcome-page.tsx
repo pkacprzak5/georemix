@@ -6,12 +6,12 @@ import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 import StylisedSpan from "@/components/ui/stylised-span";
 import { InputButton } from "@/components/ui/input-button";
-import { BookText, Loader2, Trophy } from "lucide-react";
+import { BookText, Trophy } from "lucide-react";
 
 export function WelcomePage() {
   const gameStateManager = useGameStateManager();
   const dataSourceManager = useDataSourceManager();
-  const { navigateTo, navigateWithLoading } = useNavigation();
+  const { navigateTo } = useNavigation();
   const [playerName, setPlayerName] = useState("");
   const [isCheckingName, setIsCheckingName] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
@@ -107,15 +107,8 @@ export function WelcomePage() {
             className="w-full"
           />
 
-          <div className="min-h-[3rem] space-y-3">
-            {isCheckingName && (
-              <div className="flex items-center gap-3 rounded-base border-2 border-border bg-secondary-background px-4 py-3 text-sm font-base text-foreground shadow-shadow">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Sprawdzam dostepnosc nazwy...</span>
-              </div>
-            )}
-
-            {!isCheckingName && existingPlayerName && (
+          {!isCheckingName && existingPlayerName && (
+            <div className="min-h-[3rem] space-y-3">
               <div className="space-y-3 rounded-base border-2 border-border bg-secondary-background px-5 py-4 text-sm font-base text-foreground shadow-shadow">
                 <p>
                   Nazwa <span className="font-heading uppercase">{existingPlayerName}</span> jest
@@ -133,14 +126,16 @@ export function WelcomePage() {
                   </ButtonLarge>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {!isCheckingName && !existingPlayerName && nameError && (
+          {!isCheckingName && !existingPlayerName && nameError && (
+            <div className="min-h-[3rem] space-y-3">
               <div className="rounded-base border-2 border-border bg-secondary-background px-4 py-3 text-sm font-base text-red-600 shadow-shadow">
                 {nameError}
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           <ButtonLarge
             onClick={handleShowLeaderboard}
