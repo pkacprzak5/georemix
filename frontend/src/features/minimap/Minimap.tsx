@@ -5,7 +5,6 @@ import "leaflet/dist/leaflet.css";
 import { useEventBridge } from "@/context/game-state";
 import { useResizableWindow } from "@/hooks/use-resizable-window";
 
-
 // Window size constants for calculations
 const WINDOW_WIDTH_MINIMIZED = 300;
 const WINDOW_HEIGHT_MINIMIZED = 200;

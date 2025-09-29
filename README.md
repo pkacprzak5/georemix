@@ -36,13 +36,27 @@ The backend is located in the `backend` directory.
    cd backend
    ```
 
-2. Activate the virtual environment:
+2. Create a Python virtual environment:
+   ```
+   python -m venv .venv
+   ```
+
+3. Activate the virtual environment:
    - On Windows:
      ```
      .venv\Scripts\Activate.ps1
      ```
+   - On Linux/Mac:
+     ```
+     source .venv/bin/activate
+     ```
 
-3. Run the Flask app:
+4. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+5. Run the Flask app:
    ```
    python app.py
    ```

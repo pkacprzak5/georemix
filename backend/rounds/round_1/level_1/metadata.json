@@ -1,7 +1,11 @@
 {
-  "initialNode": 1156350815484235,
+  "initialNode": 834015571448095,
   "theme": "light",
-  "name": "Paris - temp",
-  "thumbnail": "level_2.png",
-  "number": 2
+  "name": "Obraz Van Gogha",
+  "thumbnail": "gogh.webp",
+  "number": 2,
+  "colors": {
+    "background": "#dcebfe",
+    "main": "#5294ff"
+  }
 }

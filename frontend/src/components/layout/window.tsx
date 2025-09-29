@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { TextParticle, type TextParticleProps } from "../ui/text-particle";
 import { useDrag } from "@/hooks/use-drag";
+import { Square, Minus, Copy, X } from "lucide-react";
 
 const TEXT_PARTICLE_THROTTLE = 400;
 const TEXT_PARTICLE_REMOVE_DELAY = 800;
@@ -38,6 +39,8 @@ function WindowLayout({
 
   const [textParticleProps, setTextParticleProps] = useState<TextParticleProps[]>([]);
   const lastClickCreatedAt = useRef<number>(0);
+
+  const [maximized, setMaximized] = useState(false);
 
   const { position, isDragging } = useDrag({
     initialPosition,
@@ -118,18 +121,36 @@ function WindowLayout({
           <div className="flex gap-1 ml-2">
             {/* Minimize */}
             <button
-              onClick={(e) => handleIconClick(e, onMinimize)}
+              onClick={(e) => {
+                setMaximized(false);
+                handleIconClick(e, onMinimize);
+              }}
               className="window-button"
               aria-label="Minimize">
-              <span className="text-xs font-bold">–</span>
+              <span className="text-xs font-bold">
+                <Minus />
+              </span>
             </button>
 
-            {/* Maximize */}
+            {/* Maximize & minimize */}
             <button
-              onClick={(e) => handleIconClick(e, onMaximize)}
+              onClick={(e) => {
+                if (!maximized) {
+                  handleIconClick(e, onMaximize);
+                } else {
+                  handleIconClick(e, onMinimize);
+                }
+                setMaximized(!maximized);
+              }}
               className="window-button"
               aria-label="Maximize">
-              <span className="text-xs font-bold">□</span>
+              <span className="text-xs font-bold flex items-center justify-center">
+                {!maximized ? (
+                  <Copy transform="scale(-1,1)" size={"60%"} />
+                ) : (
+                  <Square size={"70%"} />
+                )}
+              </span>
             </button>
 
             {/* Close */}
@@ -137,7 +158,7 @@ function WindowLayout({
               onClick={(e) => handleIconClick(e, onClose)}
               className="window-button"
               aria-label="Close">
-              <span className="text-xs font-bold">✕</span>
+              <X />
             </button>
           </div>
         </div>

@@ -22,7 +22,7 @@ export function LevelStart() {
           <>
             <div className="relative">
               <div className="absolute -top-2 z-[100] -left-2 bg-secondary-background gradient border-2 border-border rounded-base px-4 py-2 shadow-shadow text-xl font-base">
-                Runda {gameStateManager.currentRoundNumber}
+                Runda {gameStateManager.currentLevelInfo.number}
               </div>
               <figure className="overflow-hidden rounded-base border-2 border-border bg-secondary-background font-base shadow-shadow transition-all">
                 <div className="relative">
