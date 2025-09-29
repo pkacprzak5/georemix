@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonLarge } from "@/components/ui/button";
 
 function formatScore(value: number): string {
   return Number.isFinite(value) ? Math.round(value).toLocaleString() : "0";
@@ -70,35 +70,42 @@ export function LeaderBoardPage() {
 
   return (
     <div className="flex justify-center min-h-full p-8">
-      <div className="max-w-[800px] flex flex-col gap-8">
-        <div className="flex w-full gap-8">
-          <Button onClick={() => navigateTo(moduleIdMap.INTRO, "welcome-page")}>
-            Back to Home
-          </Button>
-          {gameStateManager.isRoundFinished && (
-            <Button onClick={() => navigateTo(moduleIdMap.FINAL, "final-result")}>
-              Back to Results
-            </Button>
-          )}
-        </div>
-
-        <Tabs defaultValue={defaultRound.toString()} className="max-w-[800px]">
-          <TabsList className="grid w-full grid-cols-3">
+      <div className="w-[900px] flex flex-col gap-8">
+        <Tabs className="shadow-shadow rounded-base" defaultValue={defaultRound.toString()}>
+          <TabsList className="grid p-0 w-full rounded-b-none grid-cols-3 gap-0 overflow-hidden h-12 border-b-0">
             {rounds
               .map((round) => round.toString())
               .map((round) => (
-                <TabsTrigger value={round}>Round {round}</TabsTrigger>
+                <TabsTrigger
+                  className="h-full m-0 rounded-none border-0 border-r-2 last:border-r-0 border-border bg-white"
+                  value={round}>
+                  Runda {round}
+                </TabsTrigger>
               ))}
           </TabsList>
           {rounds.map((round) => (
-            <TabsContent value={round.toString()}>
+            <TabsContent className="border-t-0 mt-0" value={round.toString()}>
               <RankingTable
-                rows={mockLeaderboard.find(({ roundNumber }) => roundNumber === round)!.results}
+                className="rounded-t-none shadow-none"
+                rows={mockLeaderboard
+                  .find(({ roundNumber }) => roundNumber === round)!
+                  .results.slice(-10)}
                 columns={leaderboardColumns}
               />
             </TabsContent>
           ))}
         </Tabs>
+
+        <div className="flex w-full gap-8">
+          <ButtonLarge onClick={() => navigateTo(moduleIdMap.INTRO, "welcome-page")}>
+            Powrót do Menu
+          </ButtonLarge>
+          {gameStateManager.isRoundFinished && (
+            <ButtonLarge onClick={() => navigateTo(moduleIdMap.FINAL, "final-result")}>
+              Powrót do Wyników
+            </ButtonLarge>
+          )}
+        </div>
       </div>
     </div>
   );

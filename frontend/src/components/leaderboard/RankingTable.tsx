@@ -43,7 +43,7 @@ export function RankingTable<Row>({
         </div>
       ) : null}
       <table className="w-full border-collapse">
-        <thead className="bg-secondary-background border-b-2 border-border">
+        <thead className="bg-secondary-background border-b-2 border-border h-12">
           <tr className="text-left text-xs font-heading uppercase tracking-[0.15em] text-foreground/80">
             <th className="px-6 py-3">Poz.</th>
             {columns.map((column) => (
