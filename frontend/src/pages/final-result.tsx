@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Clock, Map, ArrowLeft } from "lucide-react";
+import { Clock, Map, ArrowLeft, MapPin } from "lucide-react";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { useGameStateManager } from "@/context/game-state";
 import { ButtonLarge } from "@/components/ui/button";
@@ -55,6 +55,7 @@ export function FinalResult() {
     maxPossibleScore: number;
     levelCount: number;
     averageScore: number;
+    shortestDistance: number;
   } | null>(null);
 
   useEffect(() => {
@@ -65,13 +66,22 @@ export function FinalResult() {
       
       let totalScore = 0;
       let totalTime = 0;
+      let shortestDistance = Infinity;
       const completedLevels = allResults.length;
 
       // Calculate totals from all level results
       allResults.forEach(result => {
         totalScore += result.score;
         totalTime += result.timeTaken;
+        if (result.distance < shortestDistance) {
+          shortestDistance = result.distance;
+        }
       });
+
+      // If no results, set shortestDistance to 0
+      if (shortestDistance === Infinity) {
+        shortestDistance = 0;
+      }
 
       setSummaryData({
         totalScore,
@@ -79,6 +89,7 @@ export function FinalResult() {
         maxPossibleScore,
         levelCount: completedLevels,
         averageScore: completedLevels > 0 ? Math.round(totalScore / completedLevels) : 0,
+        shortestDistance,
       });
     } catch (error) {
       console.error("Error calculating final results:", error);
@@ -89,13 +100,13 @@ export function FinalResult() {
         maxPossibleScore: 25000,
         levelCount: 5,
         averageScore: 3750,
+        shortestDistance: 245,
       });
     }
   }, [gameStateManager]);
 
   const handlePlayAgain = () => {
-    
-    console.log("placeholder")
+    navigateTo(moduleIdMap.FINAL, "final-map");
   };
 
   const handleBackToMenu = () => {
@@ -108,6 +119,14 @@ export function FinalResult() {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const formatDistance = (distance: number) => {
+    if (distance < 1000) {
+      return `${Math.round(distance)} m`;
+    } else {
+      return `${(distance / 1000).toFixed(1)} km`;
+    }
   };
 
   const getPerformanceRating = (score: number, maxScore: number) => {
@@ -133,6 +152,7 @@ export function FinalResult() {
   // Animated counters
   const animatedTotalScore = useCountUp(summaryData?.totalScore || 0, COUNT_UP_DURATION);
   const animatedTotalTime = useCountUp(summaryData?.totalTime || 0, COUNT_UP_DURATION);
+  const animatedShortestDistance = useCountUp(summaryData?.shortestDistance || 0, COUNT_UP_DURATION);
 
   if (!summaryData) {
     return (
@@ -153,10 +173,10 @@ export function FinalResult() {
         </h1>
 
         <div className="max-w-4xl w-full flex flex-col items-center justify-center space-y-8">
-          {/* Progress and Time Layout - 2/3 + 1/3 split */}
-          <div className="grid grid-cols-3 gap-6 w-full">
-            {/* Combined Score and Progress Card - spans 2 columns */}
-            <div className="col-span-2 relative">
+          {/* 2x2 Grid Layout */}
+          <div className="grid grid-cols-3 grid-rows-2 gap-6 w-full">
+            {/* Combined Score and Progress Card - spans 2 columns, 2 rows (2x2) */}
+            <div className="col-span-2 row-span-2 relative">
               <Card className="absolute -top-3 z-[100] -left-8 bg-main py-2">
                 <CardContent className="px-4">
                   <div className="text-md text-foreground dark:text-shadow font-base">
@@ -164,8 +184,8 @@ export function FinalResult() {
                   </div>
                 </CardContent>
               </Card>
-              <Card className="bg-secondary-background gradient">
-                <CardContent className="py-8">
+              <Card className="bg-secondary-background gradient h-full">
+                <CardContent className="py-8 h-full flex flex-col justify-center">
                   {/* Main Score Section */}
                   <div className="text-center mb-6">
                     <div className="text-6xl font-bold text-background dark:text-foreground font-outline-1 mb-2">
@@ -191,14 +211,25 @@ export function FinalResult() {
               </Card>
             </div>
 
-            {/* Total Time Card - spans 1 column */}
+            {/* Total Time Card - spans 1 column, 1 row (1x1) */}
             <Card className="bg-secondary-background gradient">
-              <CardContent className="text-center py-6">
-                <Clock className="mx-auto mb-8 text-main" size={32} />
-                <div className="text-5xl font-bold text-background dark:text-foreground font-outline-1 mb-1">
+              <CardContent className="text-center flex items-center justify-center flex-col h-full py-1">
+                <Clock className="mx-auto mb-4 text-main" size={28} />
+                <div className="text-4xl font-bold text-background dark:text-foreground font-outline-1 mb-1">
                   {formatTime(animatedTotalTime)}
                 </div>
-                <div className="text-sm text-muted-foreground">CAŁKOWITY CZAS</div>
+                <div className="text-xs text-muted-foreground">CAŁKOWITY CZAS</div>
+              </CardContent>
+            </Card>
+            
+            {/* Shortest Distance Card - spans 1 column, 1 row (1x1) */}
+            <Card className="bg-secondary-background gradient">
+              <CardContent className="text-center flex items-center justify-center flex-col h-full py-1">
+                <MapPin className="mx-auto mb-4 text-main" size={28} />
+                <div className="text-4xl font-bold text-background dark:text-foreground font-outline-1 mb-1">
+                  {formatDistance(animatedShortestDistance)}
+                </div>
+                <div className="text-xs text-muted-foreground">NAJKRÓTSZY DYSTANS</div>
               </CardContent>
             </Card>
           </div>
