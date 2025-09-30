@@ -33,7 +33,7 @@ export class GameStateManager {
   private readonly _timeCap: number = 10; // 10secs
   private readonly _metersCap: number = 50;
 
-  constructor() {}
+  constructor() { }
 
   // Getters
   get currentRoundNumber(): number {
@@ -201,9 +201,22 @@ export class GameStateManager {
     });
   }
 
+  resetCurrentResultInfo() {
+    this._currentCoordinates = null;
+    this._submittedCoordinates = null;
+    this._timeTaken = 0;
+    this._currentDistance = null;
+    this._currentScore = null;
+  }
+
   resetAll() {
     this._currentRoundNumber = null;
     this._currentLevelNumber = null;
     this._levelResults = [];
+    this._levels = [];
+    this._currentColors = DEFAULT_COLORS;
+    this._playerName = "";
+    this._currentTheme = "light";
+    this.resetCurrentResultInfo();
   }
 }
