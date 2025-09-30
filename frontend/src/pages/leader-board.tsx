@@ -6,6 +6,7 @@ import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 import { ButtonLarge } from "@/components/ui/button";
+import { ScrollText, ArrowLeft } from "lucide-react";
 
 function formatScore(value: number): string {
   return Number.isFinite(value) ? Math.round(value).toLocaleString() : "0";
@@ -98,11 +99,11 @@ export function LeaderBoardPage() {
 
         <div className="flex w-full gap-8">
           <ButtonLarge onClick={() => navigateTo(moduleIdMap.INTRO, "welcome-page")}>
-            Powrót do Menu
+            <ArrowLeft className="mt-1" /> Powrót do Menu
           </ButtonLarge>
           {gameStateManager.isRoundFinished && (
             <ButtonLarge onClick={() => navigateTo(moduleIdMap.FINAL, "final-result")}>
-              Powrót do Wyników
+              Powrót do Podsumowania <ScrollText className="mt-1" />
             </ButtonLarge>
           )}
         </div>
