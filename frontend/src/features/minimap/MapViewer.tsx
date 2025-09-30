@@ -1,8 +1,6 @@
 import L from "leaflet";
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
-import { MapPin } from "lucide-react";
-import { renderToString } from "react-dom/server";
 import { Button } from "@/components/ui/button";
 import { MapZoomControls } from "@/components/ui/map-zoom-controls";
 import { type MapCoordinates } from "@/types/project";
@@ -65,9 +63,16 @@ export default function MapViewer() {
     eventBridge.emit("resultSubmitted", {});
   };
 
-  // Custom icon for selected position using Lucide MapPin
-  const customIcon = L.divIcon({
-    html: renderToString(<MapPin size={32} color="var(--main)" />),
+  const selectedLocationIcon = L.divIcon({
+    html: `
+      <svg width="32" height="32" viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+        fill="var(--main)">
+          <path d="M12.56 20.82a.96.96 0 0 1-1.12 0C6.611 17.378 1.486 10.298 6.667 5.182A7.6 7.6 0 0 1 12 3c2 0 3.919.785 5.333 2.181 5.181 5.116.056 12.196-4.773 15.64" />
+          <path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+      </svg>
+    `,
     className: "custom-mappin-icon",
     iconSize: [32, 32],
     iconAnchor: [16, 32],
@@ -79,13 +84,15 @@ export default function MapViewer() {
       <MapContainer
         center={[51.505, -0.09]}
         zoom={2}
+        minZoom={2}
+        maxZoom={18}
         zoomControl={false}
         attributionControl={false}
         style={{ height: "100%", width: "100%", cursor: "default" }}>
         <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
         <MapClickHandler onPositionSelect={setPosition} />
         <MapResizer />
-        {position && <Marker position={position} icon={customIcon} />}
+        {position && <Marker position={position} icon={selectedLocationIcon} />}
         <MapZoomControls className="absolute bottom-4 right-4 z-[999]" size="sm" />
       </MapContainer>
       <div

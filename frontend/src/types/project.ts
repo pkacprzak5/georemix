@@ -26,6 +26,8 @@ export const DEFAULT_COLORS = {
 export interface Colors {
   background: string;
   main: string;
+  background: string;
+  main: string;
 }
 
 export type LevelInfo = {

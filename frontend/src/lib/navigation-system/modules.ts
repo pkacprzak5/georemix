@@ -10,6 +10,7 @@ import { NavigationLoadingPage } from "@/pages/navigation-loading-page";
 import type { Module } from "./types";
 import { moduleIdMap } from "./types";
 import { FinalResult } from "@/pages/final-result";
+import { FinalMap } from "@/pages/final-map";
 import { LeaderBoardPage } from "@/pages/leader-board";
 
 export const titleGroup: Module = {
@@ -49,7 +50,10 @@ export const levelEndGroup: Module = {
 
 export const gameEndGroup: Module = {
   id: moduleIdMap.FINAL,
-  pages: [{ id: "final-result", component: FinalResult, title: "Summary" }],
+  pages: [
+    { id: "final-result", component: FinalResult, title: "Summary" },
+    { id: "final-map", component: FinalMap, title: "Final Map" },
+  ],
 };
 
 export const loadingGroup: Module = {

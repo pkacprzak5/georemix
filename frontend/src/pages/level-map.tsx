@@ -27,7 +27,7 @@ const actualLocationIcon = L.divIcon({
   `,
   className: "",
   iconSize: [36, 36],
-  iconAnchor: [0, 36]
+  iconAnchor: [7, 33],
 });
 
 const guessLocationIcon = L.divIcon({
@@ -144,17 +144,31 @@ export function LevelMap() {
               <CardContent className="px-3 py-2">
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                      stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="var(--main)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      stroke="black"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      fill="var(--main)">
                       <path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528" />
                     </svg>
                     <span className="text-foreground font-base">Faktyczna lokalizacja</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <svg width="24" height="24" viewBox="0 0 24 24"
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
-                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                      fill="#77b900">
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      fill="var(--main)">
                       <path d="M12.56 20.82a.96.96 0 0 1-1.12 0C6.611 17.378 1.486 10.298 6.667 5.182A7.6 7.6 0 0 1 12 3c2 0 3.919.785 5.333 2.181 5.181 5.116.056 12.196-4.773 15.64" />
                       <path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
                     </svg>
@@ -180,6 +194,8 @@ export function LevelMap() {
                 <MapContainer
                   center={resultData.actualPosition}
                   zoom={13}
+                  minZoom={2}
+                  maxZoom={18}
                   style={{ height: "100%", width: "100%" }}
                   zoomControl={false}
                   attributionControl={false}>
@@ -203,7 +219,7 @@ export function LevelMap() {
                   {/* Line connecting the two points */}
                   <Polyline
                     positions={[resultData.actualPosition, resultData.guessPosition]}
-                    color="#77b900"
+                    color="var(--main)"
                     weight={3}
                     opacity={0.7}
                     dashArray="5, 10"
@@ -233,6 +249,6 @@ export function LevelMap() {
           </ButtonLarge>
         </div>
       </div>
-    </div >
+    </div>
   );
 }

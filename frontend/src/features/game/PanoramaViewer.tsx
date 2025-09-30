@@ -40,7 +40,7 @@ const PanoramaViewer = () => {
 
   const handleReady = (instance: Viewer) => {
     const virtualTour = instance.getPlugin(VirtualTourPlugin) as VirtualTourPlugin;
-    
+
     if (!virtualTour) {
       return;
     }
@@ -93,6 +93,8 @@ const PanoramaViewer = () => {
         plugins={plugins}
         container={"container-360"}
         requestHeaders={{ "Cache-Control": "no-store" }}
+        defaultZoomLvl={40}
+        mousewheel={false}
         // src={`${IMAGES_ENDPOINT}/${gameState.currentLevelInfo.initialNode}.jpg`} // Default image, will be replaced by server-mode loading
       />
     </div>
