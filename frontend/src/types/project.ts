@@ -26,8 +26,6 @@ export const DEFAULT_COLORS = {
 export interface Colors {
   background: string;
   main: string;
-  background: string;
-  main: string;
 }
 
 export type LevelInfo = {
@@ -49,6 +47,16 @@ export type LevelResultInfo = {
   score: number;
 };
 
-// Place | Username | Total Time | Total Score | Closest Call (meters)
-// final-result -> ranking
-// welcome-page -> ranking
+/** Temporary structure for player results. */
+export type PlayerResults = {
+  playerName: string;
+  totalTime: number;
+  totalScore: number;
+  closestCall: number;
+};
+
+/** Temporary structure for leaderboard results. */
+export type Leaderboard = Array<{
+  roundNumber: number;
+  results: Array<PlayerResults>;
+}>;

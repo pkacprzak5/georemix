@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 import { RankingTable, type RankingColumn } from "@/components/leaderboard/RankingTable";
-import { mockLeaderboard, type PlayerResults } from "@/lib/api-mock";
+import { mockLeaderboard } from "@/lib/api-mock";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 import { ButtonLarge } from "@/components/ui/button";
 import { ScrollText, ArrowLeft } from "lucide-react";
+import type { PlayerResults } from "@/types/project";
 
 function formatScore(value: number): string {
   return Number.isFinite(value) ? Math.round(value).toLocaleString() : "0";

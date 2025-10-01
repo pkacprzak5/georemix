@@ -58,6 +58,8 @@ export function FinalResult() {
     shortestDistance: number;
   } | null>(null);
 
+
+  // Probably has to be moved
   useEffect(() => {
     gameStateManager.submitRoundResults();
   }, [])

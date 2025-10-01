@@ -1,16 +1,4 @@
-/** Temporary structure for player results. */
-export type PlayerResults = {
-  playerName: string;
-  totalTime: number;
-  totalScore: number;
-  closestCall: number;
-};
-
-/** Temporary structure for leaderboard results. */
-export type Leaderboard = Array<{
-  roundNumber: number;
-  results: Array<PlayerResults>;
-}>;
+import type { Leaderboard } from "@/types/project";
 
 export const mockLeaderboard: Leaderboard = (() => {
   // IIFE that loads leaderboard data from local storage

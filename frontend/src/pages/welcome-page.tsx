@@ -37,6 +37,7 @@ export function WelcomePage() {
 
     try {
       const isAvailable = await dataSourceManager.checkUsernameAvailability(trimmedName);
+      console.log("avialable", isAvailable)
 
       if (!isAvailable) {
         setExistingPlayerName(trimmedName);

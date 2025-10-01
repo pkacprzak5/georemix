@@ -3,10 +3,11 @@ import {
   type LevelInfo,
   type LevelResultInfo,
   type MapCoordinates,
+  type PlayerResults,
   DEFAULT_COLORS,
 } from "@/types/project";
 import { BASE_URL } from "@/constants";
-import { mockLeaderboard, type PlayerResults } from "@/lib/api-mock";
+import { mockLeaderboard } from "@/lib/api-mock";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
@@ -306,6 +307,7 @@ export class GameStateManager {
         theme: "light",
         thumbnail: "level_1.jpg",
         number: 1,
+        colors: DEFAULT_COLORS
       },
       {
         initialNode: "mock-node-2", 
@@ -313,6 +315,7 @@ export class GameStateManager {
         theme: "dark",
         thumbnail: "level_2.png",
         number: 2,
+        colors: DEFAULT_COLORS
       },
       {
         initialNode: "mock-node-3",
@@ -320,6 +323,7 @@ export class GameStateManager {
         theme: "light",
         thumbnail: "level_1.jpg",
         number: 3,
+        colors: DEFAULT_COLORS
       },
       {
         initialNode: "mock-node-4",
@@ -327,6 +331,7 @@ export class GameStateManager {
         theme: "dark", 
         thumbnail: "level_2.png",
         number: 4,
+        colors: DEFAULT_COLORS
       },
       {
         initialNode: "mock-node-5",
@@ -334,6 +339,7 @@ export class GameStateManager {
         theme: "light",
         thumbnail: "level_1.jpg", 
         number: 5,
+        colors: DEFAULT_COLORS
       },
     ];
 
