@@ -61,22 +61,18 @@ export function FinalResult() {
 
   // Probably has to be moved
   useEffect(() => {
-    gameStateManager.submitRoundResults();
-  }, [])
-
-  useEffect(() => {
     try {
       // Calculate totals from all completed levels
       const maxPossibleScore = gameStateManager.maxScore;
       const allResults = gameStateManager.allLevelResults;
-      
+
       let totalScore = 0;
       let totalTime = 0;
       let shortestDistance = Infinity;
       const completedLevels = allResults.length;
 
       // Calculate totals from all level results
-      allResults.forEach(result => {
+      allResults.forEach((result) => {
         totalScore += result.score;
         totalTime += result.timeTaken;
         if (result.distance < shortestDistance) {
@@ -118,7 +114,6 @@ export function FinalResult() {
   const handleBackToMenu = () => {
     gameStateManager.resetAll();
     navigateTo(moduleIdMap.INTRO, "welcome-page");
-    
   };
 
   const formatTime = (seconds: number) => {
@@ -158,7 +153,10 @@ export function FinalResult() {
   // Animated counters
   const animatedTotalScore = useCountUp(summaryData?.totalScore || 0, COUNT_UP_DURATION);
   const animatedTotalTime = useCountUp(summaryData?.totalTime || 0, COUNT_UP_DURATION);
-  const animatedShortestDistance = useCountUp(summaryData?.shortestDistance || 0, COUNT_UP_DURATION);
+  const animatedShortestDistance = useCountUp(
+    summaryData?.shortestDistance || 0,
+    COUNT_UP_DURATION
+  );
 
   if (!summaryData) {
     return (
@@ -168,7 +166,10 @@ export function FinalResult() {
     );
   }
 
-  const performanceRating = getPerformanceRating(summaryData.totalScore, summaryData.maxPossibleScore);
+  const performanceRating = getPerformanceRating(
+    summaryData.totalScore,
+    summaryData.maxPossibleScore
+  );
 
   return (
     <div className="flex items-center justify-center min-h-full bg-background">
@@ -199,11 +200,10 @@ export function FinalResult() {
                     </div>
                     <div className="text-lg text-muted-foreground mb-4">CAŁKOWITY WYNIK</div>
                   </div>
-                  
+
                   {/* Progress Section */}
                   <div className="mb-4">
-                    
-                    <Progress 
+                    <Progress
                       value={(animatedTotalScore / summaryData.maxPossibleScore) * 100}
                       className="h-6"
                     />
@@ -227,7 +227,7 @@ export function FinalResult() {
                 <div className="text-xs text-muted-foreground">CAŁKOWITY CZAS</div>
               </CardContent>
             </Card>
-            
+
             {/* Shortest Distance Card - spans 1 column, 1 row (1x1) */}
             <Card className="bg-secondary-background gradient">
               <CardContent className="text-center flex items-center justify-center flex-col h-full py-1">
@@ -242,14 +242,13 @@ export function FinalResult() {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 w-full ">
-
-             <ButtonLarge onClick={handleBackToMenu} className="flex-1">
-              <ArrowLeft className='mt-1' />Powrót do Menu
+            <ButtonLarge onClick={handleBackToMenu} className="flex-1">
+              <ArrowLeft className="mt-1" />
+              Powrót do Menu
             </ButtonLarge>
             <ButtonLarge onClick={handlePlayAgain} className="flex-1">
-               Zobacz mapę <Map className="mt-1" />
+              Zobacz mapę <Map className="mt-1" />
             </ButtonLarge>
-           
           </div>
         </div>
       </div>

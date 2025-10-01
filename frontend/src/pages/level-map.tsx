@@ -8,7 +8,7 @@ import { MapZoomControls } from "@/components/ui/map-zoom-controls";
 import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
-import { ArrowLeft, Gamepad2 } from "lucide-react";
+import { ArrowLeft, Gamepad2, Trophy } from "lucide-react";
 
 // Fix for default markers in React Leaflet
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl: unknown })._getIconUrl;
@@ -78,6 +78,8 @@ export function LevelMap() {
     guessPosition: [number, number];
   } | null>(null);
 
+  const isFinalLevel = gameStateManager.numberOfLevels === gameStateManager.currentLevelInfo.number;
+
   useEffect(() => {
     try {
       const levelResult = gameStateManager.levelResult;
@@ -106,7 +108,8 @@ export function LevelMap() {
   };
 
   const handleNextLevel = () => {
-    if (gameStateManager.numberOfLevels === gameStateManager.currentLevelInfo.number) {
+    if (isFinalLevel) {
+      gameStateManager.submitRoundResults();
       navigateTo(moduleIdMap.FINAL, "final-result");
     } else {
       const loadingPromise = new Promise((resolve) => {
@@ -245,7 +248,15 @@ export function LevelMap() {
             <ArrowLeft className="mt-1" /> Powrót do Podsumowania
           </ButtonLarge>
           <ButtonLarge onClick={handleNextLevel} className="flex-1">
-            Następna Runda <Gamepad2 className="mt-1" />
+            {isFinalLevel ? (
+              <>
+                Go to results <Trophy className="mt-1" />
+              </>
+            ) : (
+              <>
+                Następna Runda <Gamepad2 className="mt-1" />
+              </>
+            )}
           </ButtonLarge>
         </div>
       </div>
