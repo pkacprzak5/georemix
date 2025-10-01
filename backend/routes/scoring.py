@@ -129,51 +129,6 @@ def register_score_routes(app):
         }
         return jsonify(response)
 
-    @app.route("/scores/overall", methods=["GET"])
-    def get_overall_scoreboard():
-        """Get overall scoreboard across all players"""
-        aggregates = (
-            db.session.query(
-                Player.id.label("player_id"),
-                Player.username.label("username"),
-                func.coalesce(func.sum(RoundScore.score), 0).label("overall_score"),
-                func.coalesce(func.sum(func.coalesce(RoundScore.time, 0)), 0).label(
-                    "overall_time"
-                ),
-                func.coalesce(
-                    func.min(func.coalesce(RoundScore.min_distance, 1e9)), 0
-                ).label("min_distance"),
-                func.count(RoundScore.id).label("rounds_completed"),
-                func.max(RoundScore.created_at).label("last_played_at"),
-            )
-            .outerjoin(RoundScore, Player.id == RoundScore.player_id)
-            .group_by(Player.id)
-            .order_by(
-                func.coalesce(func.sum(RoundScore.score), 0).desc(),
-                func.coalesce(func.sum(func.coalesce(RoundScore.time, 0)), 1e9),
-            )
-            .all()
-        )
-
-        response = []
-        for entry in aggregates:
-            response.append(
-                {
-                    "username": entry.username,
-                    "overallScore": float(entry.overall_score or 0),
-                    "overallTime": float(entry.overall_time or 0),
-                    "minDistance": float(entry.min_distance or 0),
-                    "roundsCompleted": int(entry.rounds_completed or 0),
-                    "lastPlayedAt": (
-                        entry.last_played_at.isoformat()
-                        if entry.last_played_at
-                        else None
-                    ),
-                }
-            )
-
-        return jsonify(response)
-
     @app.route("/scores/players/<string:username>", methods=["GET"])
     def get_player_scores(username: str):
         """Get all scores for a specific player"""
