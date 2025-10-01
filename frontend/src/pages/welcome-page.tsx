@@ -7,6 +7,16 @@ import { moduleIdMap } from "@/lib/navigation-system/types";
 import StylisedSpan from "@/components/ui/stylised-span";
 import { InputButton } from "@/components/ui/input-button";
 import { BookText, Trophy } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 export function WelcomePage() {
   const gameStateManager = useGameStateManager();
@@ -20,6 +30,12 @@ export function WelcomePage() {
   useEffect(() => {
     gameStateManager.resetAll();
   }, [gameStateManager]);
+
+  useEffect(() => {
+    if (nameError) {
+      setNameError(null);
+    }
+  }, [playerName]);
 
   const handleAbout = () => {
     navigateTo(moduleIdMap.INTRO, "about");
@@ -106,29 +122,25 @@ export function WelcomePage() {
             onChange={setPlayerName}
             onSubmit={handleStartGame}
             className="w-full"
+            disabled={nameError !== null}
           />
 
-          {!isCheckingName && existingPlayerName && (
-            <div className="min-h-[3rem] space-y-3">
-              <div className="space-y-3 rounded-base border-2 border-border bg-secondary-background px-5 py-4 text-sm font-base text-foreground shadow-shadow">
-                <p>
+          <AlertDialog open={!isCheckingName && existingPlayerName !== null}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Wykorzystana nazwa</AlertDialogTitle>
+                <AlertDialogDescription>
                   Nazwa <span className="font-heading uppercase">{existingPlayerName}</span> jest
                   juz aktywna. Kontynuuj jako ten gracz, aby nadpisac jego aktualne wyniki, lub
                   wybierz inna nazwe.
-                </p>
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
-                  <ButtonLarge onClick={handleConfirmExistingPlayer} className="sm:w-auto">
-                    Kontynuuj jako {existingPlayerName}
-                  </ButtonLarge>
-                  <ButtonLarge
-                    onClick={handleRejectExistingPlayer}
-                    className="sm:w-auto bg-secondary-background text-foreground">
-                    Wybierz inną
-                  </ButtonLarge>
-                </div>
-              </div>
-            </div>
-          )}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={handleRejectExistingPlayer}>Wybierz inna nazwe</AlertDialogCancel>
+                <AlertDialogAction onClick={handleConfirmExistingPlayer}>Kontynuuj jako {existingPlayerName}</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
           {!isCheckingName && !existingPlayerName && nameError && (
             <div className="min-h-[3rem] space-y-3">
