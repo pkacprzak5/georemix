@@ -1,12 +1,16 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { ScrollText, ArrowLeft } from "lucide-react";
 import { RankingTable, type RankingColumn } from "@/components/leaderboard/RankingTable";
-import { mockLeaderboard } from "@/lib/api-mock";
+import { 
+  getAllRoundsLeaderboard, 
+  updateAllRoundsCache, 
+  type RoundLeaderboard 
+} from "@/context/game-state/DataCache";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 import { ButtonLarge } from "@/components/ui/button";
-import { ScrollText, ArrowLeft } from "lucide-react";
 import type { PlayerResults } from "@/types/project";
 
 function formatScore(value: number): string {
@@ -66,36 +70,70 @@ const leaderboardColumns: RankingColumn<PlayerResults>[] = [
 export function LeaderBoardPage() {
   const { navigateTo } = useNavigation();
   const gameStateManager = useGameStateManager();
+  const [leaderboardData, setLeaderboardData] = useState<RoundLeaderboard[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const rounds = mockLeaderboard.map((round) => round.roundNumber);
-  const defaultRound = useMemo(() => rounds[0], []);
+  // Load and update leaderboard cache when component mounts
+  useEffect(() => {
+    const loadLeaderboard = async () => {
+      setIsLoading(true);
+      
+      // Get cached data immediately
+      const cached = getAllRoundsLeaderboard();
+      setLeaderboardData(cached);
+      
+      // Update cache from backend
+      try {
+        await updateAllRoundsCache();
+        const updated = getAllRoundsLeaderboard();
+        setLeaderboardData(updated);
+      } catch (error) {
+        console.error("Failed to update leaderboard cache:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadLeaderboard();
+  }, []);
+
+  const rounds = useMemo(() => [1, 2, 3], []);
+  const defaultRound = useMemo(() => rounds[0], [rounds]);
+
+  if (isLoading && leaderboardData.length === 0) {
+    return (
+      <div className="flex justify-center items-center min-h-full">
+        <p>Ładowanie rankingu...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center min-h-full p-8">
       <div className="w-[900px] flex flex-col gap-8">
         <Tabs className="shadow-shadow rounded-base" defaultValue={defaultRound.toString()}>
           <TabsList className="grid p-0 w-full rounded-b-none grid-cols-3 gap-0 overflow-hidden h-12 border-b-0">
-            {rounds
-              .map((round) => round.toString())
-              .map((round) => (
-                <TabsTrigger
-                  className="h-full m-0 rounded-none border-0 border-r-2 last:border-r-0 border-border bg-white"
-                  value={round}>
-                  Runda {round}
-                </TabsTrigger>
-              ))}
+            {rounds.map((round) => (
+              <TabsTrigger
+                key={round}
+                className="h-full m-0 rounded-none border-0 border-r-2 last:border-r-0 border-border bg-white"
+                value={round.toString()}>
+                Runda {round}
+              </TabsTrigger>
+            ))}
           </TabsList>
-          {rounds.map((round) => (
-            <TabsContent className="border-t-0 mt-0" value={round.toString()} key={round}>
-              <RankingTable
-                className="rounded-t-none shadow-none"
-                rows={mockLeaderboard
-                  .find(({ roundNumber }) => roundNumber === round)!
-                  .results.slice(-10)}
-                columns={leaderboardColumns}
-              />
-            </TabsContent>
-          ))}
+          {rounds.map((round) => {
+            const roundData = leaderboardData.find(r => r.roundNumber === round);
+            return (
+              <TabsContent className="border-t-0 mt-0" value={round.toString()} key={round}>
+                <RankingTable
+                  className="rounded-t-none shadow-none"
+                  rows={roundData?.results || []}
+                  columns={leaderboardColumns}
+                />
+              </TabsContent>
+            );
+          })}
         </Tabs>
 
         <div className="flex w-full gap-8">

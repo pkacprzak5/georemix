@@ -7,7 +7,7 @@ import {
   DEFAULT_COLORS,
 } from "@/types/project";
 import { BASE_URL } from "@/constants";
-import { mockLeaderboard } from "@/lib/api-mock";
+import { updateRoundCache } from "@/context/game-state/DataCache";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
@@ -230,32 +230,33 @@ export class GameStateManager {
     this._currentScore = null;
   }
 
-  /** Uploads user's stage results to the server. */
-  submitRoundResults() {
+  /** Uploads user's round results to the server and updates cache. */
+  async submitRoundResults(dataSourceManager: { submitRoundScore: (data: { username: string; roundNumber: number; score?: number; time?: number; minDistance?: number }) => Promise<unknown> }): Promise<void> {
     this._isRoundFinished = true;
 
-    // Find leaderboard for the round.
-
-    const roundLeaderboard = mockLeaderboard.find(
-      (stage) => stage.roundNumber === this.currentRoundNumber
-    );
-
-    if (!roundLeaderboard) {
-      console.error(`Round ${this.currentRoundNumber} doesn't have mock leaderboard.`);
+    if (!this._playerName) {
+      console.error("No player name set");
       return;
     }
 
-    // Overwrite last result for the player with the current one.
-
-    roundLeaderboard.results = roundLeaderboard.results.filter(
-      ({ playerName }) => playerName !== this._playerName
-    );
-
     const roundResults = this.computeRoundResults();
-    roundLeaderboard.results.push(roundResults);
 
-    // Save mock leaderboard to localstorage.
-    localStorage.setItem("leaderboard-mock", JSON.stringify(mockLeaderboard));
+    try {
+      // Submit to backend
+      await dataSourceManager.submitRoundScore({
+        username: this._playerName,
+        roundNumber: this.currentRoundNumber,
+        score: roundResults.totalScore,
+        time: roundResults.totalTime,
+        minDistance: roundResults.closestCall,
+      });
+
+      // Update cache after successful submission
+      await updateRoundCache(this.currentRoundNumber);
+    } catch (error) {
+      console.error("Error submitting round results:", error);
+      throw error;
+    }
   }
 
   /** Computes stats included in the leaderboard from finished round. */

@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import jsonify, request
 from sqlalchemy import func
 from models.database import db, Player, RoundScore
@@ -82,17 +83,33 @@ def register_score_routes(app):
         time_value = _parse_float(payload.get("time"))
         min_distance_value = _parse_float(payload.get("minDistance"))
 
-        round_score = RoundScore()  # type: ignore
-        round_score.player = player
-        round_score.round_number = round_number
-        round_score.score = score_value
-        round_score.time = time_value
-        round_score.min_distance = min_distance_value
+        # Check if a score already exists for this player and round
+        round_score = RoundScore.query.filter_by(
+            player_id=player.id, 
+            round_number=round_number
+        ).first()
 
-        db.session.add(round_score)
+        if round_score:
+            # Update existing score
+            round_score.score = score_value
+            round_score.time = time_value
+            round_score.min_distance = min_distance_value
+            round_score.created_at = datetime.utcnow()
+            status_code = 200
+        else:
+            # Create new score
+            round_score = RoundScore()  # type: ignore
+            round_score.player = player
+            round_score.round_number = round_number
+            round_score.score = score_value
+            round_score.time = time_value
+            round_score.min_distance = min_distance_value
+            db.session.add(round_score)
+            status_code = 201
+
         db.session.commit()
 
-        return jsonify(round_score.to_dict()), 201
+        return jsonify(round_score.to_dict()), status_code
 
     @app.route("/scores/rounds/<int:round_number>", methods=["GET"])
     def get_round_scoreboard(round_number: int):

@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { ArrowLeft, Gamepad2, Flag } from "lucide-react";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapZoomControls } from "@/components/ui/map-zoom-controls";
-import { useGameStateManager } from "@/context/game-state";
+import { useGameStateManager, useDataSourceManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
-import { ArrowLeft, Gamepad2, Trophy } from "lucide-react";
 
 // Fix for default markers in React Leaflet
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl: unknown })._getIconUrl;
@@ -72,6 +72,7 @@ function MapBounds({
 export function LevelMap() {
   const { navigateTo, navigateWithLoading } = useNavigation();
   const gameStateManager = useGameStateManager();
+  const dataSourceManager = useDataSourceManager();
   const [resultData, setResultData] = useState<{
     distance: number;
     actualPosition: [number, number];
@@ -107,10 +108,16 @@ export function LevelMap() {
     navigateTo(moduleIdMap.LEVEL_END, "level-summary");
   };
 
-  const handleNextLevel = () => {
+  const handleNextLevel = async () => {
     if (isFinalLevel) {
-      gameStateManager.submitRoundResults();
-      navigateTo(moduleIdMap.FINAL, "final-result");
+      try {
+        await gameStateManager.submitRoundResults(dataSourceManager);
+        navigateTo(moduleIdMap.FINAL, "final-result");
+      } catch (error) {
+        console.error("Failed to submit round results:", error);
+        // Still navigate even if submission fails
+        navigateTo(moduleIdMap.FINAL, "final-result");
+      }
     } else {
       const loadingPromise = new Promise((resolve) => {
         gameStateManager.loadNextLevel();
@@ -250,7 +257,7 @@ export function LevelMap() {
           <ButtonLarge onClick={handleNextLevel} className="flex-1">
             {isFinalLevel ? (
               <>
-                Go to results <Trophy className="mt-1" />
+                Zakończ Rozgrywkę <Flag className="mt-1" />
               </>
             ) : (
               <>
