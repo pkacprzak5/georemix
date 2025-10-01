@@ -2,12 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { ScrollText, ArrowLeft } from "lucide-react";
 import { RankingTable, type RankingColumn } from "@/components/leaderboard/RankingTable";
 import { 
-  getAllRoundsLeaderboard, 
-  updateAllRoundsCache, 
   type RoundLeaderboard 
-} from "@/context/game-state/DataCache";
+} from "@/context/game-state/DataSourceManager";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGameStateManager } from "@/context/game-state";
+import { useGameStateManager, useDataSourceManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
 import { ButtonLarge } from "@/components/ui/button";
@@ -70,6 +68,7 @@ const leaderboardColumns: RankingColumn<PlayerResults>[] = [
 export function LeaderBoardPage() {
   const { navigateTo } = useNavigation();
   const gameStateManager = useGameStateManager();
+  const dataSourceManager = useDataSourceManager();
   const [leaderboardData, setLeaderboardData] = useState<RoundLeaderboard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -79,13 +78,13 @@ export function LeaderBoardPage() {
       setIsLoading(true);
       
       // Get cached data immediately
-      const cached = getAllRoundsLeaderboard();
+      const cached = dataSourceManager.getAllRoundsLeaderboard();
       setLeaderboardData(cached);
       
       // Update cache from backend
       try {
-        await updateAllRoundsCache();
-        const updated = getAllRoundsLeaderboard();
+        await dataSourceManager.updateAllRoundsCache();
+        const updated = dataSourceManager.getAllRoundsLeaderboard();
         setLeaderboardData(updated);
       } catch (error) {
         console.error("Failed to update leaderboard cache:", error);
@@ -95,7 +94,7 @@ export function LeaderBoardPage() {
     };
 
     loadLeaderboard();
-  }, []);
+  }, [dataSourceManager]);
 
   const rounds = useMemo(() => [1, 2, 3], []);
   const defaultRound = useMemo(() => rounds[0], [rounds]);

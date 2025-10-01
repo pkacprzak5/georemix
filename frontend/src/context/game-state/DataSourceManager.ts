@@ -1,6 +1,19 @@
 import { BASE_URL } from "@/constants";
 import type { PlayerResults } from "@/types/project";
 
+const LEADERBOARD_CACHE_KEY = "leaderboard-cache";
+const CACHE_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
+
+export interface RoundLeaderboard {
+  roundNumber: number;
+  results: PlayerResults[];
+  lastUpdated: number;
+}
+
+export interface LeaderboardCache {
+  rounds: RoundLeaderboard[];
+}
+
 // Backend response types
 interface BackendRoundScore {
   id: number;
@@ -11,15 +24,6 @@ interface BackendRoundScore {
   score: number | null;
   time: number | null;
   createdAt: string;
-}
-
-interface BackendOverallScore {
-  username: string;
-  overallScore: number;
-  overallTime: number;
-  minDistance: number;
-  roundsCompleted: number;
-  lastPlayedAt: string | null;
 }
 
 interface RoundScoresResponse {
@@ -120,18 +124,108 @@ export class DataSourceManager {
     }));
   }
 
-  // Get overall scores
-  async getOverallScores(): Promise<PlayerResults[]> {
-    const scores = await this.get<BackendOverallScore[]>(`/scores/overall`);
+  // Cache management methods
 
-    // Transform backend data to match OverallScore/PlayerResults format
-    return (scores || []).map(score => ({
-      // Map to PlayerResults fields
-      playerName: score.username,
-      totalScore: score.overallScore,
-      totalTime: score.overallTime,
-      closestCall: score.minDistance,
-    }));
+  /**
+   * Get cached leaderboard data from localStorage
+   */
+  getLeaderboardCache(): LeaderboardCache {
+    try {
+      const cached = localStorage.getItem(LEADERBOARD_CACHE_KEY);
+      if (cached) {
+        return JSON.parse(cached);
+      }
+    } catch (error) {
+      console.error("Error reading leaderboard cache:", error);
+    }
+    
+    // Return empty cache
+    return { rounds: [] };
+  }
+
+  /**
+   * Save leaderboard data to localStorage cache
+   */
+  private saveLeaderboardCache(cache: LeaderboardCache): void {
+    try {
+      localStorage.setItem(LEADERBOARD_CACHE_KEY, JSON.stringify(cache));
+    } catch (error) {
+      console.error("Error saving leaderboard cache:", error);
+    }
+  }
+
+  /**
+   * Update cache for a specific round
+   */
+  async updateRoundCache(roundNumber: number): Promise<void> {
+    const results = await this.getRoundScores(roundNumber);
+    const cache = this.getLeaderboardCache();
+    
+    // Sort results by score (descending), then time (ascending)
+    const sortedResults = results
+      .sort((a, b) => {
+        if (b.totalScore !== a.totalScore) {
+          return b.totalScore - a.totalScore;
+        }
+        return a.totalTime - b.totalTime;
+      })
+      .slice(0, 10); // Keep only top 10
+    
+    // Update or add round data
+    const existingIndex = cache.rounds.findIndex(r => r.roundNumber === roundNumber);
+    const roundData: RoundLeaderboard = {
+      roundNumber,
+      results: sortedResults,
+      lastUpdated: Date.now(),
+    };
+    
+    if (existingIndex >= 0) {
+      cache.rounds[existingIndex] = roundData;
+    } else {
+      cache.rounds.push(roundData);
+    }
+    
+    this.saveLeaderboardCache(cache);
+  }
+
+  /**
+   * Update cache for all rounds (1, 2, 3)
+   */
+  async updateAllRoundsCache(): Promise<void> {
+    const rounds = [1, 2, 3];
+    await Promise.all(rounds.map(round => this.updateRoundCache(round)));
+  }
+
+  /**
+   * Check if cache for a round needs refresh
+   */
+  needsCacheRefresh(roundNumber: number): boolean {
+    const cache = this.getLeaderboardCache();
+    const roundData = cache.rounds.find(r => r.roundNumber === roundNumber);
+    
+    if (!roundData) {
+      return true;
+    }
+    
+    const timeSinceUpdate = Date.now() - roundData.lastUpdated;
+    return timeSinceUpdate > CACHE_EXPIRY_MS;
+  }
+
+  /**
+   * Get leaderboard for a specific round from cache
+   */
+  getRoundLeaderboard(roundNumber: number): PlayerResults[] {
+    const cache = this.getLeaderboardCache();
+    const roundData = cache.rounds.find(r => r.roundNumber === roundNumber);
+    return roundData?.results || [];
+  }
+
+  /**
+   * Get all rounds leaderboard data from cache
+   */
+  getAllRoundsLeaderboard(): RoundLeaderboard[] {
+    const cache = this.getLeaderboardCache();
+    return cache.rounds;
   }
 
   private async get<T>(endpoint: string): Promise<T> {

@@ -7,7 +7,7 @@ import {
   DEFAULT_COLORS,
 } from "@/types/project";
 import { BASE_URL } from "@/constants";
-import { updateRoundCache } from "@/context/game-state/DataCache";
+import type { DataSourceManager } from "./DataSourceManager";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
@@ -231,7 +231,7 @@ export class GameStateManager {
   }
 
   /** Uploads user's round results to the server and updates cache. */
-  async submitRoundResults(dataSourceManager: { submitRoundScore: (data: { username: string; roundNumber: number; score?: number; time?: number; minDistance?: number }) => Promise<unknown> }): Promise<void> {
+  async submitRoundResults(dataSourceManager: DataSourceManager): Promise<void> {
     this._isRoundFinished = true;
 
     if (!this._playerName) {
@@ -252,7 +252,7 @@ export class GameStateManager {
       });
 
       // Update cache after successful submission
-      await updateRoundCache(this.currentRoundNumber);
+      await dataSourceManager.updateRoundCache(this.currentRoundNumber);
     } catch (error) {
       console.error("Error submitting round results:", error);
       throw error;
