@@ -1,12 +1,37 @@
 import { useMemo, useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import Star9 from "./stars/Star9";
+import { Flag, Globe, MapPin, Map } from "lucide-react";
 
 interface EdgeStarsProps {
   className?: string;
   reverse?: boolean;
   paddingLeft?: number;   // Minimum distance from left edge in pixels
   paddingRight?: number;  // Minimum distance from right edge in pixels
+}
+
+// Available icon components with weights (higher weight = more frequent)
+const ICONS = [
+  { Component: Star9, usesFillProp: false, weight: 30 },  // 30/35 = ~86% stars
+  { Component: Flag, usesFillProp: true, weight: 1 },     // 1/35 = ~3% each icon
+  { Component: Globe, usesFillProp: true, weight: 1 },
+  { Component: MapPin, usesFillProp: true, weight: 1 },
+  { Component: Map, usesFillProp: true, weight: 1 },
+];
+
+// Helper function to select icon based on weights
+function selectWeightedIcon() {
+  const totalWeight = ICONS.reduce((sum, icon) => sum + icon.weight, 0);
+  let random = Math.random() * totalWeight;
+  
+  for (const icon of ICONS) {
+    random -= icon.weight;
+    if (random <= 0) {
+      return icon;
+    }
+  }
+  
+  return ICONS[0]; // Fallback to first icon
 }
 
 // Configurable constants
@@ -137,34 +162,50 @@ export default function EdgeStars({
       const yOffset = Math.random() * CONFIG.Y_RANDOM_OFFSET * 2 - CONFIG.Y_RANDOM_OFFSET;
       const y = currentY + yOffset;
       
+      // Randomly select icon and color using weighted selection
+      const icon = selectWeightedIcon();
+      const color = CONFIG.COLORS[Math.floor(Math.random() * CONFIG.COLORS.length)];
+      
+      // Random rotation between -45 and 45 degrees
+      const rotation = Math.random() * 90 - 45;
+      
+      // Calculate actual size accounting for icon type
+      const clampedSize = Math.max(30, Math.min(60, size));
+      const actualSize = icon.usesFillProp ? clampedSize * 2/3 : clampedSize;
+      
+      // Add safety margin to account for rotation (diagonal is longer than side)
+      const safetyMargin = actualSize * 0.5; // 50% extra space for rotation
+      
       // Calculate X position based on position (using percentage of container width)
+      // Ensure icons stay within bounds even with rotation
       let x: number;
       if (position === 'left') {
         // Random offset as percentage of container width
         const xOffsetPercent = Math.random() * CONFIG.X_RANDOM_OFFSET_PERCENT;
         const xOffset = (containerWidth * xOffsetPercent) / 100;
-        x = paddingLeft + xOffset;
+        x = Math.max(safetyMargin, paddingLeft + xOffset);
       } else if (position === 'right') {
         // Random offset as percentage of container width
         const xOffsetPercent = Math.random() * CONFIG.X_RANDOM_OFFSET_PERCENT;
         const xOffset = (containerWidth * xOffsetPercent) / 100;
-        x = paddingRight + xOffset;
+        x = Math.max(safetyMargin, paddingRight + xOffset);
       } else {
         // Middle position - center with some random offset (% of width)
         const xOffsetPercent = Math.random() * CONFIG.MIDDLE_X_OFFSET_PERCENT * 2 - CONFIG.MIDDLE_X_OFFSET_PERCENT;
         const xOffset = (containerWidth * xOffsetPercent) / 100;
-        x = (containerWidth / 2) + xOffset;
+        const proposedX = (containerWidth / 2) + xOffset;
+        // Ensure middle icons don't overflow either edge
+        x = Math.max(safetyMargin, Math.min(containerWidth - safetyMargin, proposedX));
       }
-      
-      // Alternate colors
-      const color = CONFIG.COLORS[i % CONFIG.COLORS.length];
 
       generatedStars.push({
-        size: Math.max(30, Math.min(60, size)), // Clamp between 30-60
+        size: clampedSize,
         y,
         x,
         position,
         color,
+        icon,
+        rotation,
       });
 
       // Increment Y for next star
@@ -178,29 +219,42 @@ export default function EdgeStars({
     <div
       ref={containerRef}
       className={cn(
-        "relative h-full pointer-events-none",
+        "relative h-full pointer-events-none overflow-hidden",
         className
       )}
     >
-      {stars.map((star, index) => (
-        <div
-          key={index}
-          className="absolute"
-          style={{
-            top: `${star.y}px`,
-            ...(star.position === 'middle' 
-              ? { left: `${star.x}px`, transform: 'translateX(-50%)' }
-              : { [star.position]: `${star.x}px` }
-            ),
-          }}
-        >
-          <Star9
-            size={star.size}
-            color={star.color}
-            pathClassName="stroke-[4px] dark:stroke-[3px] stroke-black dark:stroke-black/70"
-          />
-        </div>
-      ))}
+      {stars.map((star, index) => {
+        const IconComponent = star.icon.Component;
+        const usesFillProp = star.icon.usesFillProp;
+        
+        return (
+          <div
+            key={index}
+            className="absolute"
+            style={{
+              top: `${star.y}px`,
+              ...(star.position === 'middle' 
+                ? { left: `${star.x}px`, transform: `translateX(-50%) rotate(${star.rotation}deg)` }
+                : { [star.position]: `${star.x}px`, transform: `rotate(${star.rotation}deg)` }
+              ),
+            }}
+          >
+            {usesFillProp ? (
+              <IconComponent
+                size={star.size * 2/3}
+                fill={star.color}
+                strokeWidth={1}
+              />
+            ) : (
+              <IconComponent
+                size={star.size}
+                color={star.color}
+                pathClassName="stroke-[4px] dark:stroke-[3px] stroke-black dark:stroke-black/70"
+              />
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
