@@ -24,6 +24,7 @@ const PanoramaViewer = () => {
     const roundNumber = gameStateManager.currentRoundNumber;
     const levelNumber = gameStateManager.currentLevelInfo.number;
     const endpoint = BASE_URL + `/round${roundNumber}/level${levelNumber}/nodes`;
+    console.log(endpoint, BASE_URL)
 
     try {
       const response = await fetch(`${endpoint}/${nodeId}`, {
