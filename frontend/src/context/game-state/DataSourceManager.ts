@@ -50,6 +50,19 @@ const JSON_HEADERS: Record<string, string> = {
   "Accept": "application/json",
 };
 
+// // Update global fetch override to accept RequestInfo | URL
+// if (typeof window !== 'undefined' && window.fetch) {
+//   const originalFetch = window.fetch.bind(window);
+//   window.fetch = (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+//     init = init || {};
+//     init.headers = {
+//       ...init.headers,
+//       'Access-Control-Allow-Origin': '*'
+//     };
+//     return originalFetch(input, init);
+//   };
+// }
+
 export class DataSourceManager {
   private readonly baseUrl: string;
 
@@ -237,7 +250,7 @@ export class DataSourceManager {
     if (!headers.has("Accept")) {
       headers.set("Accept", "application/json");
     }
-
+    console.log(this.baseUrl)
     const response = await fetch(`${this.baseUrl}${endpoint}`, {
       ...init,
       headers,

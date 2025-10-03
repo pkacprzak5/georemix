@@ -26,7 +26,9 @@ const PanoramaViewer = () => {
     const endpoint = BASE_URL + `/round${roundNumber}/level${levelNumber}/nodes`;
 
     try {
-      const response = await fetch(`${endpoint}/${nodeId}`);
+      const response = await fetch(`${endpoint}/${nodeId}`, {
+        headers: { "Access-Control-Allow-Origin": "*" },
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
