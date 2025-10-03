@@ -3,9 +3,11 @@ import {
   type LevelInfo,
   type LevelResultInfo,
   type MapCoordinates,
+  type PlayerResults,
   DEFAULT_COLORS,
 } from "@/types/project";
 import { BASE_URL } from "@/constants";
+import type { DataSourceManager } from "./DataSourceManager";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
@@ -17,6 +19,9 @@ export class GameStateManager {
   private _currentTheme: "light" | "dark" = "light";
   private _currentColors: Colors = DEFAULT_COLORS;
   private _playerName: string = "";
+
+  /** Whether currently selected stage is finished. */
+  private _isRoundFinished: boolean = false;
 
   // Current Gameplay
   private _currentCoordinates: MapCoordinates | null = null;
@@ -33,9 +38,14 @@ export class GameStateManager {
   private readonly _timeCap: number = 10; // 10secs
   private readonly _metersCap: number = 50;
 
-  constructor() {}
+  constructor() { }
 
   // Getters
+
+  get isRoundFinished(): boolean {
+    return this._isRoundFinished;
+  }
+
   get currentRoundNumber(): number {
     if (this._currentRoundNumber === null) {
       throw new Error("No current round set");
@@ -78,6 +88,17 @@ export class GameStateManager {
     }
 
     return this._levelResults[this._currentLevelNumber];
+  }
+
+  get maxScore(): number {
+    if(this._levels.length === 0) {
+      throw new Error("No levels loaded");
+    }
+    return this._maxPoints * this._levels.length;
+  }
+
+  get allLevelResults(): LevelResultInfo[] {
+    return this._levelResults;
   }
 
   setTimeTaken(time: number) {
@@ -201,9 +222,172 @@ export class GameStateManager {
     });
   }
 
+  resetCurrentResultInfo() {
+    this._currentCoordinates = null;
+    this._submittedCoordinates = null;
+    this._timeTaken = 0;
+    this._currentDistance = null;
+    this._currentScore = null;
+  }
+
+  /** Uploads user's round results to the server and updates cache. */
+  async submitRoundResults(dataSourceManager: DataSourceManager): Promise<void> {
+    this._isRoundFinished = true;
+
+    if (!this._playerName) {
+      console.error("No player name set");
+      return;
+    }
+
+    const roundResults = this.computeRoundResults();
+
+    try {
+      // Submit to backend
+      await dataSourceManager.submitRoundScore({
+        username: this._playerName,
+        roundNumber: this.currentRoundNumber,
+        score: roundResults.totalScore,
+        time: roundResults.totalTime,
+        minDistance: roundResults.closestCall,
+      });
+
+      // Update cache after successful submission
+      await dataSourceManager.updateRoundCache(this.currentRoundNumber);
+    } catch (error) {
+      console.error("Error submitting round results:", error);
+      throw error;
+    }
+  }
+
+  /** Computes stats included in the leaderboard from finished round. */
+  private computeRoundResults(): PlayerResults {
+    // Reduce over level results and gather essential stats.
+    const results: PlayerResults = this._levelResults.reduce(
+      (prev, curr) => {
+        return {
+          ...prev,
+          totalTime: prev.totalTime + curr.timeTaken,
+          totalScore: prev.totalScore + curr.score,
+          closestCall: Math.min(prev.closestCall, curr.distance),
+        };
+      },
+      {
+        playerName: this.playerName,
+        totalTime: 0,
+        totalScore: 0,
+        closestCall: Infinity,
+      } satisfies PlayerResults
+    );
+
+    return results;
+  }
+
   resetAll() {
+    this._isRoundFinished = false;
     this._currentRoundNumber = null;
     this._currentLevelNumber = null;
     this._levelResults = [];
+    this._levels = [];
+    this._currentColors = DEFAULT_COLORS;
+    this._playerName = "";
+    this._currentTheme = "light";
+    this.resetCurrentResultInfo();
+  }
+
+  // Mock data initialization for testing/development
+  initializeMockData() {
+    this._currentRoundNumber = 1;
+    this._currentLevelNumber = 4; // Set to last level (0-indexed, so level 5)
+    this._playerName = "Test Player";
+    
+    // Mock levels data
+    this._levels = [
+      {
+        initialNode: "mock-node-1",
+        name: "Kraków - Rynek Główny",
+        theme: "light",
+        thumbnail: "level_1.jpg",
+        number: 1,
+        colors: DEFAULT_COLORS
+      },
+      {
+        initialNode: "mock-node-2", 
+        name: "Warszawa - Pałac Kultury",
+        theme: "dark",
+        thumbnail: "level_2.png",
+        number: 2,
+        colors: DEFAULT_COLORS
+      },
+      {
+        initialNode: "mock-node-3",
+        name: "Gdańsk - Długa Ulica", 
+        theme: "light",
+        thumbnail: "level_1.jpg",
+        number: 3,
+        colors: DEFAULT_COLORS
+      },
+      {
+        initialNode: "mock-node-4",
+        name: "Wrocław - Rynek",
+        theme: "dark", 
+        thumbnail: "level_2.png",
+        number: 4,
+        colors: DEFAULT_COLORS
+      },
+      {
+        initialNode: "mock-node-5",
+        name: "Poznań - Stary Rynek",
+        theme: "light",
+        thumbnail: "level_1.jpg", 
+        number: 5,
+        colors: DEFAULT_COLORS
+      },
+    ];
+
+    // Mock level results for all completed levels
+    this._levelResults = [
+      {
+        distance: 245,
+        timeTaken: 23,
+        answerPosition: { lat: 50.0619, lng: 19.9368 },
+        submittedPosition: { lat: 50.0643, lng: 19.9401 },
+        score: 4850,
+      },
+      {
+        distance: 1250,
+        timeTaken: 35,
+        answerPosition: { lat: 52.2297, lng: 21.0122 },
+        submittedPosition: { lat: 52.2403, lng: 21.0189 },
+        score: 3200,
+      },
+      {
+        distance: 680,
+        timeTaken: 28,
+        answerPosition: { lat: 54.3520, lng: 18.6466 },
+        submittedPosition: { lat: 54.3598, lng: 18.6523 },
+        score: 4100,
+      },
+      {
+        distance: 420,
+        timeTaken: 31,
+        answerPosition: { lat: 51.1079, lng: 17.0385 },
+        submittedPosition: { lat: 51.1123, lng: 17.0428 },
+        score: 4250,
+      },
+      {
+        distance: 890,
+        timeTaken: 42,
+        answerPosition: { lat: 52.4064, lng: 16.9252 },
+        submittedPosition: { lat: 52.4156, lng: 16.9341 },
+        score: 3750,
+      },
+    ];
+
+    // Set current coordinates and other state for the current level
+    this._currentCoordinates = { lat: 52.4064, lng: 16.9252 };
+    this._submittedCoordinates = { lat: 52.4156, lng: 16.9341 };
+    this._timeTaken = 42;
+    this._currentDistance = 890;
+    this._currentScore = 3750;
   }
 }
