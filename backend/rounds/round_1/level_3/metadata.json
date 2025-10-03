@@ -1,7 +1,11 @@
 {
   "initialNode": 733979678594772,
   "theme": "light",
-  "name": "Hoover Dam - temp",
-  "thumbnail": "level_1.png",
-  "number": 3
+  "name": "Borderlands",
+  "thumbnail": "level_3.png",
+  "number": 3,
+  "colors": {
+    "main": "oklch(84.08% 0.1725 84.2)",
+    "background": "oklch(96.22% 0.0569 95.61)"
+  }
 }

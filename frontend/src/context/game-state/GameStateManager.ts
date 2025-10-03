@@ -208,6 +208,7 @@ export class GameStateManager {
     this._currentLevelNumber = levelNumber;
     const level = this._levels[levelNumber];
     this._currentTheme = level.theme;
+    console.log(level.colors)
     this._currentColors = level.colors;
   }
 
