@@ -98,7 +98,7 @@ const PanoramaViewer = () => {
         requestHeaders={{ "Cache-Control": "no-store" }}
         defaultZoomLvl={40}
         mousewheel={false}
-        // src={`${IMAGES_ENDPOINT}/${gameState.currentLevelInfo.initialNode}.jpg`} // Default image, will be replaced by server-mode loading
+        src={`${BASE_URL}/images/${gameStateManager.currentLevelInfo.initialNode}.jpg`} // Default image, will be replaced by server-mode loading
       />
     </div>
   );
