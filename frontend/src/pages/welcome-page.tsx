@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ButtonLarge } from "@/components/ui/button";
+import { Button, ButtonLarge } from "@/components/ui/button";
 import { useDataSourceManager, useGameStateManager } from "@/context/game-state";
 import { ApiError } from "@/context/game-state/DataSourceManager";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
@@ -7,16 +7,13 @@ import { moduleIdMap } from "@/lib/navigation-system/types";
 import StylisedSpan from "@/components/ui/stylised-span";
 import { InputButton } from "@/components/ui/input-button";
 import { BookText, Trophy } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+import { Window, WindowContent } from "@/components/layout/window";
+import { useResizableWindow } from "@/hooks/use-resizable-window";
+
+const WINDOW_WIDTH_MINIMIZED = 400;
+const WINDOW_HEIGHT_MINIMIZED = 200;
+const WINDOW_WIDTH_MAXIMIZED_RATIO = 0.3;
+const WINDOW_HEIGHT_MAXIMIZED_RATIO = 0.3;
 
 export function WelcomePage() {
   const gameStateManager = useGameStateManager();
@@ -26,6 +23,33 @@ export function WelcomePage() {
   const [isCheckingName, setIsCheckingName] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
   const [existingPlayerName, setExistingPlayerName] = useState<string | null>(null);
+
+  const {
+    position,
+    setPosition,
+    isVisible,
+    style,
+    windowClass,
+    handleMaximize,
+    handleMinimize,
+    handleClose,
+    handleOpen,
+  } = useResizableWindow({
+    minimizedSize: {
+      width: WINDOW_WIDTH_MINIMIZED,
+      height: WINDOW_HEIGHT_MINIMIZED,
+    },
+    maximizedRatio: {
+      width: WINDOW_WIDTH_MAXIMIZED_RATIO,
+      height: WINDOW_HEIGHT_MAXIMIZED_RATIO,
+    },
+    initialVisibility: true,
+    initialOpened: false,
+    initialPosition: {
+      x: window.innerWidth / 2 - WINDOW_WIDTH_MINIMIZED / 2,
+      y: window.innerHeight / 2 - WINDOW_HEIGHT_MINIMIZED / 2,
+    },
+  });
 
   useEffect(() => {
     gameStateManager.resetAll();
@@ -53,10 +77,10 @@ export function WelcomePage() {
 
     try {
       const isAvailable = await dataSourceManager.checkUsernameAvailability(trimmedName);
-      console.log("avialable", isAvailable)
 
       if (!isAvailable) {
         setExistingPlayerName(trimmedName);
+        handleOpen();
         return;
       }
 
@@ -98,6 +122,7 @@ export function WelcomePage() {
   };
 
   const handleRejectExistingPlayer = () => {
+    handleClose();
     setExistingPlayerName(null);
     setNameError("Wybierz inna nazwe gracza, aby utworzyc nowy profil.");
   };
@@ -125,22 +150,40 @@ export function WelcomePage() {
             disabled={nameError !== null}
           />
 
-          <AlertDialog open={!isCheckingName && existingPlayerName !== null}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Wykorzystana nazwa</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Nazwa <span className="font-heading uppercase">{existingPlayerName}</span> jest
-                  juz aktywna. Kontynuuj jako ten gracz, aby nadpisac jego aktualne wyniki, lub
-                  wybierz inna nazwe.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel onClick={handleRejectExistingPlayer}>Wybierz inna nazwe</AlertDialogCancel>
-                <AlertDialogAction onClick={handleConfirmExistingPlayer}>Kontynuuj jako {existingPlayerName}</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          {isVisible && (
+            <Window
+              title="alert.exe"
+              position={position}
+              setPosition={setPosition}
+              className={windowClass}
+              style={style}
+              onMaximize={handleMaximize}
+              onMinimize={handleMinimize}
+              onClose={handleRejectExistingPlayer}>
+              <WindowContent className="w-full h-full relative p-4">
+                <div className="flex flex-col justify-between h-full">
+                  <span>
+                    Nazwa <span className="font-heading uppercase">{existingPlayerName}</span> jest
+                    juz aktywna. Kontynuuj jako ten gracz, aby nadpisac jego aktualne wyniki, lub
+                    wybierz inna nazwe.
+                  </span>
+                  <div className="flex flex-wrap justify-around mt-4 gap-4">
+                    <Button
+                      onClick={handleRejectExistingPlayer}
+                      className="bg-secondary-background text-foreground">
+                      Wybierz inna nazwe
+                    </Button>
+                    <Button
+                      onClick={handleConfirmExistingPlayer}
+                      className="bg-main text-foreground">
+                      Kontunuuj jako
+                      <span className="font-heading uppercase">{existingPlayerName}</span>
+                    </Button>
+                  </div>
+                </div>
+              </WindowContent>
+            </Window>
+          )}
 
           {!isCheckingName && !existingPlayerName && nameError && (
             <div className="min-h-[3rem] space-y-3">
