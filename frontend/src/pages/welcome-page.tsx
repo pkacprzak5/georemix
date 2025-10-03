@@ -16,7 +16,6 @@ export function WelcomePage() {
   const [playerName, setPlayerName] = useState("");
   const [isCheckingName, setIsCheckingName] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
-  const [existingPlayerName, setExistingPlayerName] = useState<string | null>(null);
 
   useEffect(() => {
     gameStateManager.resetAll();
@@ -34,14 +33,15 @@ export function WelcomePage() {
 
     setIsCheckingName(true);
     setNameError(null);
-    setExistingPlayerName(null);
 
     try {
       const isAvailable = await dataSourceManager.checkUsernameAvailability(trimmedName);
       console.log("avialable", isAvailable)
 
       if (!isAvailable) {
-        setExistingPlayerName(trimmedName);
+        // Automatically accept existing player name
+        gameStateManager.setPlayerName(trimmedName);
+        navigateTo(moduleIdMap.INTRO, "stage-picker");
         return;
       }
 
@@ -68,23 +68,6 @@ export function WelcomePage() {
 
   const handleShowLeaderboard = () => {
     navigateTo(moduleIdMap.INTRO, "leader-board");
-  };
-
-  const handleConfirmExistingPlayer = () => {
-    const trimmedName = existingPlayerName ?? playerName.trim();
-    if (!trimmedName) {
-      return;
-    }
-
-    gameStateManager.setPlayerName(trimmedName);
-    setExistingPlayerName(null);
-    setNameError(null);
-    navigateTo(moduleIdMap.INTRO, "stage-picker");
-  };
-
-  const handleRejectExistingPlayer = () => {
-    setExistingPlayerName(null);
-    setNameError("Wybierz inna nazwe gracza, aby utworzyc nowy profil.");
   };
 
   return (
@@ -114,29 +97,7 @@ export function WelcomePage() {
             className="w-full"
           />
 
-          {!isCheckingName && existingPlayerName && (
-            <div className="min-h-[3rem] space-y-3">
-              <div className="space-y-3 rounded-base border-2 border-border bg-secondary-background px-5 py-4 text-sm font-base text-foreground shadow-shadow">
-                <p>
-                  Nazwa <span className="font-heading uppercase">{existingPlayerName}</span> jest
-                  juz aktywna. Kontynuuj jako ten gracz, aby nadpisac jego aktualne wyniki, lub
-                  wybierz inna nazwe.
-                </p>
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
-                  <ButtonLarge onClick={handleConfirmExistingPlayer} className="sm:w-auto">
-                    Kontynuuj jako {existingPlayerName}
-                  </ButtonLarge>
-                  <ButtonLarge
-                    onClick={handleRejectExistingPlayer}
-                    className="sm:w-auto bg-secondary-background text-foreground">
-                    Wybierz inną
-                  </ButtonLarge>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {!isCheckingName && !existingPlayerName && nameError && (
+          {!isCheckingName && nameError && (
             <div className="min-h-[3rem] space-y-3">
               <div className="rounded-base border-2 border-border bg-secondary-background px-4 py-3 text-sm font-base text-red-600 shadow-shadow">
                 {nameError}
