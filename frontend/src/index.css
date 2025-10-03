@@ -63,6 +63,14 @@
   --shadow-highlight: 8px 8px 0px 0px var(--border);
   --font-weight-base: 600;
   --font-weight-heading: 700;
+
+  /* Custom breakpoints for high-resolution displays */
+  --breakpoint-3xl: 1920px;  /* Full HD+ */
+  --breakpoint-4xl: 2560px;  /* QHD/WQHD */
+  --breakpoint-5xl: 3200px;  /* QHD+ */
+  --breakpoint-6xl: 3840px;  /* 4K UHD */
+  --breakpoint-7xl: 5120px;  /* 5K */
+  --breakpoint-8xl: 7680px;  /* 8K UHD */
 }
 
 .gradient {
