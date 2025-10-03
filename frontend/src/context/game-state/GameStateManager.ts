@@ -220,6 +220,7 @@ export class GameStateManager {
       this._currentLevelNumber += 1;
       const level = this._levels[this._currentLevelNumber];
       this._currentTheme = level.theme;
+      this._currentColors = level.colors;
     });
   }
 
