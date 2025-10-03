@@ -1,11 +1,7 @@
 {
-  "initialNode": 834015571448095,
+  "initialNode": 1521796545455580,
   "theme": "light",
-  "name": "Obraz Van Gogha",
-  "thumbnail": "gogh.webp",
-  "number": 2,
-  "colors": {
-    "background": "#dcebfe",
-    "main": "#5294ff"
-  }
+  "name": "Milan - temp",
+  "thumbnail": "level_1.png",
+  "number": 1
 }
