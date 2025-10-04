@@ -7,6 +7,7 @@ import { moduleIdMap } from "@/lib/navigation-system/types";
 import StylisedSpan from "@/components/ui/stylised-span";
 import { InputButton } from "@/components/ui/input-button";
 import { BookText, Trophy } from "lucide-react";
+import { GlobeLogo } from "@/components/ui/globe-logo";
 import { Window, WindowContent } from "@/components/layout/window";
 import { useResizableWindow } from "@/hooks/use-resizable-window";
 
@@ -139,16 +140,21 @@ export function WelcomePage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-full px-4">
+    <div className="flex items-center justify-center h-full w-full px-4">
       <div className="w-full max-w-4xl space-y-8">
-        <div className="text-center">
-          <h1 className="leading-normal">
-            Witaj w <StylisedSpan showStars>GeoRemix</StylisedSpan>
+        <div className="text-center mb-10">
+          <div className="flex justify-center mb-4">
+            <div className="w-1/3 aspect-square max-w-sm">
+              <GlobeLogo />
+            </div>
+          </div>
+          <h1 className="leading-normal mb-4">
+            Witaj w <StylisedSpan showStars>GeoRemix!</StylisedSpan>
           </h1>
-          <p className="leading-snug mx-auto w-full md:mt-[50px] md:mb-[60px] sm:mt-12 my-5 sm:mb-10 2xl:text-3xl xl:text-2xl lg:text-2xl xl:w-full lg:w-2/3 md:w-full md:text-2xl sm:text-xl text-xl">
-            Od futurystycznych metropolii po fantastyczne krainy - sprawdz czy potrafisz rozpoznac
-            znajome miejsca w nowej odslonie!
-          </p>
+          {/* <p className="leading-snug mx-auto my-0 w-full 2xl:text-lg xl:text-lg lg:text-lg xl:w-full lg:w-2/3 md:w-full md:text-2xl sm:text-xl text-xl">
+            Od futurystycznych metropolii po fantastyczne krainy - Spradź, czy potrafisz rozpoznać
+            znajome miejsca w nowej odsłonie!
+          </p> */}
         </div>
 
         <div className="space-y-4 max-w-md mx-auto">

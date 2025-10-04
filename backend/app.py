@@ -41,9 +41,11 @@ def load_round_level_data(round_num, level_num, file_type):
         return None
 
 
+
 def load_metadata(round_num, level_num):
     """Load metadata from specific round/level"""
     return load_round_level_data(round_num, level_num, "metadata")
+
 
 
 def load_nodes(round_num, level_num):
@@ -51,9 +53,11 @@ def load_nodes(round_num, level_num):
     return load_round_level_data(round_num, level_num, "nodes")
 
 
+
 def load_links(round_num, level_num):
     """Load links from specific round/level"""
     return load_round_level_data(round_num, level_num, "links")
+
 
 
 def get_round_levels(round_num):
@@ -62,15 +66,19 @@ def get_round_levels(round_num):
     if not os.path.exists(round_path):
         return []
 
+
     levels = []
     for item in os.listdir(round_path):
         item_path = os.path.join(round_path, item)
         if os.path.isdir(item_path) and item.startswith("level_"):
+        if os.path.isdir(item_path) and item.startswith("level_"):
             try:
+                level_num = int(item.split("_")[1])
                 level_num = int(item.split("_")[1])
                 levels.append(level_num)
             except (IndexError, ValueError):
                 continue
+
 
     return sorted(levels)
 
@@ -134,8 +142,13 @@ def get_level_node(round_num, level_num, node_id):
         "panorama": IMAGE_ENDPOINT + str(node_data["panorama"]),
         "links": links,
         "gps": node_data["gps"],
-        "sphereCorrection": {"pan": str(node_data["sphereCorrection"]["pan"]) + "deg"},
+        "sphereCorrection": {
+            "pan": str(sphere_correction.get("pan", 0)) + "deg",
+            "tilt": str(sphere_correction.get("tilt", 0)) + "deg",
+            "roll": str(sphere_correction.get("roll", 0)) + "deg",
+        },
     }
+
 
     return jsonify(response_node)
 
@@ -146,8 +159,10 @@ def get_level_nodes(round_num, level_num):
     nodes = load_nodes(round_num, level_num)
     links_data = load_links(round_num, level_num)
 
+
     if not nodes or not links_data:
         return jsonify({"error": "Level data not found"}), 404
+
 
     response_nodes = []
     for node_data in nodes:
@@ -176,10 +191,15 @@ def get_level_nodes(round_num, level_num):
             "panoData": {
                 "poseHeading": (node_data["sphereCorrection"]["pan"]) / 180 * 3.14
             },
+            "panoData": {
+                "poseHeading": (node_data["sphereCorrection"]["pan"]) / 180 * 3.14
+            },
         }
         response_nodes.append(response_node)
 
+
     return jsonify(response_nodes)
+
 
 
 @app.route("/images/<path:filename>")
@@ -187,6 +207,7 @@ def get_level_nodes(round_num, level_num):
 def get_image(filename):
     """Serve images from the images directory"""
     return send_from_directory("images", filename)
+
 
 
 @app.route("/thumbnails/<path:filename>")
