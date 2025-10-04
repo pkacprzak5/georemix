@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import jsonify, request
 from sqlalchemy import func
 from models.database import db, Player, RoundScore
+from middleware.security import validate_api_key, validate_origin, require_json
 
 
 def _parse_float(value):
@@ -29,6 +30,9 @@ def register_score_routes(app):
         return jsonify([player.to_dict() for player in players])
 
     @app.route("/players", methods=["POST"])
+    @validate_api_key
+    @validate_origin
+    @require_json
     def create_player():
         payload = request.get_json(silent=True) or {}
         username = (payload.get("username") or "").strip()
@@ -64,6 +68,9 @@ def register_score_routes(app):
         return jsonify(player.to_dict(include_scores=True))
 
     @app.route("/scores/round", methods=["POST"])
+    @validate_api_key
+    @validate_origin
+    @require_json
     def submit_round_score():
         payload = request.get_json(silent=True) or {}
 
