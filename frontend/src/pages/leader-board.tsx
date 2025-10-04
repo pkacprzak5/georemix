@@ -65,12 +65,16 @@ const leaderboardColumns: RankingColumn<PlayerResults>[] = [
   },
 ];
 
+const ESTIMATED_PAGE_CONTENT_HEIGHT = 300;
+const ESTIMATED_ROW_HEIGHT = 65;
+
 export function LeaderBoardPage() {
   const { navigateTo } = useNavigation();
   const gameStateManager = useGameStateManager();
   const dataSourceManager = useDataSourceManager();
   const [leaderboardData, setLeaderboardData] = useState<RoundLeaderboard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [maxRows, setMaxRows] = useState(10);
 
   // Load and update leaderboard cache when component mounts
   useEffect(() => {
@@ -95,6 +99,20 @@ export function LeaderBoardPage() {
 
     loadLeaderboard();
   }, [dataSourceManager]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const height = window.innerHeight;
+      const availableHeight = height - ESTIMATED_PAGE_CONTENT_HEIGHT; // estimate for header, tabs, buttons, padding
+      const rowHeight = ESTIMATED_ROW_HEIGHT; // estimated row height
+      const calculatedMaxRows = Math.max(1, Math.floor(availableHeight / rowHeight));
+      setMaxRows(calculatedMaxRows);
+    };
+
+    handleResize(); // initial calculation
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const rounds = useMemo(() => [1, 2, 3], []);
   const defaultRound = useMemo(() => rounds[0], [rounds]);
@@ -129,6 +147,7 @@ export function LeaderBoardPage() {
                   className="rounded-t-none shadow-none"
                   rows={roundData?.results || []}
                   columns={leaderboardColumns}
+                  maxRows={maxRows}
                 />
               </TabsContent>
             );

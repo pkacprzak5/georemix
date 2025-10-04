@@ -16,6 +16,7 @@ export interface RankingTableProps<Row> {
   getRowKey?: (row: Row, index: number) => string | number;
   className?: string;
   caption?: ReactNode;
+  maxRows?: number;
 }
 
 const rankAccentClasses = [
@@ -30,7 +31,9 @@ export function RankingTable<Row>({
   getRowKey,
   className,
   caption,
+  maxRows,
 }: RankingTableProps<Row>) {
+  const displayRows = maxRows ? rows.slice(0, maxRows) : rows;
   return (
     <div
       className={cn(
@@ -61,7 +64,7 @@ export function RankingTable<Row>({
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, index) => {
+          {displayRows.map((row, index) => {
             const rowKey = getRowKey ? getRowKey(row, index) : index;
             const rank = index + 1;
             const rankAccent =
