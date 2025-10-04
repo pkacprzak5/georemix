@@ -21,8 +21,19 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+# Configure CORS with stricter settings
 cors = CORS(
-    app, resources={r"/*": {"origins": CLIENT_ORIGIN}}, supports_credentials=True
+    app, 
+    resources={
+        r"/*": {
+            "origins": CLIENT_ORIGIN.split(","),
+            "methods": ["GET", "POST", "OPTIONS"],
+            "allow_headers": ["Content-Type", "X-API-Key"],
+            "expose_headers": ["Content-Type"],
+            "supports_credentials": True,
+            "max_age": 3600
+        }
+    }
 )
 
 db.init_app(app)
