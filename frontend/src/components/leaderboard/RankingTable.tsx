@@ -64,42 +64,53 @@ export function RankingTable<Row>({
           </tr>
         </thead>
         <tbody>
-          {displayRows.map((row, index) => {
-            const rowKey = getRowKey ? getRowKey(row, index) : index;
-            const rank = index + 1;
-            const rankAccent =
-              rankAccentClasses[index] ?? "bg-background text-foreground border-border";
+          {displayRows.length === 0 ? (
+            <tr>
+              <td
+                colSpan={columns.length + 1}
+                className="px-6 py-8 text-center text-sm font-base text-foreground"
+              >
+                Brak wyników do wyświetlenia
+              </td>
+            </tr>
+          ) : (
+            displayRows.map((row, index) => {
+              const rowKey = getRowKey ? getRowKey(row, index) : index;
+              const rank = index + 1;
+              const rankAccent =
+                rankAccentClasses[index] ?? "bg-background text-foreground border-border";
 
-            return (
-              <tr
-                key={rowKey}
-                className="border-b border-border last:border-b-0 odd:bg-background even:bg-secondary-background/30">
-                <td className="px-6 py-4">
-                  <span
-                    className={cn(
-                      "inline-flex min-w-[2.5rem] items-center justify-center rounded-full border-2 px-2 py-1 text-sm font-heading",
-                      rankAccent
-                    )}>
-                    #{rank}
-                  </span>
-                </td>
-                {columns.map((column) => (
-                  <td
-                    key={column.key}
-                    className={cn(
-                      "px-6 py-4 text-sm font-base",
-                      column.align === "right" && "text-right",
-                      column.align === "center" && "text-center",
-                      column.cellClassName
-                    )}>
-                    {column.render
-                      ? column.render(row, index)
-                      : (row as Record<string, ReactNode>)[column.key]}
+              return (
+                <tr
+                  key={rowKey}
+                  className="border-b border-border last:border-b-0 odd:bg-background even:bg-secondary-background/30">
+                  <td className="px-6 py-4">
+                    <span
+                      className={cn(
+                        "inline-flex min-w-[2.5rem] items-center justify-center rounded-full border-2 px-2 py-1 text-sm font-heading",
+                        rankAccent
+                      )}>
+                      #{rank}
+                    </span>
                   </td>
-                ))}
-              </tr>
-            );
-          })}
+                  {columns.map((column) => (
+                    <td
+                      key={column.key}
+                      className={cn(
+                        "px-6 py-4 text-sm font-base",
+                        column.align === "right" && "text-right",
+                        column.align === "center" && "text-center",
+                        column.cellClassName
+                      )}>
+                      {column.render
+                        ? column.render(row, index)
+                        : (row as Record<string, ReactNode>)[column.key]}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
     </div>
