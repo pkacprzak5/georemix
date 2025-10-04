@@ -118,15 +118,16 @@ def get_level_node(round_num, level_num, node_id):
             )
 
     # Build the response node
+    sphere_correction = node_data["sphereCorrection"]
     response_node = {
         "id": str(node_data["id"]),
         "panorama": IMAGE_ENDPOINT + str(node_data["panorama"]),
         "links": links,
         "gps": node_data["gps"],
         "sphereCorrection": {
-            "pan": str(node_data["sphereCorrection"]["pan"]) + "deg",
-            "tilt": str(node_data["sphereCorrection"]["tilt"]) + "deg",
-            "roll": str(node_data["sphereCorrection"]["roll"]) + "deg",
+            "pan": str(sphere_correction.get("pan", 0)) + "deg",
+            "tilt": str(sphere_correction.get("tilt", 0)) + "deg",
+            "roll": str(sphere_correction.get("roll", 0)) + "deg",
         },
     }
 
