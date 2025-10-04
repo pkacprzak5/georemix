@@ -2,7 +2,7 @@ import { AnimatePresence, motion, type Transition, type Variants } from "framer-
 import { useEffect, useRef } from "react";
 import { useNavigation } from "./navigation-provider";
 import type { Page } from "./types";
-import { LoadingScreen } from "@/pages/loading-screen";
+import EdgeStars from "@/components/ui/edge-stars";
 
 const pageVariants: Variants = {
   enter: {
@@ -53,6 +53,31 @@ export function Router() {
 
   // Determine what to render based on loading state
   const renderContent = () => {
+    const pageContent = <currentPage.component />;
+    
+    // Wrap with EdgeStars if enabled for this page
+    const contentWithStars = currentPage.showStars ? (
+      <div className="flex h-full w-full min-h-full min-w-full">
+        {/* Left edge stars */}
+        <EdgeStars 
+          paddingLeft={20} 
+          className="w-[20%] 2xl:w-[25%] xl:w-[20%] lg:flex hidden h-full" 
+        />
+        
+        {/* Main content */}
+        <div className="flex-1 2xl:w-[50%] lg:w-[60%] w-[60%]">
+          {pageContent}
+        </div>
+
+        {/* Right edge stars */}
+        <EdgeStars
+          paddingRight={20} 
+          className="w-[20%] 2xl:w-[25%] xl:w-[20%] lg:flex hidden h-full" 
+          reverse 
+        />
+      </div>
+    ) : pageContent;
+
     // For initial page, render without motion animation
     if (isInitialPage) {
       return (
@@ -64,7 +89,7 @@ export function Router() {
           key={state.currentPage}
           transition={pageTransition}
           className="absolute inset-0">
-          <currentPage.component />
+          {contentWithStars}
         </motion.div>
       );
     }
@@ -79,7 +104,7 @@ export function Router() {
         exit="exit"
         transition={pageTransition}
         className="absolute inset-0">
-        <currentPage.component />
+        {contentWithStars}
       </motion.div>
     );
   };
