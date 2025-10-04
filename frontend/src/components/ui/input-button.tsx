@@ -10,6 +10,7 @@ interface BrutalistInputProps {
   className?: string;
   label?: string;
   ref?: React.RefObject<HTMLInputElement | null>;
+  disabled?: boolean;
 }
 
 export const InputButton = ({
@@ -20,20 +21,21 @@ export const InputButton = ({
   className = "",
   label,
   ref,
+  disabled = false,
 }: BrutalistInputProps) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && onSubmit && value.trim()) {
+    if (e.key === "Enter" && onSubmit && value.trim() && !disabled) {
       onSubmit();
     }
   };
 
   const handleSubmit = () => {
-    if (onSubmit && value.trim()) {
+    if (onSubmit && value.trim() && !disabled) {
       onSubmit();
     }
   };
 
-  const isDisabled = !value.trim();
+  const isDisabled = !value.trim() || disabled;
 
   return (
     <div className={cn("relative w-full", className)}>

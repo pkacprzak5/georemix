@@ -2,7 +2,6 @@ import { Gameplay } from "@/pages/gameplay";
 import { LevelStart } from "@/pages/level-start";
 import { LevelSummary } from "@/pages/level-summary";
 import { LevelMap } from "@/pages/level-map";
-import { MockPage } from "@/pages/mock";
 import { WelcomePage } from "@/pages/welcome-page";
 import { StagePicker } from "@/pages/stage-picker";
 import { TitlePage } from "@/pages/title";
@@ -12,6 +11,7 @@ import type { Module } from "./types";
 import { moduleIdMap } from "./types";
 import { FinalResult } from "@/pages/final-result";
 import { FinalMap } from "@/pages/final-map";
+import { LeaderBoardPage } from "@/pages/leader-board";
 
 export const titleGroup: Module = {
   id: moduleIdMap.TITLE,
@@ -24,7 +24,7 @@ export const introGroup: Module = {
   pages: [
     { id: "welcome-page", component: WelcomePage, title: "Welcome to GeoRemix", showStars: true },
     { id: "about", component: AboutPage, title: "About" },
-    { id: "leader-board", component: MockPage, title: "Leader Board" },
+    { id: "leader-board", component: LeaderBoardPage, title: "Leader Board" },
     { id: "stage-picker", component: StagePicker, title: "Pick the Stage", showStars: true },
   ],
   // initialPage: "welcome-page",
@@ -50,7 +50,10 @@ export const levelEndGroup: Module = {
 
 export const gameEndGroup: Module = {
   id: moduleIdMap.FINAL,
-  pages: [{ id: "final-result", component: FinalResult, title: "Summary", showStars: true }],
+   pages: [
+    { id: "final-result", component: FinalResult, title: "Summary" },
+    { id: "final-map", component: FinalMap, title: "Final Map" },
+  ],
 
 };
 

@@ -112,12 +112,15 @@ export function FinalMap() {
   useEffect(() => {
     try {
       const allResults = gameStateManager.allLevelResults;
-      
+
       const mappedData: LevelMapData[] = allResults.map((result, index) => ({
         levelNumber: index + 1,
         distance: result.distance,
         actualPosition: [result.answerPosition.lat, result.answerPosition.lng] as [number, number],
-        guessPosition: [result.submittedPosition.lat, result.submittedPosition.lng] as [number, number],
+        guessPosition: [result.submittedPosition.lat, result.submittedPosition.lng] as [
+          number,
+          number,
+        ],
         color: levelColors[index % levelColors.length],
       }));
 
@@ -150,8 +153,7 @@ export function FinalMap() {
 
   const handleShowLeaderboard = () => {
     // TODO: Implement leaderboard navigation
-    console.log("Show leaderboard - to be implemented");
-    alert("Tabela wyników - wkrótce!");
+    navigateTo(moduleIdMap.INTRO, "leader-board");
   };
 
   const formatDistance = (distance: number) => {
@@ -165,20 +167,17 @@ export function FinalMap() {
   const handleMarkerClick = (actualPos: [number, number], guessPos: [number, number]) => {
     if (mapInstanceRef.current) {
       const bounds = L.latLngBounds([actualPos, guessPos]);
-      mapInstanceRef.current.fitBounds(bounds, { 
+      mapInstanceRef.current.fitBounds(bounds, {
         padding: [100, 100],
         maxZoom: 15,
         animate: true,
-        duration: 1.5 // Animation duration in seconds
+        duration: 1.5, // Animation duration in seconds
       });
     }
   };
 
   // Get all positions for bounds calculation
-  const allPositions = levelsData.flatMap((level) => [
-    level.actualPosition,
-    level.guessPosition,
-  ]);
+  const allPositions = levelsData.flatMap((level) => [level.actualPosition, level.guessPosition]);
 
   if (levelsData.length === 0) {
     return (
@@ -277,7 +276,7 @@ export function FinalMap() {
                         position={level.actualPosition}
                         icon={createActualLocationIcon(level.color)}
                         eventHandlers={{
-                          click: () => handleMarkerClick(level.actualPosition, level.guessPosition)
+                          click: () => handleMarkerClick(level.actualPosition, level.guessPosition),
                         }}
                       />
 
@@ -286,7 +285,7 @@ export function FinalMap() {
                         position={level.guessPosition}
                         icon={createGuessLocationIcon(level.color)}
                         eventHandlers={{
-                          click: () => handleMarkerClick(level.actualPosition, level.guessPosition)
+                          click: () => handleMarkerClick(level.actualPosition, level.guessPosition),
                         }}
                       />
 
@@ -314,7 +313,11 @@ export function FinalMap() {
                   <MapBounds positions={allPositions} />
 
                   {/* Map handler to capture map instance */}
-                  <MapHandler onMapReady={(map) => { mapInstanceRef.current = map; }} />
+                  <MapHandler
+                    onMapReady={(map) => {
+                      mapInstanceRef.current = map;
+                    }}
+                  />
 
                   {/* Custom Zoom Controls */}
                   <MapZoomControls />

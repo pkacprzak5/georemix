@@ -1,8 +1,25 @@
+import { useEffect } from "react";
 import { Window, WindowContent } from "@/components/layout/window";
 import { Router } from "@/lib/navigation-system/router";
 import { Minimap } from "./features/minimap/Minimap";
+import { useDataSourceManager } from "@/context/game-state";
 
 function App() {
+  const dataSourceManager = useDataSourceManager();
+
+  // Initialize leaderboard cache when app launches
+  useEffect(() => {
+    const initializeCache = async () => {
+      try {
+        await dataSourceManager.updateAllRoundsCache();
+      } catch (error) {
+        console.error("Failed to initialize leaderboard cache:", error);
+      }
+    };
+
+    initializeCache();
+  }, [dataSourceManager]);
+
   return (
     <>
       <Window

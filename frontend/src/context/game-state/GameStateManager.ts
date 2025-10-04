@@ -3,9 +3,11 @@ import {
   type LevelInfo,
   type LevelResultInfo,
   type MapCoordinates,
+  type PlayerResults,
   DEFAULT_COLORS,
 } from "@/types/project";
 import { BASE_URL } from "@/constants";
+import type { DataSourceManager } from "./DataSourceManager";
 
 // TODO:  I truly grieve that this is not a zustand store.
 export class GameStateManager {
@@ -17,6 +19,9 @@ export class GameStateManager {
   private _currentTheme: "light" | "dark" = "light";
   private _currentColors: Colors = DEFAULT_COLORS;
   private _playerName: string = "";
+
+  /** Whether currently selected stage is finished. */
+  private _isRoundFinished: boolean = false;
 
   // Current Gameplay
   private _currentCoordinates: MapCoordinates | null = null;
@@ -36,6 +41,11 @@ export class GameStateManager {
   constructor() { }
 
   // Getters
+
+  get isRoundFinished(): boolean {
+    return this._isRoundFinished;
+  }
+
   get currentRoundNumber(): number {
     if (this._currentRoundNumber === null) {
       throw new Error("No current round set");
@@ -220,7 +230,60 @@ export class GameStateManager {
     this._currentScore = null;
   }
 
+  /** Uploads user's round results to the server and updates cache. */
+  async submitRoundResults(dataSourceManager: DataSourceManager): Promise<void> {
+    this._isRoundFinished = true;
+
+    if (!this._playerName) {
+      console.error("No player name set");
+      return;
+    }
+
+    const roundResults = this.computeRoundResults();
+
+    try {
+      // Submit to backend
+      await dataSourceManager.submitRoundScore({
+        username: this._playerName,
+        roundNumber: this.currentRoundNumber,
+        score: roundResults.totalScore,
+        time: roundResults.totalTime,
+        minDistance: roundResults.closestCall,
+      });
+
+      // Update cache after successful submission
+      await dataSourceManager.updateRoundCache(this.currentRoundNumber);
+    } catch (error) {
+      console.error("Error submitting round results:", error);
+      throw error;
+    }
+  }
+
+  /** Computes stats included in the leaderboard from finished round. */
+  private computeRoundResults(): PlayerResults {
+    // Reduce over level results and gather essential stats.
+    const results: PlayerResults = this._levelResults.reduce(
+      (prev, curr) => {
+        return {
+          ...prev,
+          totalTime: prev.totalTime + curr.timeTaken,
+          totalScore: prev.totalScore + curr.score,
+          closestCall: Math.min(prev.closestCall, curr.distance),
+        };
+      },
+      {
+        playerName: this.playerName,
+        totalTime: 0,
+        totalScore: 0,
+        closestCall: Infinity,
+      } satisfies PlayerResults
+    );
+
+    return results;
+  }
+
   resetAll() {
+    this._isRoundFinished = false;
     this._currentRoundNumber = null;
     this._currentLevelNumber = null;
     this._levelResults = [];
@@ -245,6 +308,7 @@ export class GameStateManager {
         theme: "light",
         thumbnail: "level_1.jpg",
         number: 1,
+        colors: DEFAULT_COLORS
       },
       {
         initialNode: "mock-node-2", 
@@ -252,6 +316,7 @@ export class GameStateManager {
         theme: "dark",
         thumbnail: "level_2.png",
         number: 2,
+        colors: DEFAULT_COLORS
       },
       {
         initialNode: "mock-node-3",
@@ -259,6 +324,7 @@ export class GameStateManager {
         theme: "light",
         thumbnail: "level_1.jpg",
         number: 3,
+        colors: DEFAULT_COLORS
       },
       {
         initialNode: "mock-node-4",
@@ -266,6 +332,7 @@ export class GameStateManager {
         theme: "dark", 
         thumbnail: "level_2.png",
         number: 4,
+        colors: DEFAULT_COLORS
       },
       {
         initialNode: "mock-node-5",
@@ -273,6 +340,7 @@ export class GameStateManager {
         theme: "light",
         thumbnail: "level_1.jpg", 
         number: 5,
+        colors: DEFAULT_COLORS
       },
     ];
 

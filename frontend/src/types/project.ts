@@ -37,12 +37,6 @@ export type LevelInfo = {
   colors: Colors;
 };
 
-export type LevelResult = {
-  levelId: string;
-  score: number;
-  timeTaken: number;
-};
-
 export type RoundInfo = LevelInfo[];
 
 export type LevelResultInfo = {
@@ -52,3 +46,17 @@ export type LevelResultInfo = {
   answerPosition: MapCoordinates;
   score: number;
 };
+
+/** Temporary structure for player results. */
+export type PlayerResults = {
+  playerName: string;
+  totalTime: number;
+  totalScore: number;
+  closestCall: number;
+};
+
+/** Temporary structure for leaderboard results. */
+export type Leaderboard = Array<{
+  roundNumber: number;
+  results: Array<PlayerResults>;
+}>;

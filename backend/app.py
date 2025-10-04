@@ -1,17 +1,35 @@
-from flask import Flask, jsonify, send_from_directory
-from flask_cors import CORS
 import json
 import os
 from dotenv import load_dotenv
+from flask import Flask, jsonify, send_from_directory
+from flask_cors import CORS, cross_origin
+from models.database import db
+from routes.scoring import register_score_routes
 
-load_dotenv()
+if not load_dotenv():
+    print(".env file not detected.")
 
-BASE_URL = os.getenv("BASE_URL", "http://localhost:5000")
+PORT = int(os.getenv("API_PORT", "5000"))
+HOST = os.getenv("API_HOST", "http://localhost")
+BASE_URL = f"{HOST}:{PORT}"
 IMAGE_ENDPOINT = f"{BASE_URL}/images/"
 
-app = Flask(__name__)
-CORS(app)
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///scores.db")
+CLIENT_ORIGIN = os.getenv("CLIENT_ORIGIN", "http://localhost:5173")
 
+app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+cors = CORS(
+    app, resources={r"/*": {"origins": CLIENT_ORIGIN}}, supports_credentials=True
+)
+
+db.init_app(app)
+register_score_routes(app)
+
+
+# Content endpoints below
 
 def load_round_level_data(round_num, level_num, file_type):
     """Load data from specific round/level folder"""
@@ -23,9 +41,11 @@ def load_round_level_data(round_num, level_num, file_type):
         return None
 
 
+
 def load_metadata(round_num, level_num):
     """Load metadata from specific round/level"""
     return load_round_level_data(round_num, level_num, "metadata")
+
 
 
 def load_nodes(round_num, level_num):
@@ -33,18 +53,19 @@ def load_nodes(round_num, level_num):
     return load_round_level_data(round_num, level_num, "nodes")
 
 
+
 def load_links(round_num, level_num):
     """Load links from specific round/level"""
     return load_round_level_data(round_num, level_num, "links")
 
 
+
 def get_round_levels(round_num):
     """Get all level numbers for a specific round"""
-    import os
-
     round_path = f"rounds/round_{round_num}"
     if not os.path.exists(round_path):
         return []
+
 
     levels = []
     for item in os.listdir(round_path):
@@ -55,6 +76,7 @@ def get_round_levels(round_num):
                 levels.append(level_num)
             except (IndexError, ValueError):
                 continue
+
 
     return sorted(levels)
 
@@ -94,18 +116,14 @@ def get_level_node(round_num, level_num, node_id):
     if not nodes or not links_data:
         return jsonify({"error": "Level data not found"}), 404
 
-    # Find the node
     node_data = next((node for node in nodes if str(node["id"]) == str(node_id)), None)
     if not node_data:
         return jsonify({"error": "Node not found"}), 404
 
-    # Get links for this node
     node_links = links_data.get(str(node_id), [])
 
-    # Build links with position information
     links = []
     for linked_node_id in node_links:
-        # Find the linked node to get GPS for bearing calculation
         linked_node = next(
             (node for node in nodes if str(node["id"]) == str(linked_node_id)), None
         )
@@ -117,7 +135,6 @@ def get_level_node(round_num, level_num, node_id):
                 }
             )
 
-    # Build the response node
     sphere_correction = node_data["sphereCorrection"]
     response_node = {
         "id": str(node_data["id"]),
@@ -131,6 +148,7 @@ def get_level_node(round_num, level_num, node_id):
         },
     }
 
+
     return jsonify(response_node)
 
 
@@ -140,20 +158,19 @@ def get_level_nodes(round_num, level_num):
     nodes = load_nodes(round_num, level_num)
     links_data = load_links(round_num, level_num)
 
+
     if not nodes or not links_data:
         return jsonify({"error": "Level data not found"}), 404
+
 
     response_nodes = []
     for node_data in nodes:
         node_id = str(node_data["id"])
 
-        # Get links for this node
         node_links = links_data.get(node_id, [])
 
-        # Build links with position information
         links = []
         for linked_node_id in node_links:
-            # Find the linked node to get GPS for bearing calculation
             linked_node = next(
                 (node for node in nodes if str(node["id"]) == str(linked_node_id)), None
             )
@@ -165,7 +182,6 @@ def get_level_nodes(round_num, level_num):
                     }
                 )
 
-        # Build the response node
         response_node = {
             "id": node_id,
             "panorama": IMAGE_ENDPOINT + str(node_data["panorama"]),
@@ -177,13 +193,17 @@ def get_level_nodes(round_num, level_num):
         }
         response_nodes.append(response_node)
 
+
     return jsonify(response_nodes)
 
 
+
 @app.route("/images/<path:filename>")
+@cross_origin(origins=CLIENT_ORIGIN, supports_credentials=True)
 def get_image(filename):
     """Serve images from the images directory"""
     return send_from_directory("images", filename)
+
 
 
 @app.route("/thumbnails/<path:filename>")
@@ -192,5 +212,9 @@ def get_thumbnail(filename):
     return send_from_directory("thumbnails", filename)
 
 
+with app.app_context():
+    db.create_all()
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=PORT)

@@ -4,8 +4,11 @@ frontend/dist/
 
 # Backend
 backend/.venv/
+backend/venv/
 *__pycache__/
 backend/*.pyc
+backend/instance/
+backend/*.db
 
 # OS
 .DS_Store
