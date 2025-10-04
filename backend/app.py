@@ -71,9 +71,7 @@ def get_round_levels(round_num):
     for item in os.listdir(round_path):
         item_path = os.path.join(round_path, item)
         if os.path.isdir(item_path) and item.startswith("level_"):
-        if os.path.isdir(item_path) and item.startswith("level_"):
             try:
-                level_num = int(item.split("_")[1])
                 level_num = int(item.split("_")[1])
                 levels.append(level_num)
             except (IndexError, ValueError):
@@ -137,6 +135,7 @@ def get_level_node(round_num, level_num, node_id):
                 }
             )
 
+    sphere_correction = node_data["sphereCorrection"]
     response_node = {
         "id": str(node_data["id"]),
         "panorama": IMAGE_ENDPOINT + str(node_data["panorama"]),
@@ -188,9 +187,6 @@ def get_level_nodes(round_num, level_num):
             "panorama": IMAGE_ENDPOINT + str(node_data["panorama"]),
             "links": links,
             "gps": node_data["gps"],
-            "panoData": {
-                "poseHeading": (node_data["sphereCorrection"]["pan"]) / 180 * 3.14
-            },
             "panoData": {
                 "poseHeading": (node_data["sphereCorrection"]["pan"]) / 180 * 3.14
             },

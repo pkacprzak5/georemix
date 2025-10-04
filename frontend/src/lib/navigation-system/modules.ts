@@ -50,7 +50,10 @@ export const levelEndGroup: Module = {
 
 export const gameEndGroup: Module = {
   id: moduleIdMap.FINAL,
-  pages: [{ id: "final-result", component: FinalResult, title: "Summary", showStars: true }],
+   pages: [
+    { id: "final-result", component: FinalResult, title: "Summary" },
+    { id: "final-map", component: FinalMap, title: "Final Map" },
+  ],
 
 };
 
