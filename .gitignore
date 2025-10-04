@@ -20,6 +20,9 @@ Thumbs.db
 
 .env
 ignore*
+
+pipeline/pictures/
+pipeline/logs/
 images_1
 images_2
 cracow
