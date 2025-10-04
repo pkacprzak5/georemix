@@ -15,6 +15,8 @@ const WINDOW_HEIGHT_MINIMIZED = 200;
 const WINDOW_WIDTH_MAXIMIZED_RATIO = 0.3;
 const WINDOW_HEIGHT_MAXIMIZED_RATIO = 0.3;
 
+const WINDOW_CLOSE_TIMEOUT = 300;
+
 export function WelcomePage() {
   const gameStateManager = useGameStateManager();
   const dataSourceManager = useDataSourceManager();
@@ -23,6 +25,7 @@ export function WelcomePage() {
   const [isCheckingName, setIsCheckingName] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
   const [existingPlayerName, setExistingPlayerName] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
     position,
@@ -74,6 +77,7 @@ export function WelcomePage() {
     setIsCheckingName(true);
     setNameError(null);
     setExistingPlayerName(null);
+    setErrorMessage(null);
 
     try {
       const isAvailable = await dataSourceManager.checkUsernameAvailability(trimmedName);
@@ -88,18 +92,20 @@ export function WelcomePage() {
       gameStateManager.setPlayerName(trimmedName);
       navigateTo(moduleIdMap.INTRO, "stage-picker");
     } catch (error) {
-      const defaultMessage = "Nie udalo sie zweryfikowac nazwy gracza. Sprobuj ponownie.";
+      const defaultMessage =
+        "Nie udało się zweryfikować nazwy gracza. Daj nam moment i spróbuj ponownie później.";
+      let message: string | null = defaultMessage;
+
       if (error instanceof ApiError) {
         if (error.status === 409) {
-          setNameError("Ktos wlasnie zajal te nazwe! Wpisz inna propozycje.");
+          message = null;
         } else if (error.status >= 500) {
-          setNameError("Serwer chwilowo nie odpowiada. Daj nam moment i sprobuj ponownie.");
-        } else {
-          setNameError(defaultMessage);
+          message = "Serwer chwilowo nie odpowiada. Daj nam moment i spróbuj ponownie później.";
         }
-      } else {
-        setNameError(defaultMessage);
       }
+
+      setErrorMessage(message);
+      handleOpen();
     } finally {
       setIsCheckingName(false);
     }
@@ -117,14 +123,19 @@ export function WelcomePage() {
 
     gameStateManager.setPlayerName(trimmedName);
     setExistingPlayerName(null);
-    setNameError(null);
     navigateTo(moduleIdMap.INTRO, "stage-picker");
   };
 
   const handleRejectExistingPlayer = () => {
     handleClose();
     setExistingPlayerName(null);
-    setNameError("Wybierz inna nazwe gracza, aby utworzyc nowy profil.");
+  };
+
+  const handleCloseError = () => {
+    handleClose();
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, WINDOW_CLOSE_TIMEOUT);
   };
 
   return (
@@ -142,7 +153,7 @@ export function WelcomePage() {
 
         <div className="space-y-4 max-w-md mx-auto">
           <InputButton
-            placeholder="Podaj nazwe gracza"
+            placeholder="Wprowadź nazwę gracza"
             value={playerName}
             onChange={setPlayerName}
             onSubmit={handleStartGame}
@@ -152,6 +163,8 @@ export function WelcomePage() {
 
           {isVisible && (
             <Window
+              disableMaximize
+              disableMinimize
               title="alert.exe"
               position={position}
               setPosition={setPosition}
@@ -159,38 +172,42 @@ export function WelcomePage() {
               style={style}
               onMaximize={handleMaximize}
               onMinimize={handleMinimize}
-              onClose={handleRejectExistingPlayer}>
+              onClose={errorMessage ? handleCloseError : handleRejectExistingPlayer}>
               <WindowContent className="w-full h-full relative p-4">
                 <div className="flex flex-col justify-between h-full">
-                  <span>
-                    Nazwa <span className="font-heading uppercase">{existingPlayerName}</span> jest
-                    juz aktywna. Kontynuuj jako ten gracz, aby nadpisac jego aktualne wyniki, lub
-                    wybierz inna nazwe.
-                  </span>
-                  <div className="flex flex-wrap justify-around mt-4 gap-4">
-                    <Button
-                      onClick={handleRejectExistingPlayer}
-                      className="bg-secondary-background text-foreground">
-                      Wybierz inna nazwe
-                    </Button>
-                    <Button
-                      onClick={handleConfirmExistingPlayer}
-                      className="bg-main text-foreground">
-                      Kontunuuj jako
-                      <span className="font-heading uppercase">{existingPlayerName}</span>
-                    </Button>
-                  </div>
+                  {errorMessage ? (
+                    <>
+                      <span>{errorMessage}</span>
+                      <div className="flex justify-center mt-4">
+                        <Button onClick={handleCloseError} className="bg-main text-foreground">
+                          Zamknij
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <span>
+                        Nazwa <span className="font-heading">{existingPlayerName}</span>
+                        jest już aktywna. Kontynuując nadpiszesz aktualne wyniki tego gracza.
+                      </span>
+                      <div className="flex flex-wrap justify-around mt-4 gap-4">
+                        <Button
+                          onClick={handleRejectExistingPlayer}
+                          className="bg-secondary-background text-foreground">
+                          Wybierz inną nazwę
+                        </Button>
+                        <Button
+                          onClick={handleConfirmExistingPlayer}
+                          className="bg-main text-foreground">
+                          Kontynuuj jako
+                          <span className="font-heading">{existingPlayerName}</span>
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </div>
               </WindowContent>
             </Window>
-          )}
-
-          {!isCheckingName && !existingPlayerName && nameError && (
-            <div className="min-h-[3rem] space-y-3">
-              <div className="rounded-base border-2 border-border bg-secondary-background px-4 py-3 text-sm font-base text-red-600 shadow-shadow">
-                {nameError}
-              </div>
-            </div>
           )}
 
           <ButtonLarge

@@ -19,6 +19,9 @@ type WindowLayoutProps = {
   onClose?: () => void;
   onMinimize?: () => void;
   onMaximize?: () => void;
+  disableMinimize?: boolean;
+  disableMaximize?: boolean;
+  disableClose?: boolean;
 } & React.ComponentProps<"div">;
 
 function WindowLayout({
@@ -31,6 +34,9 @@ function WindowLayout({
   onClose,
   onMinimize,
   onMaximize,
+  disableMinimize = false,
+  disableMaximize = false,
+  disableClose = false,
   style,
   ...props
 }: WindowLayoutProps) {
@@ -120,46 +126,52 @@ function WindowLayout({
           {/* Header Icons */}
           <div className="flex gap-1 ml-2">
             {/* Minimize */}
-            <button
-              onClick={(e) => {
-                setMaximized(false);
-                handleIconClick(e, onMinimize);
-              }}
-              className="window-button"
-              aria-label="Minimize">
-              <span className="text-xs font-bold">
-                <Minus />
-              </span>
-            </button>
+            {!disableMinimize && (
+              <button
+                onClick={(e) => {
+                  setMaximized(false);
+                  handleIconClick(e, onMinimize);
+                }}
+                className="window-button"
+                aria-label="Minimize">
+                <span className="text-xs font-bold">
+                  <Minus />
+                </span>
+              </button>
+            )}
 
             {/* Maximize & minimize */}
-            <button
-              onClick={(e) => {
-                if (!maximized) {
-                  handleIconClick(e, onMaximize);
-                } else {
-                  handleIconClick(e, onMinimize);
-                }
-                setMaximized(!maximized);
-              }}
-              className="window-button"
-              aria-label="Maximize">
-              <span className="text-xs font-bold flex items-center justify-center">
-                {!maximized ? (
-                  <Copy transform="scale(-1,1)" size={"60%"} />
-                ) : (
-                  <Square size={"70%"} />
-                )}
-              </span>
-            </button>
+            {!disableMaximize && (
+              <button
+                onClick={(e) => {
+                  if (!maximized) {
+                    handleIconClick(e, onMaximize);
+                  } else {
+                    handleIconClick(e, onMinimize);
+                  }
+                  setMaximized(!maximized);
+                }}
+                className="window-button"
+                aria-label="Maximize">
+                <span className="text-xs font-bold flex items-center justify-center">
+                  {!maximized ? (
+                    <Copy transform="scale(-1,1)" size={"60%"} />
+                  ) : (
+                    <Square size={"70%"} />
+                  )}
+                </span>
+              </button>
+            )}
 
             {/* Close */}
-            <button
-              onClick={(e) => handleIconClick(e, onClose)}
-              className="window-button"
-              aria-label="Close">
-              <X />
-            </button>
+            {!disableClose && (
+              <button
+                onClick={(e) => handleIconClick(e, onClose)}
+                className="window-button"
+                aria-label="Close">
+                <X />
+              </button>
+            )}
           </div>
         </div>
 
