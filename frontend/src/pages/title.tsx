@@ -37,10 +37,10 @@ export function TitlePage() {
       <div className="text-center">
         <div className="mb-8">
           {showLogo && (
-            <div className="animate-fade-in flex items-center justify-center gap-20">
-              <NvidiaLogo className=" w-[30%] h-[50%]" />
-              <X size={"80px"} className="ml-[-50px]" />
-              <BitLogo className=" w-[30%] h-[50%]" />
+            <div className="animate-fade-in flex items-center justify-center gap-20 3xl:gap-24 4xl:gap-32 5xl:gap-40">
+              <NvidiaLogo className="w-[30%] h-[50%] 3xl:w-[32%] 4xl:w-[35%] 5xl:w-[38%]" />
+              <X size={"80px"} className="ml-[-50px] 3xl:w-24 3xl:h-24 4xl:w-28 4xl:h-28 5xl:w-32 5xl:h-32 3xl:ml-[-60px] 4xl:ml-[-70px] 5xl:ml-[-80px]" />
+              <BitLogo className="w-[30%] h-[50%] 3xl:w-[32%] 4xl:w-[35%] 5xl:w-[38%]" />
             </div>
           )}
         </div>

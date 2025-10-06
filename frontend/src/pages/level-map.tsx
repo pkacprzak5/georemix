@@ -144,15 +144,15 @@ export function LevelMap() {
   }
 
   return (
-    <div className="flex items-center h-full justify-center min-h-full bg-background p-4">
-      <div className="max-w-4xl w-full flex flex-col justify-center h-full space-y-6">
+    <div className="flex items-center h-full justify-center min-h-full bg-background p-4 3xl:p-6 4xl:p-8 5xl:p-10">
+      <div className="max-w-[80%] w-full flex flex-col justify-center h-full space-y-6 3xl:space-y-8 4xl:space-y-10">
         {/* Map Container with Legend Card Overlay */}
-        <div className="relative flex-1 max-h-[80%] min-h-[400px]">
+        <div className="relative flex-1 max-h-[80%] min-h-[400px] 3xl:min-h-[500px] 4xl:min-h-[600px] 5xl:min-h-[700px]">
           {/* Legend Card - positioned outside bounds with higher z-index */}
           <div className=" absolute -top-2 z-[2000] p-0 -left-2">
             <Card className="p-0 bg-secondary-background gradient">
-              <CardContent className="px-3 py-2">
-                <div className="space-y-2 text-sm">
+              <CardContent className="px-3 py-2 3xl:px-4 3xl:py-3 4xl:px-5 4xl:py-4">
+                <div className="space-y-2 3xl:space-y-3 4xl:space-y-4 text-sm 3xl:text-base 4xl:text-lg 5xl:text-xl">
                   <div className="flex items-center space-x-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

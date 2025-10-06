@@ -188,17 +188,17 @@ export function FinalMap() {
   }
 
   return (
-    <div className="flex items-center h-full justify-center min-h-full bg-background space-y-8 p-6">
-      <div className="max-w-6xl w-full flex flex-col justify-center h-full space-y-8">
+    <div className="flex items-center h-full justify-center min-h-full bg-background space-y-8 3xl:space-y-10 4xl:space-y-12 p-6 3xl:p-8 4xl:p-10 5xl:p-12">
+      <div className="max-w-[80%] w-full flex flex-col justify-center h-full space-y-8 3xl:space-y-10 4xl:space-y-12">
         {/* Map Container with Legend Card Overlay */}
-        <div className="relative flex-1 h-[80%] min-h-[500px]">
+        <div className="relative flex-1 h-[80%] min-h-[500px] 3xl:min-h-[600px] 4xl:min-h-[700px] 5xl:min-h-[800px]">
           {/* Legend Card - positioned outside bounds with higher z-index */}
-          <div className="absolute -top-2 z-[2000] p-0 -left-2 max-w-xs">
+          <div className="absolute -top-2 z-[2000] p-0 -left-2 max-w-xs 3xl:max-w-sm 4xl:max-w-md 5xl:max-w-lg">
             <Card className="p-0 bg-secondary-background gradient">
-              <CardContent className="px-3 py-2">
-                <div className="space-y-3">
-                  <div className="text-sm font-bold text-foreground mb-2">Legenda:</div>
-                  <div className="space-y-2 text-xs max-h-64 overflow-y-auto">
+              <CardContent className="px-3 py-2 3xl:px-4 3xl:py-3 4xl:px-5 4xl:py-4">
+                <div className="space-y-3 3xl:space-y-4 4xl:space-y-5">
+                  <div className="text-sm 3xl:text-base 4xl:text-lg 5xl:text-xl font-bold text-foreground mb-2">Legenda:</div>
+                  <div className="space-y-2 3xl:space-y-3 text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg max-h-64 3xl:max-h-80 4xl:max-h-96 overflow-y-auto">
                     {levelsData.map((level) => (
                       <div key={level.levelNumber} className="space-y-1">
                         <div className="flex items-center space-x-2">

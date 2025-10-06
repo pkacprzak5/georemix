@@ -34,11 +34,25 @@ function selectWeightedIcon() {
   return ICONS[0]; // Fallback to first icon
 }
 
+// Helper function to get base size based on viewport width
+function getBaseSize(viewportWidth: number): number {
+  const breakpoints = CONFIG.SIZE_BREAKPOINTS;
+  
+  // Find the largest breakpoint that the viewport width exceeds
+  for (let i = breakpoints.length - 1; i >= 0; i--) {
+    if (viewportWidth >= breakpoints[i].minWidth) {
+      return breakpoints[i].baseSize;
+    }
+  }
+  
+  return CONFIG.BASE_SIZE; // Fallback
+}
+
 // Configurable constants
 const CONFIG = {
   BASE_STAR_COUNT: 8,               // Base number of stars for narrow containers
   STARS_PER_100PX: 4,               // Additional stars per 100px of width
-  BASE_SIZE: 50,                    // Base size for stars
+  BASE_SIZE: 50,                    // Base size for stars (default breakpoint)
   SIZE_RANDOM_OFFSET: 15,           // Random size variation (+/-)
   Y_MARGIN: 100,                    // Base vertical spacing between stars
   Y_RANDOM_OFFSET: 30,              // Random vertical offset (+/-)
@@ -50,6 +64,13 @@ const CONFIG = {
   COLORS: [
     "var(--main)",
     "var(--secondary-background)",
+  ],
+  // Responsive base size based on viewport width
+  SIZE_BREAKPOINTS: [
+    { minWidth: 0, baseSize: 50 },      // Default (< 1920px)
+    { minWidth: 1920, baseSize: 60 },   // 3xl breakpoint
+    { minWidth: 2560, baseSize: 70 },   // 4xl breakpoint
+    { minWidth: 3840, baseSize: 85 },   // 5xl breakpoint
   ],
 };
 
@@ -83,22 +104,24 @@ export default function EdgeStars({
 }: EdgeStarsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(0);
 
-  // Measure container width
+  // Measure container and viewport width
   useEffect(() => {
     if (!containerRef.current) {
       return;
     }
 
-    const updateWidth = () => {
+    const updateDimensions = () => {
       if (containerRef.current) {
         setContainerWidth(containerRef.current.offsetWidth);
       }
+      setViewportWidth(window.innerWidth);
     };
 
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
   const showMiddleColumn = containerWidth >= CONFIG.MIN_WIDTH_FOR_MIDDLE;
@@ -118,6 +141,9 @@ export default function EdgeStars({
     let currentY = 40; // Starting Y position
     let lastPosition: 'left' | 'right' | 'middle' | null = null;
     let consecutiveCount = 0;
+
+    // Get responsive base size based on viewport width
+    const responsiveBaseSize = getBaseSize(viewportWidth);
 
     // Available positions based on whether middle column is shown
     const availablePositions: Array<'left' | 'right' | 'middle'> = showMiddleColumn 
@@ -155,8 +181,8 @@ export default function EdgeStars({
         lastPosition = position;
       }
       
-      // Calculate size with random offset
-      const size = CONFIG.BASE_SIZE + (Math.random() * CONFIG.SIZE_RANDOM_OFFSET * 2 - CONFIG.SIZE_RANDOM_OFFSET);
+      // Calculate size with random offset using responsive base size
+      const size = responsiveBaseSize + (Math.random() * CONFIG.SIZE_RANDOM_OFFSET * 2 - CONFIG.SIZE_RANDOM_OFFSET);
       
       // Calculate Y position with random offset
       const yOffset = Math.random() * CONFIG.Y_RANDOM_OFFSET * 2 - CONFIG.Y_RANDOM_OFFSET;
@@ -213,7 +239,7 @@ export default function EdgeStars({
     }
 
     return generatedStars;
-  }, [reverse, paddingLeft, paddingRight, showMiddleColumn, containerWidth, starCount]); // Regenerate if any prop changes
+  }, [reverse, paddingLeft, paddingRight, showMiddleColumn, containerWidth, starCount, viewportWidth]); // Regenerate if any prop changes
 
   return (
     <div

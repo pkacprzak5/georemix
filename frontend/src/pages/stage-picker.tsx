@@ -14,17 +14,17 @@ export function StagePicker() {
 
   return (
     <div className="flex items-center justify-center min-h-full">
-      <div className="w-full max-w-lg space-y-6">
-        <div className="space-y-10">
-          <ButtonLarge onClick={() => handleRoundSelect(1)} className="w-full">
+      <div className="w-full max-w-lg 3xl:max-w-xl 4xl:max-w-2xl 5xl:max-w-3xl space-y-6 3xl:space-y-8 4xl:space-y-10">
+        <div className="space-y-10 3xl:space-y-12 4xl:space-y-16">
+          <ButtonLarge onClick={() => handleRoundSelect(1)} className="w-full 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
             Rozgrywka 1
           </ButtonLarge>
 
-          <ButtonLarge disabled onClick={() => handleRoundSelect(2)} className="w-full">
+          <ButtonLarge disabled onClick={() => handleRoundSelect(2)} className="w-full 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
             Rozgrywka 2: Dostępna wkrótce
           </ButtonLarge>
 
-          <ButtonLarge disabled onClick={() => handleRoundSelect(3)} className="w-full">
+          <ButtonLarge disabled onClick={() => handleRoundSelect(3)} className="w-full 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
             Rozgrywka 3: Dostępna wkrótce
           </ButtonLarge>
         </div>
