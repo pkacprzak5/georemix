@@ -22,6 +22,7 @@ type WindowLayoutProps = {
   disableMinimize?: boolean;
   disableMaximize?: boolean;
   disableClose?: boolean;
+  iconMaximisedByDefault?: boolean;
 } & React.ComponentProps<"div">;
 
 function WindowLayout({
@@ -37,6 +38,7 @@ function WindowLayout({
   disableMinimize = false,
   disableMaximize = false,
   disableClose = false,
+  iconMaximisedByDefault = true,
   style,
   ...props
 }: WindowLayoutProps) {
@@ -155,7 +157,7 @@ function WindowLayout({
                 className="window-button"
                 aria-label="Maximize">
                 <span className="text-xs font-bold flex items-center justify-center">
-                  {!maximized ? (
+                  {maximized !== iconMaximisedByDefault ? (
                     <Copy transform="scale(-1,1)" size={"60%"} />
                   ) : (
                     <Square size={"70%"} />

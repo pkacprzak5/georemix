@@ -97,8 +97,8 @@ export default function MapViewer() {
       </MapContainer>
       <div
         style={{ opacity: position ? 1 : 0, pointerEvents: position ? "auto" : "none" }}
-        className="absolute bottom-4 left-1/2 transform transition-opacity duration-200 ease-in-out -translate-x-1/2 z-[1000]">
-        <Button onClick={handleSubmit} className="relative z-[1000]">
+        className="absolute 2xl:w-[50%] w-[4ּ0%] max-w-[200px] bottom-4 left-1/2 transform transition-opacity duration-200 ease-in-out -translate-x-1/2 z-[1000]">
+        <Button onClick={handleSubmit} className="relative z-[1000] w-full">
           To tutaj!
         </Button>
       </div>
