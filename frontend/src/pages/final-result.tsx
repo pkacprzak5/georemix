@@ -58,7 +58,6 @@ export function FinalResult() {
     shortestDistance: number;
   } | null>(null);
 
-
   // Probably has to be moved
   useEffect(() => {
     try {
@@ -198,7 +197,9 @@ export function FinalResult() {
                     <div className="text-6xl 3xl:text-7xl 4xl:text-8xl 5xl:text-9xl font-bold text-background dark:text-foreground font-outline-1 mb-2 3xl:mb-3 4xl:mb-4">
                       {animatedTotalScore}
                     </div>
-                    <div className="text-lg 3xl:text-xl 4xl:text-2xl 5xl:text-3xl text-muted-foreground mb-4">CAŁKOWITY WYNIK</div>
+                    <div className="text-lg 3xl:text-xl 4xl:text-2xl 5xl:text-3xl text-muted-foreground mb-4">
+                      CAŁKOWITY WYNIK
+                    </div>
                   </div>
 
                   {/* Progress Section */}
@@ -220,22 +221,32 @@ export function FinalResult() {
             {/* Total Time Card - spans 1 column, 1 row (1x1) */}
             <Card className="bg-secondary-background gradient">
               <CardContent className="text-center flex items-center justify-center flex-col h-full py-1 3xl:py-2 4xl:py-3">
-                <Clock className="mx-auto mb-4 3xl:mb-5 4xl:mb-6 text-main 3xl:w-9 3xl:h-9 4xl:w-11 4xl:h-11 5xl:w-14 5xl:h-14" size={28} />
+                <Clock
+                  className="mx-auto mb-4 3xl:mb-5 4xl:mb-6 text-main 3xl:w-9 3xl:h-9 4xl:w-11 4xl:h-11 5xl:w-14 5xl:h-14"
+                  size={28}
+                />
                 <div className="text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3">
                   {formatTime(animatedTotalTime)}
                 </div>
-                <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground">CAŁKOWITY CZAS</div>
+                <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground whitespace-nowrap">
+                  CAŁKOWITY CZAS
+                </div>
               </CardContent>
             </Card>
 
             {/* Shortest Distance Card - spans 1 column, 1 row (1x1) */}
             <Card className="bg-secondary-background gradient">
               <CardContent className="text-center flex items-center justify-center flex-col h-full py-1 3xl:py-2 4xl:py-3">
-                <MapPin className="mx-auto mb-4 3xl:mb-5 4xl:mb-6 text-main 3xl:w-9 3xl:h-9 4xl:w-11 4xl:h-11 5xl:w-14 5xl:h-14" size={28} />
-                <div className="text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3">
+                <MapPin
+                  className="mx-auto mb-4 3xl:mb-5 4xl:mb-6 text-main 3xl:w-9 3xl:h-9 4xl:w-11 4xl:h-11 5xl:w-14 5xl:h-14"
+                  size={28}
+                />
+                <div className="text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3 whitespace-nowrap">
                   {formatDistance(animatedShortestDistance)}
                 </div>
-                <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground">NAJKRÓTSZY DYSTANS</div>
+                <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground ">
+                  NAJKRÓTSZY DYSTANS
+                </div>
               </CardContent>
             </Card>
           </div>

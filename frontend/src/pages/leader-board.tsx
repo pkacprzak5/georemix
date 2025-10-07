@@ -65,7 +65,7 @@ const leaderboardColumns: RankingColumn<PlayerResults>[] = [
   },
 ];
 
-const ESTIMATED_PAGE_CONTENT_HEIGHT = 300;
+const ESTIMATED_PAGE_CONTENT_HEIGHT = 350;
 const ESTIMATED_ROW_HEIGHT = 65;
 
 export function LeaderBoardPage() {
@@ -155,12 +155,12 @@ export function LeaderBoardPage() {
         </Tabs>
 
         <div className="flex w-full gap-8">
-          <ButtonLarge onClick={() => navigateTo(moduleIdMap.INTRO, "welcome-page")}>
+          <ButtonLarge className="whitespace-nowrap" onClick={() => navigateTo(moduleIdMap.INTRO, "welcome-page")}>
             <ArrowLeft className="mt-1" /> Powrót do Menu
           </ButtonLarge>
           {gameStateManager.isRoundFinished && (
-            <ButtonLarge onClick={() => navigateTo(moduleIdMap.FINAL, "final-result")}>
-              Powrót do Podsumowania <ScrollText className="mt-1" />
+            <ButtonLarge className="whitespace-nowrap" onClick={() => navigateTo(moduleIdMap.FINAL, "final-result")}>
+              Powrót do Podsumowania <ScrollText className=" whitespace-nowrap mt-1" />
             </ButtonLarge>
           )}
         </div>

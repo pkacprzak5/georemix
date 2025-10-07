@@ -57,7 +57,7 @@ const CONFIG = {
   Y_MARGIN: 100,                    // Base vertical spacing between stars
   Y_RANDOM_OFFSET: 30,              // Random vertical offset (+/-)
   X_RANDOM_OFFSET_PERCENT: 15,      // Random horizontal offset as % of container width
-  DEFAULT_PADDING: 0,               // Default padding from edges (in pixels)
+  DEFAULT_PADDING: 50,               // Default padding from edges (in pixels)
   MIN_WIDTH_FOR_MIDDLE: 150,        // Minimum width (px) to show middle column
   MIDDLE_X_OFFSET_PERCENT: 10,      // Random horizontal offset for middle stars (% of width)
   MAX_CONSECUTIVE_SAME_POSITION: 2, // Maximum times same position can appear in a row
