@@ -156,7 +156,7 @@ export function LevelSummary() {
             <div className="grid grid-cols-2 gap-4 3xl:gap-5 4xl:gap-6 5xl:gap-8 w-full">
               <Card className="bg-secondary-background gradient">
                 <CardContent className="text-center">
-                  <div className="text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3">
+                  <div className="text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3 whitespace-nowrap">
                     {formatDistance(animatedDistance)}
                   </div>
                   <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground">DYSTANS</div>

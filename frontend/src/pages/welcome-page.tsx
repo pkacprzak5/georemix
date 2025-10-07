@@ -164,7 +164,7 @@ export function WelcomePage() {
             onChange={setPlayerName}
             onSubmit={handleStartGame}
             className="w-full 3xl:text-xl 4xl:text-2xl 5xl:text-2xl"
-            disabled={nameError !== null}
+            disabled={nameError !== null || isCheckingName || !!existingPlayerName}
           />
 
           {isVisible && (
