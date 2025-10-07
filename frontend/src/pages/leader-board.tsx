@@ -126,7 +126,7 @@ export function LeaderBoardPage() {
   }
 
   return (
-    <div className="flex justify-center min-h-full p-8 3xl:p-10 4xl:p-12 5xl:p-16">
+    <div className="flex justify-center items-center min-h-full p-8 3xl:p-10 4xl:p-12 5xl:p-16">
       <div className="w-[900px] 3xl:w-[1100px] 4xl:w-[1400px] 5xl:w-[1800px] flex flex-col gap-8 3xl:gap-10 4xl:gap-12">
         <Tabs className="shadow-shadow rounded-base" defaultValue={defaultRound.toString()}>
           <TabsList className="grid p-0 w-full rounded-b-none grid-cols-3 gap-0 overflow-hidden h-12 3xl:h-14 4xl:h-16 5xl:h-20 border-b-0">
