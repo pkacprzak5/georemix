@@ -14,12 +14,13 @@ export function StagePicker() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-full">
-      <div className="w-full max-w-xl 3xl:max-w-xl 4xl:max-w-2xl 5xl:max-w-3xl space-y-6 3xl:space-y-8 4xl:space-y-10">
-        {/* Header */}
-        <h1 className="leading-normal text-center mb-20">
+    <div className="flex items-center flex-col justify-center min-h-full">
+      <h1 className="leading-normal text-center mb-20">
           <StylisedSpan showStars>Wybierz rozgrywkę!</StylisedSpan>
         </h1>
+      <div className="w-full max-w-xl 3xl:max-w-xl 4xl:max-w-2xl 5xl:max-w-3xl space-y-6 3xl:space-y-8 4xl:space-y-10">
+        {/* Header */}
+        
 
         <div className="space-y-10 3xl:space-y-12 4xl:space-y-16">
           <ButtonLarge onClick={() => handleRoundSelect(1)} className="w-full 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
