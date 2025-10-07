@@ -6,6 +6,7 @@ import { ArrowLeft, Trophy } from "lucide-react";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapZoomControls } from "@/components/ui/map-zoom-controls";
+import EdgeStars from "@/components/ui/edge-stars";
 import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
@@ -112,6 +113,7 @@ export function FinalMap() {
   useEffect(() => {
     try {
       const allResults = gameStateManager.allLevelResults;
+      const allLevels = gameStateManager.allLevels;
 
       const mappedData: LevelMapData[] = allResults.map((result, index) => ({
         levelNumber: index + 1,
@@ -121,7 +123,8 @@ export function FinalMap() {
           number,
           number,
         ],
-        color: levelColors[index % levelColors.length],
+        // Get color from level info's main color, fallback to levelColors array
+        color: allLevels[index]?.colors?.main || levelColors[index % levelColors.length],
       }));
 
       setLevelsData(mappedData);
@@ -188,8 +191,13 @@ export function FinalMap() {
   }
 
   return (
-    <div className="flex items-center h-full justify-center min-h-full bg-background space-y-8 3xl:space-y-10 4xl:space-y-12 p-6 3xl:p-8 4xl:p-10 5xl:p-12">
-      <div className="max-w-[80%] w-full flex flex-col justify-center h-full space-y-8 3xl:space-y-10 4xl:space-y-12">
+    <div className="flex items-center h-full justify-center min-h-full bg-background relative">
+      <div className="w-[15%] h-full">
+        <EdgeStars className="h-full" baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
+      </div>
+
+      {/* Main content - 80% width */}
+      <div className="w-[70%] h-full max-h-[80vh] flex flex-col justify-center space-y-8 3xl:space-y-10 4xl:space-y-12 p-6 3xl:p-8 4xl:p-10 5xl:p-12">
         {/* Map Container with Legend Card Overlay */}
         <div className="relative flex-1 h-[80%] min-h-[500px] 3xl:min-h-[600px] 4xl:min-h-[700px] 5xl:min-h-[800px]">
           {/* Legend Card - positioned outside bounds with higher z-index */}
@@ -336,6 +344,11 @@ export function FinalMap() {
             Tabela Wyników <Trophy className="mt-1" />
           </ButtonLarge>
         </div>
+      </div>
+
+      {/* Right EdgeStars - 10% width */}
+      <div className="w-[15%] h-full">
+        <EdgeStars className="h-full" reverse baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
       </div>
     </div>
   );

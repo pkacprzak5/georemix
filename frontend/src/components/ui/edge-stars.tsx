@@ -8,6 +8,9 @@ interface EdgeStarsProps {
   reverse?: boolean;
   paddingLeft?: number;   // Minimum distance from left edge in pixels
   paddingRight?: number;  // Minimum distance from right edge in pixels
+  baseStarCount?: number; // Base number of stars for narrow containers
+  starsPerHundredPx?: number; // Additional stars per 100px of width
+  yMargin?: number; // Base vertical spacing between stars
 }
 
 // Available icon components with weights (higher weight = more frequent)
@@ -83,8 +86,11 @@ const CONFIG = {
  * 
  * @param className - Additional CSS classes
  * @param reverse - Not used in random mode, kept for backwards compatibility
- * @param paddingLeft - Minimum distance from left edge in pixels (default: 0px)
- * @param paddingRight - Minimum distance from right edge in pixels (default: 0px)
+ * @param paddingLeft - Minimum distance from left edge in pixels (default: 50px)
+ * @param paddingRight - Minimum distance from right edge in pixels (default: 50px)
+ * @param baseStarCount - Base number of stars for narrow containers (default: 8)
+ * @param starsPerHundredPx - Additional stars per 100px of width (default: 4)
+ * @param yMargin - Base vertical spacing between stars (default: 100)
  * 
  * @example
  * // Stars with custom left padding
@@ -93,6 +99,9 @@ const CONFIG = {
  * // Stars with different padding for each side
  * <EdgeStars className="lg:block hidden" paddingLeft={30} paddingRight={50} />
  * 
+ * // Less dense stars for map pages
+ * <EdgeStars baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
+ * 
  * // Wider container automatically gets more stars proportionally
  * <EdgeStars className="w-[20%] lg:block hidden" />
  */
@@ -100,7 +109,10 @@ export default function EdgeStars({
   className, 
   reverse, 
   paddingLeft = CONFIG.DEFAULT_PADDING,
-  paddingRight = CONFIG.DEFAULT_PADDING 
+  paddingRight = CONFIG.DEFAULT_PADDING,
+  baseStarCount = CONFIG.BASE_STAR_COUNT,
+  starsPerHundredPx = CONFIG.STARS_PER_100PX,
+  yMargin = CONFIG.Y_MARGIN
 }: EdgeStarsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -129,11 +141,11 @@ export default function EdgeStars({
   // Calculate number of stars based on container width
   const starCount = useMemo(() => {
     if (containerWidth === 0) {
-      return CONFIG.BASE_STAR_COUNT;
+      return baseStarCount;
     }
-    const additionalStars = Math.floor((containerWidth / 100) * CONFIG.STARS_PER_100PX);
-    return Math.max(CONFIG.BASE_STAR_COUNT, CONFIG.BASE_STAR_COUNT + additionalStars);
-  }, [containerWidth]);
+    const additionalStars = Math.floor((containerWidth / 100) * starsPerHundredPx);
+    return Math.max(baseStarCount, baseStarCount + additionalStars);
+  }, [containerWidth, baseStarCount, starsPerHundredPx]);
 
   // Generate stars with consistent random values using useMemo
   const stars = useMemo(() => {
@@ -235,11 +247,11 @@ export default function EdgeStars({
       });
 
       // Increment Y for next star
-      currentY += CONFIG.Y_MARGIN;
+      currentY += yMargin;
     }
 
     return generatedStars;
-  }, [reverse, paddingLeft, paddingRight, showMiddleColumn, containerWidth, starCount, viewportWidth]); // Regenerate if any prop changes
+  }, [reverse, paddingLeft, paddingRight, showMiddleColumn, containerWidth, starCount, viewportWidth, yMargin]); // Regenerate if any prop changes
 
   return (
     <div

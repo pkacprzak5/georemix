@@ -3,7 +3,7 @@ import { moduleIdMap } from "@/lib/navigation-system/types";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StylisedSpan from "@/components/ui/stylised-span";
-import { ArrowLeft } from "lucide-react";
+import { Earth } from "lucide-react";
 
 export function AboutPage() {
   const { navigateTo } = useNavigation();
@@ -42,9 +42,11 @@ export function AboutPage() {
             </CardContent>
           </Card>
 
-          <ButtonLarge onClick={handleGoBack} className="w-full mt-8 3xl:mt-10 4xl:mt-12 5xl:mt-16 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
-            <ArrowLeft className="mt-1 3xl:w-6 3xl:h-6 4xl:w-7 4xl:h-7 5xl:w-8 5xl:h-8" />
+          <ButtonLarge
+            onClick={handleGoBack}
+            className="w-full mt-8 3xl:mt-10 4xl:mt-12 5xl:mt-16 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
             Powrót do Menu Głównego
+            <Earth className="mt-1 3xl:w-6 3xl:h-6 4xl:w-7 4xl:h-7 5xl:w-8 5xl:h-8" />
           </ButtonLarge>
         </div>
 
@@ -56,7 +58,9 @@ export function AboutPage() {
               <StylisedSpan>Zasady Gry</StylisedSpan>
             </CardTitle>
             <div>
-              <h3 className="text-lg 3xl:text-xl 4xl:text-2xl 5xl:text-3xl font-bold text-foreground mb-2 mt-6">Przebieg rozgrywki</h3>
+              <h3 className="text-lg 3xl:text-xl 4xl:text-2xl 5xl:text-3xl font-bold text-foreground mb-2 mt-6">
+                Przebieg rozgrywki
+              </h3>
               <p className="text-foreground leading-relaxed mt-2">
                 Rozgrywka składa się z 5 rund, z których każda odbywa się w innej lokalizacji oraz w
                 odmiennym stylu wizualnym.
