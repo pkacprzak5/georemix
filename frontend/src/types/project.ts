@@ -18,11 +18,6 @@ export type LevelPhoto = {
   lng: number;
   name: string;
 };
-
-export const DEFAULT_COLORS = {
-  background: "#eaf7cf",
-  main: "#77b900",
-};
 export interface Colors {
   background: string;
   main: string;
@@ -60,3 +55,10 @@ export type Leaderboard = Array<{
   roundNumber: number;
   results: Array<PlayerResults>;
 }>;
+
+export const DEFAULT_COLORS = {
+  background: "#eaf7cf",
+  main: "#77b900",
+};
+
+export const MAP_TILE_URL = "https://tiles.openfreemap.org/styles/positron"

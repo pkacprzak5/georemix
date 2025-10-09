@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
+import { MapContainer, Marker, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { ArrowLeft, Trophy } from "lucide-react";
@@ -10,6 +10,9 @@ import EdgeStars from "@/components/ui/edge-stars";
 import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
+import MAP_TILES from "@/../public/MapTiles.json"
+// @ts-ignore
+import "@maplibre/maplibre-gl-leaflet";
 
 // Fix for default markers in React Leaflet
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl: unknown })._getIconUrl;
@@ -49,11 +52,24 @@ const createGuessLocationIcon = (color: string) =>
     iconAnchor: [18, 36],
   });
 
-const mapLayer = {
-  url: "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png",
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-};
+// Component to add MapLibre GL layer
+function MapLibreLayer() {
+  const map = useMap();
+
+  useEffect(() => {
+    // @ts-ignore - MapLibre GL Leaflet plugin
+    const mapLibreLayer = L.maplibreGL({
+      //@ts-ignore
+      style: MAP_TILES
+    }).addTo(map);
+
+    return () => {
+      map.removeLayer(mapLibreLayer);
+    };
+  }, [map]);
+
+  return null;
+}
 
 // Level colors for differentiation
 const levelColors = [
@@ -274,7 +290,8 @@ export function FinalMap() {
                   style={{ height: "100%", width: "100%" }}
                   zoomControl={false}
                   attributionControl={false}>
-                  <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
+                  {/* Use MapLibre GL for vector tiles */}
+                  <MapLibreLayer />
 
                   {/* Render markers and lines for each level */}
                   {levelsData.map((level) => (

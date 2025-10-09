@@ -1,25 +1,37 @@
 import L from "leaflet";
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
+import { MapContainer, Marker, useMapEvents, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { MapZoomControls } from "@/components/ui/map-zoom-controls";
 import { type MapCoordinates } from "@/types/project";
 import { useEventBridge, useGameStateManager } from "@/context/game-state";
-
-interface MapLayer {
-  url: string;
-  attribution: string;
-}
+import MAP_TILES from "@/../public/MapTiles.json"
+// @ts-ignore
+import "@maplibre/maplibre-gl-leaflet";
 
 interface MapClickHandlerProps {
   onPositionSelect: (position: MapCoordinates) => void;
 }
 
-const mapLayer: MapLayer = {
-  url: "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png",
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-};
+
+// Component to add MapLibre GL layer
+function MapLibreLayer() {
+  const map = useMap();
+
+  useEffect(() => {
+    // @ts-ignore - MapLibre GL Leaflet plugin
+    const mapLibreLayer = L.maplibreGL({
+      //@ts-ignore
+      style: MAP_TILES
+    }).addTo(map);
+
+    return () => {
+      map.removeLayer(mapLibreLayer);
+    };
+  }, [map]);
+
+  return null;
+}
 
 function MapClickHandler({ onPositionSelect }: MapClickHandlerProps) {
   useMapEvents({
@@ -89,7 +101,7 @@ export default function MapViewer() {
         zoomControl={false}
         attributionControl={false}
         style={{ height: "100%", width: "100%", cursor: "default" }}>
-        <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
+        <MapLibreLayer />
         <MapClickHandler onPositionSelect={setPosition} />
         <MapResizer />
         {position && <Marker position={position} icon={selectedLocationIcon} />}

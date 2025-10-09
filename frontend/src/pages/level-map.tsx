@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
+import { MapContainer, Marker, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { ArrowLeft, Gamepad2, Flag } from "lucide-react";
@@ -10,6 +10,9 @@ import EdgeStars from "@/components/ui/edge-stars";
 import { useGameStateManager, useDataSourceManager, useThemeManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
+import MAP_TILES from "@/../public/MapTiles.json"
+// @ts-ignore
+import "@maplibre/maplibre-gl-leaflet";
 
 // Fix for default markers in React Leaflet
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl: unknown })._getIconUrl;
@@ -46,11 +49,24 @@ const guessLocationIcon = L.divIcon({
   iconAnchor: [18, 36],
 });
 
-const mapLayer = {
-  url: "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png",
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-};
+// Component to add MapLibre GL layer
+function MapLibreLayer() {
+  const map = useMap();
+
+  useEffect(() => {
+    // @ts-ignore - MapLibre GL Leaflet plugin
+    const mapLibreLayer = L.maplibreGL({
+      //@ts-ignore
+      style: MAP_TILES
+    }).addTo(map);
+
+    return () => {
+      map.removeLayer(mapLibreLayer);
+    };
+  }, [map]);
+
+  return null;
+}
 
 // Component to fit bounds when markers change
 function MapBounds({
@@ -219,7 +235,8 @@ export function LevelMap() {
                   style={{ height: "100%", width: "100%" }}
                   zoomControl={false}
                   attributionControl={false}>
-                  <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
+                  {/* Use MapLibre GL for vector tiles */}
+                  <MapLibreLayer />
 
                   {/* Actual location marker */}
                   <Marker position={resultData.actualPosition} icon={actualLocationIcon} />
