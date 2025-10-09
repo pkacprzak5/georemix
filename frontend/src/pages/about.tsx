@@ -28,16 +28,14 @@ export function AboutPage() {
               <p className="text-foreground leading-relaxed">
                 <span className="font-bold">GeoRemix</span> to gra powstała w ramach współpracy Koła
                 Naukowego BIT i NVIDIA, łącząca zaawansowane technologie przetwarzania obrazu z
-                wykorzystaniem AI z klasyczną rozrywką znaną z gry GeoGuesser.
+                wykorzystaniem AI z klasyczną rozrywką znaną z gry GeoGuessr.
               </p>
+              <p className="text-foreground leading-relaxed">PIOTREK DOPISZ MI TU COŚ</p>
               <p className="text-foreground leading-relaxed">
-                PLACEHOLDERY DALEJ Projekt wykorzystuje nowoczesne technologie webowe oraz
-                zaawansowane renderowanie graficzne, aby zapewnić płynne i immersyjne doświadczenie
-                podczas eksploracji różnych zakątków świata.
-              </p>
-              <p className="text-foreground leading-relaxed">
-                Gra została stworzona z myślą o łączeniu edukacji z rozrywką, pozwalając graczom na
-                poznawanie nowych miejsc w interaktywny i angażujący sposób.
+                Sama platforma do gry została w całości zaprojektowana i zbudowana od podstaw przez
+                członków koła, z wykorzystaniem nowoczesnych technologii webowych - min. React po stronie frontendu oraz Flask po stronie backendu. Interfejs użytkownika utrzymany
+                jest w stylu neo-brutalistycznym, który łączy surową estetykę z funkcjonalnym
+                minimalizmem.
               </p>
             </CardContent>
           </Card>
@@ -75,31 +73,23 @@ export function AboutPage() {
             <div>
               <h3 className="text-lg font-bold text-foreground mb-2 mt-4">Punktacja</h3>
               <p className="text-foreground leading-relaxed">
-                Po wyborze wskazane miejsce porównywane jest z faktyczną lokalizacją.
+                Po wyborze, wskazane miejsce porównywane jest z faktyczną lokalizacją.
               </p>
               <p className="text-foreground leading-relaxed mt-2">
                 Im mniejsza odległość między wytypowanym punktem a rzeczywistym, tym więcej punktów
                 gracz otrzymuje.
-              </p>
-              <p className="text-foreground leading-relaxed mt-2">
-                Dodatkowym kryterium jest czas podjęcia decyzji - szybsze odpowiedzi nagradzane są
-                wyższym wynikiem!
               </p>
             </div>
             <div>
               <h3 className="text-lg font-bold text-foreground mb-2 mt-4">Zakończenie rozgrywki</h3>
               <p className="text-foreground leading-relaxed">
                 Po rozegraniu wszystkich 5 rund gra prezentuje końcowy wynik gracza, obliczany na
-                podstawie:
+                podstawie wyników w poszczególnych rundach
               </p>
-              <ul className="list-disc list-inside text-foreground leading-relaxed mt-2 ml-4">
-                <li>średniej lub łącznej odległości od właściwych miejsc,</li>
-                <li>oraz czasu, jaki zajęło podjęcie decyzji w każdej rundzie.</li>
-              </ul>
 
               <p className="text-foreground leading-relaxed mt-2">
-                Celem jest uzyskanie jak największej liczby punktów, a więc trafne i szybkie
-                rozpoznawanie lokalizacji. Wyniki mogą być porównywane między graczami.
+                Celem jest uzyskanie jak największej liczby punktów, a więc, przede wszystkim,
+                wprawne oko i trafne rozpoznawanie lokalizacji. Powodzenia!
               </p>
             </div>
           </CardContent>
