@@ -171,7 +171,7 @@ export function WelcomePage() {
             <Window
               disableMaximize
               disableMinimize
-              title="alert.exe"
+              title="Alert.exe"
               position={position}
               setPosition={setPosition}
               className={windowClass}

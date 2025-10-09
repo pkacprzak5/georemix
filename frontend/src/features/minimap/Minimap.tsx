@@ -121,7 +121,7 @@ export function Minimap() {
   return (
     isVisible && (
       <Window
-        title="map.exe"
+        title="Minimap.exe"
         position={position}
         setPosition={setPosition}
         className={windowClass}

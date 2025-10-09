@@ -45,7 +45,7 @@ export function AboutPage() {
           <ButtonLarge
             onClick={handleGoBack}
             className="w-full mt-8 3xl:mt-10 4xl:mt-12 5xl:mt-16 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
-            Powrót do Menu Głównego
+            Powrót do Menu
             <Earth className="mt-1 3xl:w-6 3xl:h-6 4xl:w-7 4xl:h-7 5xl:w-8 5xl:h-8" />
           </ButtonLarge>
         </div>
