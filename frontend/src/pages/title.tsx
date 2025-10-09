@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
+import EdgeStars from "@/components/ui/edge-stars";
 // @ts-ignore
 import BitLogo from "../../public/bitv4.svg?react";
-// @ts-ignore
-import NvidiaLogo from "../../public/Nvidia_logo.svg?react";
-import { X } from "lucide-react";
 
-// const INTRO_DURATION = 5000; // 5 seconds
-const INTRO_DURATION = 1;
-const LOGO_DELAY = 500; // 0.5 seconds
+const INTRO_DURATION = 7000; // 5 seconds
+// const INTRO_DURATION = 1;
+const LOGO_DELAY = 1500; // 0.5 seconds
+const STARS_DELAY = 200; // 0.8 seconds - delay for stars animation
 
 export function TitlePage() {
   const { navigateTo } = useNavigation();
   const [showLogo, setShowLogo] = useState(false);
+  const [showStars, setShowStars] = useState(false);
 
   useEffect(() => {
     // Show logo after 0.5 seconds
@@ -21,30 +21,49 @@ export function TitlePage() {
       setShowLogo(true);
     }, LOGO_DELAY);
 
-    // Navigate after 5 seconds
+    // Show stars after 0.8 seconds
+    const starsTimer = setTimeout(() => {
+      setShowStars(true);
+    }, STARS_DELAY);
+
+    // Navigate after 7 seconds
     const navigationTimer = setTimeout(() => {
       navigateTo(moduleIdMap.INTRO, "welcome-page");
     }, INTRO_DURATION);
 
     return () => {
       clearTimeout(logoTimer);
+      clearTimeout(starsTimer);
       clearTimeout(navigationTimer);
     };
   }, [navigateTo]);
 
   return (
-    <div className="flex items-center justify-center min-h-full">
-      <div className="text-center">
+    <div className="flex items-center justify-center min-h-full relative">
+      {/* Left EdgeStars - 10% width */}
+      {showStars && (
+        <div className="absolute left-0 top-0 w-[20%] h-full">
+          <EdgeStars className="h-full" starClassName="animate-fade-in-fast" />
+        </div>
+      )}
+
+      {/* Main content */}
+      <div className="text-center z-10">
         <div className="mb-8">
           {showLogo && (
-            <div className="animate-fade-in flex items-center justify-center gap-20">
-              <NvidiaLogo className=" w-[30%] h-[50%]" />
-              <X size={"80px"} className="ml-[-50px]" />
-              <BitLogo className=" w-[30%] h-[50%]" />
+            <div className="animate-fade-in flex items-center justify-center gap-20 3xl:gap-24 4xl:gap-32 5xl:gap-40">
+              <BitLogo className="w-[50%] h-[50%]" />
             </div>
           )}
         </div>
       </div>
+
+      {/* Right EdgeStars - 10% width */}
+      {showStars && (
+        <div className="absolute right-0 top-0 w-[20%] h-full">
+          <EdgeStars className="h-full" reverse starClassName="animate-fade-in-fast" />
+        </div>
+      )}
     </div>
   );
 }

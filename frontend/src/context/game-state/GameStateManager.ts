@@ -101,6 +101,10 @@ export class GameStateManager {
     return this._levelResults;
   }
 
+  get allLevels(): LevelInfo[] {
+    return this._levels;
+  }
+
   setTimeTaken(time: number) {
     this._timeTaken = time;
   }

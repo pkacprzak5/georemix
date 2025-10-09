@@ -5,15 +5,35 @@ import "leaflet/dist/leaflet.css";
 import { useEventBridge } from "@/context/game-state";
 import { useResizableWindow } from "@/hooks/use-resizable-window";
 
-// Window size constants for calculations
-const WINDOW_WIDTH_MINIMIZED = 300;
-const WINDOW_HEIGHT_MINIMIZED = 200;
+// Window size breakpoints based on viewport width (similar to edge-stars)
+const SIZE_BREAKPOINTS = [
+  { minWidth: 0, width: 300, height: 200 },      // Default (< 1920px)
+  { minWidth: 1920, width: 400, height: 267 },   // 3xl breakpoint
+  { minWidth: 2560, width: 500, height: 333 },   // 4xl breakpoint
+  { minWidth: 3840, width: 650, height: 433 },   // 5xl breakpoint
+];
+
+// Helper function to get minimized window size based on viewport width
+function getMinimizedSize(viewportWidth: number): { width: number; height: number } {
+  // Find the largest breakpoint that the viewport width exceeds
+  for (let i = SIZE_BREAKPOINTS.length - 1; i >= 0; i--) {
+    if (viewportWidth >= SIZE_BREAKPOINTS[i].minWidth) {
+      return { width: SIZE_BREAKPOINTS[i].width, height: SIZE_BREAKPOINTS[i].height };
+    }
+  }
+  
+  return { width: SIZE_BREAKPOINTS[0].width, height: SIZE_BREAKPOINTS[0].height }; // Fallback
+}
+
 const WINDOW_WIDTH_MAXIMIZED_RATIO = 0.5; // 50% of viewport
 const WINDOW_HEIGHT_MAXIMIZED_RATIO = 0.5; // 50% of viewport
 
 export function Minimap() {
   const eventBridge = useEventBridge();
   const [forceHidden, setForceHidden] = useState(false);
+
+  // Get responsive minimized size based on viewport width
+  const minimizedSize = getMinimizedSize(window.innerWidth);
 
   const {
     position,
@@ -27,8 +47,8 @@ export function Minimap() {
     handleOpen,
   } = useResizableWindow({
     minimizedSize: {
-      width: WINDOW_WIDTH_MINIMIZED,
-      height: WINDOW_HEIGHT_MINIMIZED,
+      width: minimizedSize.width,
+      height: minimizedSize.height,
     },
     maximizedRatio: {
       width: WINDOW_WIDTH_MAXIMIZED_RATIO,
@@ -41,10 +61,12 @@ export function Minimap() {
   // Function to reset minimap to default state (minimized and default position)
   const resetMinimapToDefault = () => {
     handleMinimize();
+    // Get current minimized size for positioning
+    const currentMinimizedSize = getMinimizedSize(window.innerWidth);
     // Reset to default position (bottom-right corner)
     setPosition({
-      x: window.innerWidth * 0.98 - WINDOW_WIDTH_MINIMIZED,
-      y: window.innerHeight * 0.98 - WINDOW_HEIGHT_MINIMIZED,
+      x: window.innerWidth * 0.98 - currentMinimizedSize.width,
+      y: window.innerHeight * 0.98 - currentMinimizedSize.height,
     });
     // Minimize the window
   };
@@ -99,13 +121,15 @@ export function Minimap() {
   return (
     isVisible && (
       <Window
-        title="map.exe"
+        title="Minimap.exe"
         position={position}
         setPosition={setPosition}
         className={windowClass}
         style={style}
         onMaximize={handleMaximize}
         onMinimize={handleMinimize}
+        disableMinimize
+        iconMaximisedByDefault={false}
         onClose={handleForceClose}>
         <WindowContent className="w-full h-full relative">
           <MapViewer />

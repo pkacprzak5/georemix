@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
+import { MapContainer, Marker, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { ArrowLeft, Gamepad2, Flag } from "lucide-react";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapZoomControls } from "@/components/ui/map-zoom-controls";
-import { useGameStateManager, useDataSourceManager } from "@/context/game-state";
+import EdgeStars from "@/components/ui/edge-stars";
+import { useGameStateManager, useDataSourceManager, useThemeManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
+import MAP_TILES from "@/../public/MapTiles.json"
+// @ts-ignore
+import "@maplibre/maplibre-gl-leaflet";
 
 // Fix for default markers in React Leaflet
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl: unknown })._getIconUrl;
@@ -45,11 +49,24 @@ const guessLocationIcon = L.divIcon({
   iconAnchor: [18, 36],
 });
 
-const mapLayer = {
-  url: "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png",
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-};
+// Component to add MapLibre GL layer
+function MapLibreLayer() {
+  const map = useMap();
+
+  useEffect(() => {
+    // @ts-ignore - MapLibre GL Leaflet plugin
+    const mapLibreLayer = L.maplibreGL({
+      //@ts-ignore
+      style: MAP_TILES
+    }).addTo(map);
+
+    return () => {
+      map.removeLayer(mapLibreLayer);
+    };
+  }, [map]);
+
+  return null;
+}
 
 // Component to fit bounds when markers change
 function MapBounds({
@@ -73,6 +90,7 @@ export function LevelMap() {
   const { navigateTo, navigateWithLoading } = useNavigation();
   const gameStateManager = useGameStateManager();
   const dataSourceManager = useDataSourceManager();
+  const themeManager = useThemeManager();
   const [resultData, setResultData] = useState<{
     distance: number;
     actualPosition: [number, number];
@@ -112,6 +130,9 @@ export function LevelMap() {
     if (isFinalLevel) {
       try {
         await gameStateManager.submitRoundResults(dataSourceManager);
+        setTimeout(() => {
+          themeManager.resetColors();
+        },200)
         navigateTo(moduleIdMap.FINAL, "final-result");
       } catch (error) {
         console.error("Failed to submit round results:", error);
@@ -144,15 +165,20 @@ export function LevelMap() {
   }
 
   return (
-    <div className="flex items-center h-full justify-center min-h-full bg-background p-4">
-      <div className="max-w-4xl w-full flex flex-col justify-center h-full space-y-6">
+    <div className="flex items-center h-full justify-center min-h-full bg-background relative">
+      <div className="w-[15%] h-full">
+        <EdgeStars className="h-full" baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
+      </div>
+
+      {/* Main content - 80% width */}
+      <div className="w-[70%] h-full flex flex-col justify-center space-y-6 3xl:space-y-8 4xl:space-y-10 p-4 3xl:p-6 4xl:p-8 5xl:p-10">
         {/* Map Container with Legend Card Overlay */}
-        <div className="relative flex-1 max-h-[80%] min-h-[400px]">
+        <div className="relative flex-1 max-h-[80%] min-h-[400px] 3xl:min-h-[500px] 4xl:min-h-[600px] 5xl:min-h-[700px]">
           {/* Legend Card - positioned outside bounds with higher z-index */}
           <div className=" absolute -top-2 z-[2000] p-0 -left-2">
             <Card className="p-0 bg-secondary-background gradient">
-              <CardContent className="px-3 py-2">
-                <div className="space-y-2 text-sm">
+              <CardContent className="px-3 py-2 3xl:px-4 3xl:py-3 4xl:px-5 4xl:py-4">
+                <div className="space-y-2 3xl:space-y-3 4xl:space-y-4 text-sm 3xl:text-base 4xl:text-lg 5xl:text-xl">
                   <div className="flex items-center space-x-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -209,7 +235,8 @@ export function LevelMap() {
                   style={{ height: "100%", width: "100%" }}
                   zoomControl={false}
                   attributionControl={false}>
-                  <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
+                  {/* Use MapLibre GL for vector tiles */}
+                  <MapLibreLayer />
 
                   {/* Actual location marker */}
                   <Marker position={resultData.actualPosition} icon={actualLocationIcon} />
@@ -266,6 +293,10 @@ export function LevelMap() {
             )}
           </ButtonLarge>
         </div>
+      </div>
+
+      <div className="w-[15%] h-full">
+        <EdgeStars className="h-full" reverse baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
       </div>
     </div>
   );
