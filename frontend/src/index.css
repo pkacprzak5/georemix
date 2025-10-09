@@ -227,6 +227,10 @@ body {
 .animate-fade-in {
   animation: fade-in 2s ease-in-out forwards;
 }
+
+.animate-fade-in-fast {
+  animation: fade-in 1s ease-in-out forwards;
+}
 /* 
  .leaflet-tile-container img {
   filter: sepia(200%)  contrast(95%)  hue-rotate(-25deg);

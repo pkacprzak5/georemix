@@ -11,6 +11,8 @@ interface EdgeStarsProps {
   baseStarCount?: number; // Base number of stars for narrow containers
   starsPerHundredPx?: number; // Additional stars per 100px of width
   yMargin?: number; // Base vertical spacing between stars
+  starClassName?: string; // Additional CSS classes for individual stars
+  starStyle?: React.CSSProperties; // Inline styles for individual stars
 }
 
 // Available icon components with weights (higher weight = more frequent)
@@ -91,6 +93,8 @@ const CONFIG = {
  * @param baseStarCount - Base number of stars for narrow containers (default: 8)
  * @param starsPerHundredPx - Additional stars per 100px of width (default: 4)
  * @param yMargin - Base vertical spacing between stars (default: 100)
+ * @param starClassName - Additional CSS classes for individual stars
+ * @param starStyle - Inline styles for individual stars
  * 
  * @example
  * // Stars with custom left padding
@@ -102,6 +106,9 @@ const CONFIG = {
  * // Less dense stars for map pages
  * <EdgeStars baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
  * 
+ * // Stars with fade-in animation
+ * <EdgeStars starClassName="animate-fade-in" />
+ * 
  * // Wider container automatically gets more stars proportionally
  * <EdgeStars className="w-[20%] lg:block hidden" />
  */
@@ -112,7 +119,9 @@ export default function EdgeStars({
   paddingRight = CONFIG.DEFAULT_PADDING,
   baseStarCount = CONFIG.BASE_STAR_COUNT,
   starsPerHundredPx = CONFIG.STARS_PER_100PX,
-  yMargin = CONFIG.Y_MARGIN
+  yMargin = CONFIG.Y_MARGIN,
+  starClassName,
+  starStyle
 }: EdgeStarsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -268,13 +277,14 @@ export default function EdgeStars({
         return (
           <div
             key={index}
-            className="absolute"
+            className={cn("absolute", starClassName)}
             style={{
               top: `${star.y}px`,
               ...(star.position === 'middle' 
                 ? { left: `${star.x}px`, transform: `translateX(-50%) rotate(${star.rotation}deg)` }
                 : { [star.position]: `${star.x}px`, transform: `rotate(${star.rotation}deg)` }
               ),
+              ...starStyle,
             }}
           >
             {usesFillProp ? (
