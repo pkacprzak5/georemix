@@ -47,14 +47,42 @@ function MapResizer() {
   const map = useMap();
 
   useEffect(() => {
+    let resizeInterval: NodeJS.Timeout | null = null;
+    let stopTimeout: NodeJS.Timeout | null = null;
+
     const resizeObserver = new ResizeObserver(() => {
-      map.invalidateSize();
+      // Clear any existing interval and stop timeout
+      if (resizeInterval) {
+        clearInterval(resizeInterval);
+      }
+      if (stopTimeout) {
+        clearTimeout(stopTimeout);
+      }
+
+      // Start continuous updates during resize
+      resizeInterval = setInterval(() => {
+        map.invalidateSize({ pan: false, animate: false });
+      }, 15);
+
+      // Stop the interval after 150ms of no resize events
+      stopTimeout = setTimeout(() => {
+        if (resizeInterval) {
+          clearInterval(resizeInterval);
+          resizeInterval = null;
+        }
+      }, 150);
     });
 
     const mapContainer = map.getContainer();
     resizeObserver.observe(mapContainer);
 
     return () => {
+      if (resizeInterval) {
+        clearInterval(resizeInterval);
+      }
+      if (stopTimeout) {
+        clearTimeout(stopTimeout);
+      }
       resizeObserver.disconnect();
     };
   }, [map]);

@@ -193,7 +193,7 @@ export function WelcomePage() {
                   ) : (
                     <>
                       <span>
-                        Nazwa <span className="font-heading">{existingPlayerName}</span>
+                        Nazwa <span className="font-heading">{existingPlayerName} </span>
                         jest już aktywna. Kontynuując nadpiszesz aktualne wyniki tego gracza.
                       </span>
                       <div className="flex flex-wrap justify-around mt-4 gap-4">
@@ -219,11 +219,15 @@ export function WelcomePage() {
           <ButtonLarge
             onClick={handleShowLeaderboard}
             className="bg-secondary-background text-foreground 3xl:text-2xl 4xl:text-3xl 5xl:text-4xl 3xl:py-6 4xl:py-7 5xl:py-8">
-            Zobacz ranking <Trophy className="mt-1 3xl:w-7 3xl:h-7 4xl:w-8 4xl:h-8 5xl:w-10 5xl:h-10" />
+            Zobacz ranking{" "}
+            <Trophy className="mt-1 3xl:w-7 3xl:h-7 4xl:w-8 4xl:h-8 5xl:w-10 5xl:h-10" />
           </ButtonLarge>
 
-          <ButtonLarge onClick={handleAbout} className="3xl:text-2xl 4xl:text-3xl 5xl:text-4xl 3xl:py-6 4xl:py-7 5xl:py-8">
-            O projekcie <BookText className="mt-1 3xl:w-7 3xl:h-7 4xl:w-8 4xl:h-8 5xl:w-10 5xl:h-10" />
+          <ButtonLarge
+            onClick={handleAbout}
+            className="3xl:text-2xl 4xl:text-3xl 5xl:text-4xl 3xl:py-6 4xl:py-7 5xl:py-8">
+            O projekcie{" "}
+            <BookText className="mt-1 3xl:w-7 3xl:h-7 4xl:w-8 4xl:h-8 5xl:w-10 5xl:h-10" />
           </ButtonLarge>
         </div>
       </div>
