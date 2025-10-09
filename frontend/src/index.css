@@ -225,11 +225,11 @@ body {
 }
 
 .animate-fade-in {
-  animation: fade-in 3s ease-in-out forwards;
+  animation: fade-in 2.5s ease-in-out forwards;
 }
 
 .animate-fade-in-fast {
-  animation: fade-in 1.5s ease-in-out forwards;
+  animation: fade-in 4s ease-in-out forwards;
 }
 /* 
  .leaflet-tile-container img {
