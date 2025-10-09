@@ -126,48 +126,48 @@ export function LevelSummary() {
 
   return (
     <div className="flex items-center justify-center min-h-full bg-background">
-      <div className="w-full space-y-8 p-6 flex flex-col items-center justify-center">
+      <div className="w-full space-y-8 3xl:space-y-10 4xl:space-y-12 5xl:space-y-16 p-6 3xl:p-8 4xl:p-10 5xl:p-12 flex flex-col items-center justify-center">
         {/* Header */}
 
         <h1 className="leading-normal">
           <StylisedSpan showStars>Ukończono Rundę!</StylisedSpan>
         </h1>
 
-        <div className="max-w-lg w-full flex flex-col items-center justify-center space-y-8">
+        <div className="max-w-lg 3xl:max-w-xl 4xl:max-w-2xl 5xl:max-w-3xl w-full flex flex-col items-center justify-center space-y-8 3xl:space-y-10 4xl:space-y-12">
           {/* Results Stats */}
-          <div className="space-y-6 w-full">
+          <div className="space-y-6 3xl:space-y-7 4xl:space-y-8 5xl:space-y-10 w-full">
             <div className="relative">
-              <Card className="absolute -top-3 z-[100] -left-8 bg-main py-2">
-                <CardContent className="px-4">
-                  <div className="text-md text-foreground dark:text-shadow font-base">
+              <Card className="absolute -top-3 z-[100] -left-8 bg-main py-2 3xl:py-3 4xl:py-3">
+                <CardContent className="px-4 3xl:px-5 4xl:px-6">
+                  <div className="text-md 3xl:text-lg 4xl:text-xl 5xl:text-2xl text-foreground dark:text-shadow font-base">
                     {scoreRating}
                   </div>
                 </CardContent>
               </Card>
               <Card className="bg-secondary-background gradient">
                 <CardContent className="text-center">
-                  <div className="text-6xl font-bold text-background dark:text-foreground font-outline-1 mb-2">
+                  <div className="text-6xl 3xl:text-7xl 4xl:text-8xl 5xl:text-9xl font-bold text-background dark:text-foreground font-outline-1 mb-2 3xl:mb-3 4xl:mb-4">
                     {animatedScore}
                   </div>
-                  <div className="text-sm text-muted-foreground">WYNIK</div>
+                  <div className="text-sm 3xl:text-base 4xl:text-lg 5xl:text-xl text-muted-foreground">WYNIK</div>
                 </CardContent>
               </Card>
             </div>
-            <div className="grid grid-cols-2 gap-4 w-full">
+            <div className="grid grid-cols-2 gap-4 3xl:gap-5 4xl:gap-6 5xl:gap-8 w-full">
               <Card className="bg-secondary-background gradient">
                 <CardContent className="text-center">
-                  <div className="text-4xl font-bold text-background dark:text-foreground font-outline-1 mb-1">
+                  <div className="text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3 whitespace-nowrap">
                     {formatDistance(animatedDistance)}
                   </div>
-                  <div className="text-xs text-muted-foreground">DYSTANS</div>
+                  <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground">DYSTANS</div>
                 </CardContent>
               </Card>
               <Card className="bg-secondary-background gradient">
                 <CardContent className="text-center">
-                  <div className="text-4xl font-bold text-background dark:text-foreground font-outline-1 mb-1">
+                  <div className="text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3">
                     {formatTime(animatedTime)}
                   </div>
-                  <div className="text-xs text-muted-foreground">CZAS</div>
+                  <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground">CZAS</div>
                 </CardContent>
               </Card>
             </div>

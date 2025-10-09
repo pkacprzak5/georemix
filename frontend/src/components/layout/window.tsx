@@ -22,6 +22,7 @@ type WindowLayoutProps = {
   disableMinimize?: boolean;
   disableMaximize?: boolean;
   disableClose?: boolean;
+  iconMaximisedByDefault?: boolean;
 } & React.ComponentProps<"div">;
 
 function WindowLayout({
@@ -37,6 +38,7 @@ function WindowLayout({
   disableMinimize = false,
   disableMaximize = false,
   disableClose = false,
+  iconMaximisedByDefault = true,
   style,
   ...props
 }: WindowLayoutProps) {
@@ -122,7 +124,7 @@ function WindowLayout({
             "flex items-center justify-between px-4 py-2 bg-main text-main-foreground border-b-2 border-border rounded-t-[3px] select-none",
             "font-heading"
           )}>
-          <div className="flex-1 truncate">{title}</div>
+          <div className="flex-1 font-mono truncate">{title}</div>
 
           {/* Header Icons */}
           <div className="flex gap-1 ml-2">
@@ -155,7 +157,7 @@ function WindowLayout({
                 className="window-button"
                 aria-label="Maximize">
                 <span className="text-xs font-bold flex items-center justify-center">
-                  {!maximized ? (
+                  {maximized !== iconMaximisedByDefault ? (
                     <Copy transform="scale(-1,1)" size={"60%"} />
                   ) : (
                     <Square size={"70%"} />

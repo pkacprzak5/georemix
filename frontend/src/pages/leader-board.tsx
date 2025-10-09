@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { ScrollText, ArrowLeft } from "lucide-react";
-import { RankingTable, type RankingColumn } from "@/components/leaderboard/RankingTable";
-import { 
-  type RoundLeaderboard 
-} from "@/context/game-state/DataSourceManager";
+import { ArrowLeft, Earth } from "lucide-react";
+import { RankingTable, type RankingColumn } from "@/components/ui/ranking-table";
+import { type RoundLeaderboard } from "@/context/game-state/DataSourceManager";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGameStateManager, useDataSourceManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
@@ -65,7 +63,7 @@ const leaderboardColumns: RankingColumn<PlayerResults>[] = [
   },
 ];
 
-const ESTIMATED_PAGE_CONTENT_HEIGHT = 300;
+const ESTIMATED_PAGE_CONTENT_HEIGHT = 350;
 const ESTIMATED_ROW_HEIGHT = 65;
 
 export function LeaderBoardPage() {
@@ -80,11 +78,11 @@ export function LeaderBoardPage() {
   useEffect(() => {
     const loadLeaderboard = async () => {
       setIsLoading(true);
-      
+
       // Get cached data immediately
       const cached = dataSourceManager.getAllRoundsLeaderboard();
       setLeaderboardData(cached);
-      
+
       // Update cache from backend
       try {
         await dataSourceManager.updateAllRoundsCache();
@@ -110,8 +108,8 @@ export function LeaderBoardPage() {
     };
 
     handleResize(); // initial calculation
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const rounds = useMemo(() => [1, 2, 3], []);
@@ -126,21 +124,21 @@ export function LeaderBoardPage() {
   }
 
   return (
-    <div className="flex justify-center min-h-full p-8">
-      <div className="w-[900px] flex flex-col gap-8">
+    <div className="flex justify-center items-center min-h-full p-8 3xl:p-10 4xl:p-12 5xl:p-16">
+      <div className="w-[900px] 3xl:w-[1100px] 4xl:w-[1400px] 5xl:w-[1800px] flex flex-col gap-8 3xl:gap-10 4xl:gap-12">
         <Tabs className="shadow-shadow rounded-base" defaultValue={defaultRound.toString()}>
-          <TabsList className="grid p-0 w-full rounded-b-none grid-cols-3 gap-0 overflow-hidden h-12 border-b-0">
+          <TabsList className="grid p-0 w-full rounded-b-none grid-cols-3 gap-0 overflow-hidden h-12 3xl:h-14 4xl:h-16 5xl:h-20 border-b-0">
             {rounds.map((round) => (
               <TabsTrigger
                 key={round}
-                className="h-full m-0 rounded-none border-0 border-r-2 last:border-r-0 border-border bg-white"
+                className="h-full m-0 rounded-none border-0 border-r-2 last:border-r-0 border-border bg-white 3xl:text-lg 4xl:text-xl 5xl:text-2xl"
                 value={round.toString()}>
                 Runda {round}
               </TabsTrigger>
             ))}
           </TabsList>
           {rounds.map((round) => {
-            const roundData = leaderboardData.find(r => r.roundNumber === round);
+            const roundData = leaderboardData.find((r) => r.roundNumber === round);
             return (
               <TabsContent className="border-t-0 mt-0" value={round.toString()} key={round}>
                 <RankingTable
@@ -155,14 +153,18 @@ export function LeaderBoardPage() {
         </Tabs>
 
         <div className="flex w-full gap-8">
-          <ButtonLarge onClick={() => navigateTo(moduleIdMap.INTRO, "welcome-page")}>
-            <ArrowLeft className="mt-1" /> Powrót do Menu
-          </ButtonLarge>
           {gameStateManager.isRoundFinished && (
-            <ButtonLarge onClick={() => navigateTo(moduleIdMap.FINAL, "final-result")}>
-              Powrót do Podsumowania <ScrollText className="mt-1" />
+            <ButtonLarge
+              className="whitespace-nowrap"
+              onClick={() => navigateTo(moduleIdMap.FINAL, "final-result")}>
+              <ArrowLeft className="mt-1" /> Powrót do Podsumowania
             </ButtonLarge>
           )}
+          <ButtonLarge
+            className="whitespace-nowrap"
+            onClick={() => navigateTo(moduleIdMap.INTRO, "welcome-page")}>
+             Powrót do Menu  <Earth className=" whitespace-nowrap mt-1" />
+          </ButtonLarge>
         </div>
       </div>
     </div>

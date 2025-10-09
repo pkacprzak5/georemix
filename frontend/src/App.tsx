@@ -28,6 +28,9 @@ function App() {
           x: (window.innerWidth / 2) * 0.05,
           y: (window.innerHeight / 2) * 0.05,
         }}
+        disableMaximize
+        disableMinimize
+        disableClose
         className="h-[95vh] w-[95vw] overflow-hidden">
         <WindowContent className="w-full h-full relative">
           <div className="w-full h-full relative">

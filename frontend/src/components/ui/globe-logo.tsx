@@ -4,7 +4,7 @@ import Star9 from "./stars/Star9";
 
 export function GlobeLogo() {
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block w-full">
       {/* Top-left star */}
       <Star9
         size={90}

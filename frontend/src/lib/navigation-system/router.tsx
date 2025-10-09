@@ -61,18 +61,18 @@ export function Router() {
         {/* Left edge stars */}
         <EdgeStars 
           paddingLeft={20} 
-          className="w-[20%] 2xl:w-[25%] xl:w-[20%] lg:flex hidden h-full" 
+          className="3xl:w-[30%] 2xl:w-[27.5%] xl:w-[25%] lg:flex hidden h-full" 
         />
         
         {/* Main content */}
-        <div className="flex-1 2xl:w-[50%] lg:w-[60%] w-[60%]">
+        <div className="flex-1 3xl:w-[40%] 2xl:w-[45%] xl:w-[50%] lg:w-[60%] w-[60%]">
           {pageContent}
         </div>
 
         {/* Right edge stars */}
         <EdgeStars
           paddingRight={20} 
-          className="w-[20%] 2xl:w-[25%] xl:w-[20%] lg:flex hidden h-full" 
+          className=" 3xl:w-[30%] 2xl:w-[27.5%] xl:w-[20%] lg:flex hidden h-full" 
           reverse 
         />
       </div>
