@@ -25,11 +25,7 @@ const PanoramaViewer = () => {
     const levelNumber = gameStateManager.currentLevelInfo.number;
 
     try {
-      const nodeData = await dataSourceManager.getNode<Node>(
-        roundNumber,
-        levelNumber,
-        nodeId
-      );
+      const nodeData = await dataSourceManager.getNode<Node>(roundNumber, levelNumber, nodeId);
       return nodeData;
     } catch (error) {
       console.error("Error fetching node:", error);
@@ -44,15 +40,26 @@ const PanoramaViewer = () => {
       return;
     }
 
-    // Listen for node changes
-    virtualTour.addEventListener("node-changed", (e: any) => {
-      // eslint-disable-line @typescript-eslint/no-explicit-any
+    getNode(gameStateManager.currentLevelInfo.initialNode).then((node: any) => {
+      if (!node) {
+        throw new Error("Can not get starting node!");
+      }
       const location: MapCoordinates = {
-        lat: e.node.gps[1],
-        lng: e.node.gps[0],
+        lat: node.gps[1],
+        lng: node.gps[0],
       };
       gameStateManager.setCoordinates(location);
     });
+
+    // Listen for node changes
+    // virtualTour.addEventListener("node-changed", (e: any) => {
+    //   // eslint-disable-line @typescript-eslint/no-explicit-any
+    //   const location: MapCoordinates = {
+    //     lat: e.node.gps[1],
+    //     lng: e.node.gps[0],
+    //   };
+    //   gameStateManager.setCoordinates(location);
+    // });
 
     setTimeout(() => {
       eventBridge.emit("viewerLoaded", {});
