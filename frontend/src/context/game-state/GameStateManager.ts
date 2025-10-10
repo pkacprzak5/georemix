@@ -33,7 +33,7 @@ export class GameStateManager {
 
   // Result calculation factors
   private readonly _maxPoints: number = 5000;
-  private readonly _distanceFactor: number = 2_000_000; // 2km
+  private readonly _distanceFactor: number = 30_000_000; // 2km
   private readonly _timeFactor: number = 120;
   private readonly _timeCap: number = 10; // 10secs
   private readonly _metersCap: number = 50;
@@ -151,18 +151,12 @@ export class GameStateManager {
     if (this._currentDistance <= this._metersCap) {
       distanceFactor = 1.0;
     } else {
-      distanceFactor = Math.exp(-this._currentDistance / this._distanceFactor);
+      distanceFactor = Math.exp(-10 * this._currentDistance / this._distanceFactor);
     }
 
-    // --- Time contribution ---
-    let timeFactor: number;
-    if (this._timeTaken <= this._timeCap) {
-      timeFactor = 1.0;
-    } else {
-      timeFactor = Math.exp(-(this._timeTaken - this._timeCap) / this._timeFactor);
-    }
+  
 
-    const levelScore = Math.round(this._maxPoints * distanceFactor * timeFactor);
+    const levelScore = Math.round(this._maxPoints * distanceFactor);
 
     this._currentScore = Math.max(0, levelScore);
 
