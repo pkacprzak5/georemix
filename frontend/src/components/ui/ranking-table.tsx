@@ -46,14 +46,14 @@ export function RankingTable<Row>({
         </div>
       ) : null}
       <table className="w-full border-collapse">
-        <thead className="bg-secondary-background border-b-2 border-border h-12">
-          <tr className="text-left text-xs font-heading uppercase tracking-[0.15em] text-foreground/80">
-            <th className="px-6 py-3">Poz.</th>
+        <thead className="bg-secondary-background border-b-2 border-border h-12 3xl:h-16 4xl:h-20 5xl:h-24">
+          <tr className="text-left text-xs 3xl:text-base 4xl:text-lg 5xl:text-xl font-heading uppercase tracking-[0.15em] text-foreground/80">
+            <th className="px-6 py-3 3xl:px-8 3xl:py-4 4xl:px-10 4xl:py-5 5xl:px-12 5xl:py-6">Poz.</th>
             {columns.map((column) => (
               <th
                 key={column.key}
                 className={cn(
-                  "px-6 py-3",
+                  "px-6 py-3 3xl:px-8 3xl:py-4 4xl:px-10 4xl:py-5 5xl:px-12 5xl:py-6",
                   column.align === "right" && "text-right",
                   column.align === "center" && "text-center",
                   column.headerClassName
@@ -68,7 +68,7 @@ export function RankingTable<Row>({
             <tr>
               <td
                 colSpan={columns.length + 1}
-                className="px-6 py-8 text-center text-sm font-base text-foreground"
+                className="px-6 py-8 3xl:px-8 3xl:py-10 4xl:px-10 4xl:py-12 5xl:px-12 5xl:py-14 text-center text-sm 3xl:text-lg 4xl:text-xl 5xl:text-2xl font-base text-foreground"
               >
                 Brak wyników do wyświetlenia
               </td>
@@ -84,10 +84,10 @@ export function RankingTable<Row>({
                 <tr
                   key={rowKey}
                   className="border-b border-border last:border-b-0 odd:bg-background even:bg-secondary-background/30">
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 3xl:px-8 3xl:py-5 4xl:px-10 4xl:py-6 5xl:px-12 5xl:py-8">
                     <span
                       className={cn(
-                        "inline-flex min-w-[2.5rem] items-center justify-center rounded-full border-2 px-2 py-1 text-sm font-heading",
+                        "inline-flex min-w-[2.5rem] 3xl:min-w-[3rem] 4xl:min-w-[3.5rem] 5xl:min-w-[4rem] items-center justify-center rounded-full border-2 px-2 py-1 3xl:px-3 3xl:py-1.5 4xl:px-4 4xl:py-2 5xl:px-5 5xl:py-2.5 text-sm 3xl:text-base 4xl:text-lg 5xl:text-xl font-heading",
                         rankAccent
                       )}>
                       #{rank}
@@ -97,7 +97,7 @@ export function RankingTable<Row>({
                     <td
                       key={column.key}
                       className={cn(
-                        "px-6 py-4 text-sm font-base",
+                        "px-6 py-4 3xl:px-8 3xl:py-5 4xl:px-10 4xl:py-6 5xl:px-12 5xl:py-8 text-sm 3xl:text-lg 4xl:text-xl 5xl:text-2xl font-base",
                         column.align === "right" && "text-right",
                         column.align === "center" && "text-center",
                         column.cellClassName

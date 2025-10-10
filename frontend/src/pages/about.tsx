@@ -18,7 +18,7 @@ export function AboutPage() {
       <div className="w-full max-w-6xl 3xl:max-w-7xl 4xl:max-w-[90rem] 5xl:max-w-[110rem] h-[calc(100%-2rem)] grid grid-cols-2 gap-8 3xl:gap-10 4xl:gap-12 5xl:gap-16">
         {/* Project Creation Card */}
         <div>
-          <Card className="h-fit bg-secondary-background gradient">
+          <Card className="h-fit bg-secondary-background gradient py-6 3xl:py-8 4xl:py-10 5xl:py-12 overflow-auto scrollbar-neobrutalist flex-1 min-h-0 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
             <CardHeader>
               <CardTitle className="text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl font-heading">
                 <StylisedSpan>O Projekcie</StylisedSpan>
@@ -42,9 +42,9 @@ export function AboutPage() {
 
           <ButtonLarge
             onClick={handleGoBack}
-            className="w-full mt-8 3xl:mt-10 4xl:mt-12 5xl:mt-16 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
+            className="w-full mt-8 3xl:mt-10 4xl:mt-12 5xl:mt-16 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
             Powrót do Menu
-            <Earth className="mt-1 3xl:w-6 3xl:h-6 4xl:w-7 4xl:h-7 5xl:w-8 5xl:h-8" />
+            <Earth className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
           </ButtonLarge>
         </div>
 

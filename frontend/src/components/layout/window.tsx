@@ -23,6 +23,7 @@ type WindowLayoutProps = {
   disableMaximize?: boolean;
   disableClose?: boolean;
   iconMaximisedByDefault?: boolean;
+  isTitleResponsive?: boolean;
 } & React.ComponentProps<"div">;
 
 function WindowLayout({
@@ -39,6 +40,7 @@ function WindowLayout({
   disableMaximize = false,
   disableClose = false,
   iconMaximisedByDefault = true,
+  isTitleResponsive = false,
   style,
   ...props
 }: WindowLayoutProps) {
@@ -124,7 +126,7 @@ function WindowLayout({
             "flex items-center justify-between px-4 py-2 bg-main text-main-foreground border-b-2 border-border rounded-t-[3px] select-none",
             "font-heading"
           )}>
-          <div className="flex-1 font-mono truncate">{title}</div>
+          <div className={`flex-1 ${isTitleResponsive && "2xl:text-xl 3xl:text-2xl"} font-mono truncate`}>{title}</div>
 
           {/* Header Icons */}
           <div className="flex gap-1 ml-2">

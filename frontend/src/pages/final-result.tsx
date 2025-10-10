@@ -174,7 +174,7 @@ export function FinalResult() {
     <div className="flex items-center justify-center min-h-full bg-background">
       <div className="w-full space-y-8 3xl:space-y-10 4xl:space-y-12 5xl:space-y-16 p-6 3xl:p-8 4xl:p-10 5xl:p-12 flex flex-col items-center justify-center">
         {/* Header */}
-        <h1 className="leading-normal text-center">
+        <h1 className="leading-normal 3xl:text-[5em] 4xl:text-[5.8em] mb-10 whitespace-nowrap text-center">
           <StylisedSpan showStars>Po bitwie opadł kurz!</StylisedSpan>
         </h1>
 
@@ -185,7 +185,7 @@ export function FinalResult() {
             <div className="col-span-2 row-span-2 relative">
               <Card className="absolute -top-3 z-[100] -left-8 bg-main py-2">
                 <CardContent className="px-4">
-                  <div className="text-md text-foreground dark:text-shadow font-base">
+                  <div className="text-md 2xl:text-lg 3xl:text-xl 4xl:text-2xl text-foreground dark:text-shadow font-base">
                     {performanceRating}
                   </div>
                 </CardContent>
@@ -206,10 +206,10 @@ export function FinalResult() {
                   <div className="mb-4">
                     <Progress
                       value={(animatedTotalScore / summaryData.maxPossibleScore) * 100}
-                      className="h-6 3xl:h-8 4xl:h-10 5xl:h-12"
+                      className="h-4 3xl:h-6"
                     />
                     <div className="text-center mb-3">
-                      <div className="text-xl 3xl:text-2xl 4xl:text-3xl 5xl:text-4xl font-bold text-foreground dark:text-foreground mt-2 3xl:mt-3 4xl:mt-4">
+                      <div className="text-xl 3xl:text-2xl 4xl:text-3xl font-bold text-foreground dark:text-foreground mt-2 3xl:mt-3 4xl:mt-4">
                         {animatedTotalScore} / {summaryData.maxPossibleScore} punktów
                       </div>
                     </div>
@@ -253,12 +253,12 @@ export function FinalResult() {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 w-full ">
-            <ButtonLarge onClick={handleBackToMenu} className="flex-1">
-              <ArrowLeft className="mt-1" />
+            <ButtonLarge onClick={handleBackToMenu} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+              <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
               Powrót do Menu
             </ButtonLarge>
-            <ButtonLarge onClick={handlePlayAgain} className="flex-1">
-              Zobacz mapę <Map className="mt-1" />
+            <ButtonLarge onClick={handlePlayAgain} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+              Zobacz mapę <Map className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
             </ButtonLarge>
           </div>
         </div>

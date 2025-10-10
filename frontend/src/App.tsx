@@ -31,6 +31,7 @@ function App() {
         disableMaximize
         disableMinimize
         disableClose
+        isTitleResponsive
         className="h-[95vh] w-[95vw] overflow-hidden">
         <WindowContent className="w-full h-full relative">
           <div className="w-full h-full relative">

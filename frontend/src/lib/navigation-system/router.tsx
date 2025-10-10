@@ -54,29 +54,31 @@ export function Router() {
   // Determine what to render based on loading state
   const renderContent = () => {
     const pageContent = <currentPage.component />;
-    
+
     // Wrap with EdgeStars if enabled for this page
     const contentWithStars = currentPage.showStars ? (
       <div className="flex h-full w-full min-h-full min-w-full">
         {/* Left edge stars */}
-        <EdgeStars 
-          paddingLeft={20} 
-          className="3xl:w-[30%] 2xl:w-[27.5%] xl:w-[25%] lg:flex hidden h-full" 
+        <EdgeStars
+          paddingLeft={20}
+          className="4xl:w-[22.5%] 3xl:w-[25%] 2xl:w-[27.5%] xl:w-[25%] lg:flex hidden h-full"
         />
-        
+
         {/* Main content */}
-        <div className="flex-1 3xl:w-[40%] 2xl:w-[45%] xl:w-[50%] lg:w-[60%] w-[60%]">
+        <div className="flex-1 4xl:w-[55%] 3xl:w-[50%] 2xl:w-[45%] xl:w-[50%] lg:w-[60%] w-[60%]">
           {pageContent}
         </div>
 
         {/* Right edge stars */}
         <EdgeStars
-          paddingRight={20} 
-          className=" 3xl:w-[30%] 2xl:w-[27.5%] xl:w-[20%] lg:flex hidden h-full" 
-          reverse 
+          paddingRight={20}
+          className="4xl:w-[22.5%] 3xl:w-[25%] 2xl:w-[27.5%] xl:w-[20%] lg:flex hidden h-full"
+          reverse
         />
       </div>
-    ) : pageContent;
+    ) : (
+      pageContent
+    );
 
     // For initial page, render without motion animation
     if (isInitialPage) {

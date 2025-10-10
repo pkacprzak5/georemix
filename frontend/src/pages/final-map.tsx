@@ -240,7 +240,7 @@ export function FinalMap() {
                       </div>
                     ))}
                   </div>
-                  <div className="pt-2 border-t border-border space-y-2 text-xs">
+                  <div className="pt-2 border-t border-border space-y-2 text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg">
                     <div className="flex items-center space-x-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -354,11 +354,11 @@ export function FinalMap() {
 
         {/* Action Buttons */}
         <div className="flex space-x-4">
-          <ButtonLarge onClick={handleBackToResults} className="flex-1">
-            <ArrowLeft className="mt-1" /> Powrót do Wyników
+          <ButtonLarge onClick={handleBackToResults} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+            <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" /> Powrót do Wyników
           </ButtonLarge>
-          <ButtonLarge onClick={handleShowLeaderboard} className="flex-1">
-            Tabela Wyników <Trophy className="mt-1" />
+          <ButtonLarge onClick={handleShowLeaderboard} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+            Tabela Wyników <Trophy className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
           </ButtonLarge>
         </div>
       </div>

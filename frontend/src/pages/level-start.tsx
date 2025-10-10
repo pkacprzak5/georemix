@@ -38,7 +38,7 @@ export function LevelStart() {
                 </figcaption>
               </figure>
             </div>
-            <ButtonLarge className="mt-8 3xl:mt-10 4xl:mt-12 5xl:mt-16 3xl:text-lg 4xl:text-xl 5xl:text-2xl" onClick={handleStartGameplay}>
+            <ButtonLarge className="mt-8 3xl:mt-10 4xl:mt-12 5xl:mt-16 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6" onClick={handleStartGameplay}>
               Rozpocznij Zgadywanie! <MapPin className="mt-1 3xl:w-6 3xl:h-6 4xl:w-7 4xl:h-7 5xl:w-8 5xl:h-8" />
             </ButtonLarge>
           </>

@@ -27,19 +27,19 @@ export function PauseMenu() {
       <div className="w-full max-w-2xl 3xl:max-w-3xl 4xl:max-w-4xl space-y-10 3xl:space-y-12 4xl:space-y-14 flex items-center justify-center flex-col">
         {/* Title */}
         <div className="text-center">
-          <h1 className="leading-normal text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl">Gra zatrzymana</h1>
+          <h1 className="leading-normal 3xl:text-[5em] 4xl:text-[5.8em] mb-4 whitespace-nowrap">Gra zatrzymana</h1>
         </div>
 
         {/* Buttons Section */}
         <div className="space-y-6 3xl:space-y-7 4xl:space-y-8 w-full max-w-xl 3xl:max-w-2xl 4xl:max-w-3xl">
           {/* Resume Button */}
-          <ButtonLarge onClick={onUnpause} className="w-full">
+          <ButtonLarge onClick={onUnpause} className="w-full 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
             Wróć do Gry <Gamepad2 className="mt-1"/>
           </ButtonLarge>
 
           {/* Exit Section with Warning */}
           <div className="space-y-4 3xl:space-y-5 4xl:space-y-6">
-            <ButtonLarge onClick={handleLeaveGame} className="w-full">
+            <ButtonLarge onClick={handleLeaveGame} className="w-full 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
               <ArrowLeft className="mt-1"/>Wyjdź do Menu
             </ButtonLarge>
             

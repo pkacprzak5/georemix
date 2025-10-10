@@ -66,9 +66,9 @@
 }
 
 @theme {
-    --breakpoint-3xl: 1920px;
-  --breakpoint-4xl: 2560px;
-  --breakpoint-5xl: 3840px;
+  --breakpoint-3xl: 112rem;
+  --breakpoint-4xl: 128rem;
+  --breakpoint-5xl: 144rem;
 }
 
 .gradient {
@@ -197,6 +197,40 @@ body {
   }
 }
 
+@keyframes bounce-dots-2xl {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes bounce-dots-3xl {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-18px);
+  }
+}
+
+@keyframes bounce-dots-4xl {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-22px);
+  }
+}
+
+
 .animate-bounce-delay-0 {
   animation: bounce-dots 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
   animation-delay: 0s;
@@ -210,6 +244,57 @@ body {
 .animate-bounce-delay-2 {
   animation: bounce-dots 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
   animation-delay: 0.2s;
+}
+
+@media (min-width: 96rem) {
+  .animate-bounce-delay-0 {
+    animation: bounce-dots-2xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0s;
+  }
+
+  .animate-bounce-delay-1 {
+    animation: bounce-dots-2xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.1s;
+  }
+
+  .animate-bounce-delay-2 {
+    animation: bounce-dots-2xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.2s;
+  }
+}
+
+@media (min-width: 112rem) {
+  .animate-bounce-delay-0 {
+    animation: bounce-dots-3xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0s;
+  }
+
+  .animate-bounce-delay-1 {
+    animation: bounce-dots-3xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.1s;
+  }
+
+  .animate-bounce-delay-2 {
+    animation: bounce-dots-3xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.2s;
+  }
+}
+
+@media (min-width: 128rem) {
+  .animate-bounce-delay-0 {
+    animation: bounce-dots-4xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0s;
+  }
+
+  .animate-bounce-delay-1 {
+    animation: bounce-dots-4xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.1s;
+  }
+
+  .animate-bounce-delay-2 {
+    animation: bounce-dots-4xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.2s;
+  }
 }
 
 /* Fade-in animation for NVIDIA logo */

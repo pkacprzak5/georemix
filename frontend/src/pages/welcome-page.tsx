@@ -144,11 +144,11 @@ export function WelcomePage() {
       <div className="w-full max-w-4xl 3xl:max-w-5xl 4xl:max-w-6xl 5xl:max-w-7xl space-y-8 3xl:space-y-10 4xl:space-y-12">
         <div className="text-center mb-10 3xl:mb-12 4xl:mb-16">
           <div className="flex justify-center mb-4 3xl:mb-6 4xl:mb-8">
-            <div className="w-1/3 aspect-square max-w-sm 3xl:max-w-md 4xl:max-w-lg 5xl:max-w-2xl">
+            <div className="w-[40%] 4xl:w-[30%] aspect-square max-w-sm 3xl:max-w-xl 4xl:max-w-lg ">
               <GlobeLogo />
             </div>
           </div>
-          <h1 className="leading-normal mb-4">
+          <h1 className="leading-normal 3xl:text-[5em] 4xl:text-[5.8em] mb-4 whitespace-nowrap">
             Witaj w <StylisedSpan showStars>GeoRemix!</StylisedSpan>
           </h1>
           {/* <p className="leading-snug mx-auto my-0 w-full 2xl:text-lg xl:text-lg lg:text-lg xl:w-full lg:w-2/3 md:w-full md:text-2xl sm:text-xl text-xl">
@@ -157,20 +157,35 @@ export function WelcomePage() {
           </p> */}
         </div>
 
-        <div className="space-y-4 3xl:space-y-5 4xl:space-y-6 max-w-md 2xl:max-w-xl 4xl:max-w-xl 5xl:max-w-2xl mx-auto">
+        <div className="space-y-4 3xl:space-y-5 4xl:spacey-6 max-w-md xl:max-w-lg 3xl:max-w-3xl 4xl:max-w-4xl mx-auto">
           <InputButton
             placeholder="Wprowadź nazwę gracza"
             value={playerName}
             onChange={setPlayerName}
             onSubmit={handleStartGame}
-            className="w-full 3xl:text-xl 4xl:text-2xl 5xl:text-2xl"
+            className="w-full 2xl:text-2xl"
             disabled={nameError !== null || isCheckingName || !!existingPlayerName}
           />
+
+          <ButtonLarge
+            onClick={handleShowLeaderboard}
+            className="bg-secondary-background text-foreground 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+            Zobacz ranking{" "}
+            <Trophy className=" w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
+          </ButtonLarge>
+
+          <ButtonLarge
+            onClick={handleAbout}
+            className=" 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+            O projekcie{" "}
+            <BookText className=" w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
+          </ButtonLarge>
 
           {isVisible && (
             <Window
               disableMaximize
               disableMinimize
+              isTitleResponsive
               title="Alert.exe"
               position={position}
               setPosition={setPosition}
@@ -215,20 +230,6 @@ export function WelcomePage() {
               </WindowContent>
             </Window>
           )}
-
-          <ButtonLarge
-            onClick={handleShowLeaderboard}
-            className="bg-secondary-background text-foreground 3xl:text-2xl 4xl:text-3xl 5xl:text-4xl 3xl:py-6 4xl:py-7 5xl:py-8">
-            Zobacz ranking{" "}
-            <Trophy className="mt-1 3xl:w-7 3xl:h-7 4xl:w-8 4xl:h-8 5xl:w-10 5xl:h-10" />
-          </ButtonLarge>
-
-          <ButtonLarge
-            onClick={handleAbout}
-            className="3xl:text-2xl 4xl:text-3xl 5xl:text-4xl 3xl:py-6 4xl:py-7 5xl:py-8">
-            O projekcie{" "}
-            <BookText className="mt-1 3xl:w-7 3xl:h-7 4xl:w-8 4xl:h-8 5xl:w-10 5xl:h-10" />
-          </ButtonLarge>
         </div>
       </div>
     </div>

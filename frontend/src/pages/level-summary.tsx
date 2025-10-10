@@ -129,7 +129,7 @@ export function LevelSummary() {
       <div className="w-full space-y-8 3xl:space-y-10 4xl:space-y-12 5xl:space-y-16 p-6 3xl:p-8 4xl:p-10 5xl:p-12 flex flex-col items-center justify-center">
         {/* Header */}
 
-        <h1 className="leading-normal">
+        <h1 className="leading-normal 3xl:text-[5em] 4xl:text-[5.8em] mb-10 whitespace-nowrap ">
           <StylisedSpan showStars>Ukończono Rundę!</StylisedSpan>
         </h1>
 
@@ -139,7 +139,7 @@ export function LevelSummary() {
             <div className="relative">
               <Card className="absolute -top-3 z-[100] -left-8 bg-main py-2 3xl:py-3 4xl:py-3">
                 <CardContent className="px-4 3xl:px-5 4xl:px-6">
-                  <div className="text-md 3xl:text-lg 4xl:text-xl 5xl:text-2xl text-foreground dark:text-shadow font-base">
+                  <div className="text-md 2xl:text-lg 3xl:text-xl 4xl:text-2xl text-foreground dark:text-shadow font-base">
                     {scoreRating}
                   </div>
                 </CardContent>
@@ -174,8 +174,8 @@ export function LevelSummary() {
           </div>
           {/* Navigation Buttons */}
           <div className="space-y-4 w-full">
-            <ButtonLarge onClick={handleViewMap} className="w-full">
-              Pokaż na mapie <Map className="mt-1" />
+            <ButtonLarge onClick={handleViewMap} className="w-full 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+              Pokaż na mapie <Map className="3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6" />
             </ButtonLarge>
           </div>
         </div>
