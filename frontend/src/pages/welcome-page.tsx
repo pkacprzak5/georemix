@@ -180,58 +180,57 @@ export function WelcomePage() {
             O projekcie{" "}
             <BookText className=" w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
           </ButtonLarge>
-
-          {isVisible && (
-            <Window
-              disableMaximize
-              disableMinimize
-              isTitleResponsive
-              title="Alert.exe"
-              position={position}
-              setPosition={setPosition}
-              className={windowClass}
-              style={style}
-              onMaximize={handleMaximize}
-              onMinimize={handleMinimize}
-              onClose={errorMessage ? handleCloseError : handleRejectExistingPlayer}>
-              <WindowContent className="w-full h-full relative p-4">
-                <div className="flex flex-col justify-between h-full">
-                  {errorMessage ? (
-                    <>
-                      <span>{errorMessage}</span>
-                      <div className="flex justify-center mt-4">
-                        <Button onClick={handleCloseError} className="bg-main text-foreground">
-                          Zamknij
-                        </Button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <span>
-                        Nazwa <span className="font-heading">{existingPlayerName} </span>
-                        jest już aktywna. Kontynuując nadpiszesz aktualne wyniki tego gracza.
-                      </span>
-                      <div className="flex flex-wrap justify-around mt-4 gap-4">
-                        <Button
-                          onClick={handleRejectExistingPlayer}
-                          className="bg-secondary-background text-foreground">
-                          Wybierz inną nazwę
-                        </Button>
-                        <Button
-                          onClick={handleConfirmExistingPlayer}
-                          className="bg-main text-foreground">
-                          Kontynuuj jako
-                          <span className="font-heading">{existingPlayerName}</span>
-                        </Button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </WindowContent>
-            </Window>
-          )}
         </div>
       </div>
+      {isVisible && (
+        <Window
+          disableMaximize
+          disableMinimize
+          isTitleResponsive
+          title="Alert.exe"
+          position={position}
+          setPosition={setPosition}
+          className={windowClass}
+          style={style}
+          onMaximize={handleMaximize}
+          onMinimize={handleMinimize}
+          onClose={errorMessage ? handleCloseError : handleRejectExistingPlayer}>
+          <WindowContent className="w-full h-full relative p-4">
+            <div className="flex flex-col justify-between h-full">
+              {errorMessage ? (
+                <>
+                  <span>{errorMessage}</span>
+                  <div className="flex justify-center mt-4">
+                    <Button onClick={handleCloseError} className="bg-main text-foreground">
+                      Zamknij
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span>
+                    Nazwa <span className="font-heading">{existingPlayerName} </span>
+                    jest już aktywna. Kontynuując nadpiszesz aktualne wyniki tego gracza.
+                  </span>
+                  <div className="flex flex-wrap justify-around mt-4 gap-4">
+                    <Button
+                      onClick={handleRejectExistingPlayer}
+                      className="bg-secondary-background text-foreground">
+                      Wybierz inną nazwę
+                    </Button>
+                    <Button
+                      onClick={handleConfirmExistingPlayer}
+                      className="bg-main text-foreground">
+                      Kontynuuj jako
+                      <span className="font-heading">{existingPlayerName}</span>
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          </WindowContent>
+        </Window>
+      )}
     </div>
   );
 }
