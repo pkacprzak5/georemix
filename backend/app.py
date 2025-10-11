@@ -11,11 +11,12 @@ if not load_dotenv():
 
 PORT = int(os.getenv("API_PORT", "5000"))
 HOST = os.getenv("API_HOST", "http://localhost")
-BASE_URL = f"{HOST}:{PORT}"
+BASE_URL = f"{HOST}"
 IMAGE_ENDPOINT = f"{BASE_URL}/images/"
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///scores.db")
 CLIENT_ORIGIN = os.getenv("CLIENT_ORIGIN", "http://localhost:5173")
+ALLOWED_ORIGINS = CLIENT_ORIGIN.split(",")
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
@@ -23,7 +24,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Configure CORS with stricter settings
 cors = CORS(
-    app, 
+    app,
     resources={
         r"/*": {
             "origins": CLIENT_ORIGIN.split(","),

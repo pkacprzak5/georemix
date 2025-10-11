@@ -3,6 +3,14 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        API_SECRET_KEY: ${API_SECRET_KEY}
+        API_PORT: ${API_PORT}
+        API_HOST: ${API_HOST}
+        DATABASE_URL: ${DATABASE_URL}
+        CLIENT_ORIGIN: ${CLIENT_ORIGIN}
+        FLASK_ENV: ${FLASK_ENV}
+        SKIP_API_KEY_CHECK: ${SKIP_API_KEY_CHECK}
     container_name: backend
     ports:
       - "5000:5000"
@@ -15,6 +23,10 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_SECRET_KEY: ${VITE_API_SECRET_KEY}
+        VITE_API_URL: ${VITE_API_URL}
+
     container_name: frontend
     ports:
       - "80:80"
