@@ -1,25 +1,37 @@
 import L from "leaflet";
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
+import { MapContainer, Marker, useMapEvents, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { MapZoomControls } from "@/components/ui/map-zoom-controls";
 import { type MapCoordinates } from "@/types/project";
 import { useEventBridge, useGameStateManager } from "@/context/game-state";
-
-interface MapLayer {
-  url: string;
-  attribution: string;
-}
+import MAP_TILES from "@/../public/MapTiles.json"
+// @ts-ignore
+import "@maplibre/maplibre-gl-leaflet";
 
 interface MapClickHandlerProps {
   onPositionSelect: (position: MapCoordinates) => void;
 }
 
-const mapLayer: MapLayer = {
-  url: "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png",
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-};
+
+// Component to add MapLibre GL layer
+function MapLibreLayer() {
+  const map = useMap();
+
+  useEffect(() => {
+    // @ts-ignore - MapLibre GL Leaflet plugin
+    const mapLibreLayer = L.maplibreGL({
+      //@ts-ignore
+      style: MAP_TILES
+    }).addTo(map);
+
+    return () => {
+      map.removeLayer(mapLibreLayer);
+    };
+  }, [map]);
+
+  return null;
+}
 
 function MapClickHandler({ onPositionSelect }: MapClickHandlerProps) {
   useMapEvents({
@@ -35,14 +47,42 @@ function MapResizer() {
   const map = useMap();
 
   useEffect(() => {
+    let resizeInterval: NodeJS.Timeout | null = null;
+    let stopTimeout: NodeJS.Timeout | null = null;
+
     const resizeObserver = new ResizeObserver(() => {
-      map.invalidateSize();
+      // Clear any existing interval and stop timeout
+      if (resizeInterval) {
+        clearInterval(resizeInterval);
+      }
+      if (stopTimeout) {
+        clearTimeout(stopTimeout);
+      }
+
+      // Start continuous updates during resize
+      resizeInterval = setInterval(() => {
+        map.invalidateSize({ pan: false, animate: false });
+      }, 15);
+
+      // Stop the interval after 150ms of no resize events
+      stopTimeout = setTimeout(() => {
+        if (resizeInterval) {
+          clearInterval(resizeInterval);
+          resizeInterval = null;
+        }
+      }, 150);
     });
 
     const mapContainer = map.getContainer();
     resizeObserver.observe(mapContainer);
 
     return () => {
+      if (resizeInterval) {
+        clearInterval(resizeInterval);
+      }
+      if (stopTimeout) {
+        clearTimeout(stopTimeout);
+      }
       resizeObserver.disconnect();
     };
   }, [map]);
@@ -89,7 +129,7 @@ export default function MapViewer() {
         zoomControl={false}
         attributionControl={false}
         style={{ height: "100%", width: "100%", cursor: "default" }}>
-        <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
+        <MapLibreLayer />
         <MapClickHandler onPositionSelect={setPosition} />
         <MapResizer />
         {position && <Marker position={position} icon={selectedLocationIcon} />}
@@ -97,8 +137,8 @@ export default function MapViewer() {
       </MapContainer>
       <div
         style={{ opacity: position ? 1 : 0, pointerEvents: position ? "auto" : "none" }}
-        className="absolute bottom-4 left-1/2 transform transition-opacity duration-200 ease-in-out -translate-x-1/2 z-[1000]">
-        <Button onClick={handleSubmit} className="relative z-[1000]">
+        className="absolute 2xl:w-[50%] w-[4ּ0%] max-w-[200px] bottom-4 left-1/2 transform transition-opacity duration-200 ease-in-out -translate-x-1/2 z-[1000]">
+        <Button onClick={handleSubmit} className="relative z-[1000] w-full">
           To tutaj!
         </Button>
       </div>

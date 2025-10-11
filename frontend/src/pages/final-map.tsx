@@ -1,14 +1,18 @@
 import { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
+import { MapContainer, Marker, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { ArrowLeft, Trophy } from "lucide-react";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapZoomControls } from "@/components/ui/map-zoom-controls";
+import EdgeStars from "@/components/ui/edge-stars";
 import { useGameStateManager } from "@/context/game-state";
 import { useNavigation } from "@/lib/navigation-system/navigation-provider";
 import { moduleIdMap } from "@/lib/navigation-system/types";
+import MAP_TILES from "@/../public/MapTiles.json"
+// @ts-ignore
+import "@maplibre/maplibre-gl-leaflet";
 
 // Fix for default markers in React Leaflet
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl: unknown })._getIconUrl;
@@ -48,11 +52,24 @@ const createGuessLocationIcon = (color: string) =>
     iconAnchor: [18, 36],
   });
 
-const mapLayer = {
-  url: "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png",
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-};
+// Component to add MapLibre GL layer
+function MapLibreLayer() {
+  const map = useMap();
+
+  useEffect(() => {
+    // @ts-ignore - MapLibre GL Leaflet plugin
+    const mapLibreLayer = L.maplibreGL({
+      //@ts-ignore
+      style: MAP_TILES
+    }).addTo(map);
+
+    return () => {
+      map.removeLayer(mapLibreLayer);
+    };
+  }, [map]);
+
+  return null;
+}
 
 // Level colors for differentiation
 const levelColors = [
@@ -112,6 +129,7 @@ export function FinalMap() {
   useEffect(() => {
     try {
       const allResults = gameStateManager.allLevelResults;
+      const allLevels = gameStateManager.allLevels;
 
       const mappedData: LevelMapData[] = allResults.map((result, index) => ({
         levelNumber: index + 1,
@@ -121,7 +139,8 @@ export function FinalMap() {
           number,
           number,
         ],
-        color: levelColors[index % levelColors.length],
+        // Get color from level info's main color, fallback to levelColors array
+        color: allLevels[index]?.colors?.main || levelColors[index % levelColors.length],
       }));
 
       setLevelsData(mappedData);
@@ -188,17 +207,22 @@ export function FinalMap() {
   }
 
   return (
-    <div className="flex items-center h-full justify-center min-h-full bg-background space-y-8 p-6">
-      <div className="max-w-6xl w-full flex flex-col justify-center h-full space-y-8">
+    <div className="flex items-center h-full justify-center min-h-full bg-background relative">
+      <div className="w-[15%] h-full">
+        <EdgeStars className="h-full" baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
+      </div>
+
+      {/* Main content - 80% width */}
+      <div className="w-[70%] h-full max-h-[80vh] flex flex-col justify-center space-y-8 3xl:space-y-10 4xl:space-y-12 p-6 3xl:p-8 4xl:p-10 5xl:p-12">
         {/* Map Container with Legend Card Overlay */}
-        <div className="relative flex-1 h-[80%] min-h-[500px]">
+        <div className="relative flex-1 h-[80%] min-h-[500px] 3xl:min-h-[600px] 4xl:min-h-[700px] 5xl:min-h-[800px]">
           {/* Legend Card - positioned outside bounds with higher z-index */}
-          <div className="absolute -top-2 z-[2000] p-0 -left-2 max-w-xs">
+          <div className="absolute -top-2 z-[2000] p-0 -left-2 max-w-xs 3xl:max-w-sm 4xl:max-w-md 5xl:max-w-lg">
             <Card className="p-0 bg-secondary-background gradient">
-              <CardContent className="px-3 py-2">
-                <div className="space-y-3">
-                  <div className="text-sm font-bold text-foreground mb-2">Legenda:</div>
-                  <div className="space-y-2 text-xs max-h-64 overflow-y-auto">
+              <CardContent className="px-3 py-2 3xl:px-4 3xl:py-3 4xl:px-5 4xl:py-4">
+                <div className="space-y-3 3xl:space-y-4 4xl:space-y-5">
+                  <div className="text-sm 3xl:text-base 4xl:text-lg 5xl:text-xl font-bold text-foreground mb-2">Legenda:</div>
+                  <div className="space-y-2 3xl:space-y-3 text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg max-h-64 3xl:max-h-80 4xl:max-h-96 overflow-y-auto">
                     {levelsData.map((level) => (
                       <div key={level.levelNumber} className="space-y-1">
                         <div className="flex items-center space-x-2">
@@ -216,7 +240,7 @@ export function FinalMap() {
                       </div>
                     ))}
                   </div>
-                  <div className="pt-2 border-t border-border space-y-2 text-xs">
+                  <div className="pt-2 border-t border-border space-y-2 text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg">
                     <div className="flex items-center space-x-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -266,7 +290,8 @@ export function FinalMap() {
                   style={{ height: "100%", width: "100%" }}
                   zoomControl={false}
                   attributionControl={false}>
-                  <TileLayer url={mapLayer.url} attribution={mapLayer.attribution} />
+                  {/* Use MapLibre GL for vector tiles */}
+                  <MapLibreLayer />
 
                   {/* Render markers and lines for each level */}
                   {levelsData.map((level) => (
@@ -329,13 +354,18 @@ export function FinalMap() {
 
         {/* Action Buttons */}
         <div className="flex space-x-4">
-          <ButtonLarge onClick={handleBackToResults} className="flex-1">
-            <ArrowLeft className="mt-1" /> Powrót do Wyników
+          <ButtonLarge onClick={handleBackToResults} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+            <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" /> Powrót do Wyników
           </ButtonLarge>
-          <ButtonLarge onClick={handleShowLeaderboard} className="flex-1">
-            Tabela Wyników <Trophy className="mt-1" />
+          <ButtonLarge onClick={handleShowLeaderboard} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+            Tabela Wyników <Trophy className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
           </ButtonLarge>
         </div>
+      </div>
+
+      {/* Right EdgeStars - 10% width */}
+      <div className="w-[15%] h-full">
+        <EdgeStars className="h-full" reverse baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
       </div>
     </div>
   );

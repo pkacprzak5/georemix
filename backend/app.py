@@ -21,13 +21,20 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-ALLOWED_ORIGINS = os.getenv(
-    "ALLOWED_ORIGINS",
-    "http://localhost,http://localhost:5173"
-).split(",")
-
-cors = CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}}, supports_credentials=True)
-
+# Configure CORS with stricter settings
+cors = CORS(
+    app, 
+    resources={
+        r"/*": {
+            "origins": CLIENT_ORIGIN.split(","),
+            "methods": ["GET", "POST", "OPTIONS"],
+            "allow_headers": ["Content-Type", "X-API-Key"],
+            "expose_headers": ["Content-Type"],
+            "supports_credentials": True,
+            "max_age": 3600
+        }
+    }
+)
 
 db.init_app(app)
 register_score_routes(app)
@@ -45,9 +52,11 @@ def load_round_level_data(round_num, level_num, file_type):
         return None
 
 
+
 def load_metadata(round_num, level_num):
     """Load metadata from specific round/level"""
     return load_round_level_data(round_num, level_num, "metadata")
+
 
 
 def load_nodes(round_num, level_num):
@@ -55,9 +64,11 @@ def load_nodes(round_num, level_num):
     return load_round_level_data(round_num, level_num, "nodes")
 
 
+
 def load_links(round_num, level_num):
     """Load links from specific round/level"""
     return load_round_level_data(round_num, level_num, "links")
+
 
 
 def get_round_levels(round_num):
@@ -65,6 +76,7 @@ def get_round_levels(round_num):
     round_path = f"rounds/round_{round_num}"
     if not os.path.exists(round_path):
         return []
+
 
     levels = []
     for item in os.listdir(round_path):
@@ -75,6 +87,7 @@ def get_round_levels(round_num):
                 levels.append(level_num)
             except (IndexError, ValueError):
                 continue
+
 
     return sorted(levels)
 
@@ -133,13 +146,19 @@ def get_level_node(round_num, level_num, node_id):
                 }
             )
 
+    sphere_correction = node_data["sphereCorrection"]
     response_node = {
         "id": str(node_data["id"]),
         "panorama": IMAGE_ENDPOINT + str(node_data["panorama"]),
         "links": links,
         "gps": node_data["gps"],
-        "sphereCorrection": {"pan": str(node_data["sphereCorrection"]["pan"]) + "deg"},
+        "sphereCorrection": {
+            "pan": str(sphere_correction.get("pan", 0)) + "deg",
+            "tilt": str(sphere_correction.get("tilt", 0)) + "deg",
+            "roll": str(sphere_correction.get("roll", 0)) + "deg",
+        },
     }
+
 
     return jsonify(response_node)
 
@@ -150,8 +169,10 @@ def get_level_nodes(round_num, level_num):
     nodes = load_nodes(round_num, level_num)
     links_data = load_links(round_num, level_num)
 
+
     if not nodes or not links_data:
         return jsonify({"error": "Level data not found"}), 404
+
 
     response_nodes = []
     for node_data in nodes:
@@ -183,7 +204,9 @@ def get_level_nodes(round_num, level_num):
         }
         response_nodes.append(response_node)
 
+
     return jsonify(response_nodes)
+
 
 
 @app.route("/images/<path:filename>")
@@ -200,6 +223,7 @@ def get_image(filename):
     response.headers.set("Access-Control-Allow-Methods", "GET, OPTIONS")
     response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
     return response
+
 
 
 @app.route("/thumbnails/<path:filename>")

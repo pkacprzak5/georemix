@@ -50,18 +50,14 @@ const JSON_HEADERS: Record<string, string> = {
   "Accept": "application/json",
 };
 
-// // Update global fetch override to accept RequestInfo | URL
-// if (typeof window !== 'undefined' && window.fetch) {
-//   const originalFetch = window.fetch.bind(window);
-//   window.fetch = (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-//     init = init || {};
-//     init.headers = {
-//       ...init.headers,
-//       'Access-Control-Allow-Origin': '*'
-//     };
-//     return originalFetch(input, init);
-//   };
-// }
+const API_KEY = import.meta.env.VITE_API_SECRET_KEY;
+
+function getAuthHeaders(): Record<string, string> {
+  return {
+    ...JSON_HEADERS,
+    "X-API-Key": API_KEY || "",
+  };
+}
 
 export class DataSourceManager {
   private readonly baseUrl: string;
@@ -92,7 +88,7 @@ export class DataSourceManager {
 
     const response = await this.request<PlayerResults>("/players", {
       method: "POST",
-      headers: JSON_HEADERS,
+      headers: getAuthHeaders(),
       body: JSON.stringify({ username: trimmed }),
     });
 
@@ -109,7 +105,7 @@ export class DataSourceManager {
   }): Promise<PlayerResults> {
     const backendScore = await this.request<BackendRoundScore>("/scores/round", {
       method: "POST",
-      headers: JSON_HEADERS,
+      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     });
 
@@ -135,6 +131,11 @@ export class DataSourceManager {
       totalTime: score.time || 0,
       closestCall: score.minDistance || 0,
     }));
+  }
+
+  // Get node data for panorama viewer
+  async getNode<T = any>(roundNumber: number, levelNumber: number, nodeId: string): Promise<T> {
+    return this.get<T>(`/round${roundNumber}/level${levelNumber}/nodes/${nodeId}`);
   }
 
   // Cache management methods
@@ -254,6 +255,7 @@ export class DataSourceManager {
     const response = await fetch(`${this.baseUrl}${endpoint}`, {
       ...init,
       headers,
+      credentials: 'include',
     });
 
     if (!response.ok) {

@@ -19,6 +19,11 @@ type WindowLayoutProps = {
   onClose?: () => void;
   onMinimize?: () => void;
   onMaximize?: () => void;
+  disableMinimize?: boolean;
+  disableMaximize?: boolean;
+  disableClose?: boolean;
+  iconMaximisedByDefault?: boolean;
+  isTitleResponsive?: boolean;
 } & React.ComponentProps<"div">;
 
 function WindowLayout({
@@ -31,6 +36,11 @@ function WindowLayout({
   onClose,
   onMinimize,
   onMaximize,
+  disableMinimize = false,
+  disableMaximize = false,
+  disableClose = false,
+  iconMaximisedByDefault = true,
+  isTitleResponsive = false,
   style,
   ...props
 }: WindowLayoutProps) {
@@ -46,7 +56,8 @@ function WindowLayout({
     initialPosition,
     position: externalPosition,
     setPosition: externalSetPosition,
-    ref: draggableHeaderRef,
+    ref: windowRef,
+    dragHandleRef: draggableHeaderRef,
     style,
   });
 
@@ -115,51 +126,57 @@ function WindowLayout({
             "flex items-center justify-between px-4 py-2 bg-main text-main-foreground border-b-2 border-border rounded-t-[3px] select-none",
             "font-heading"
           )}>
-          <div className="flex-1 truncate">{title}</div>
+          <div className={`flex-1 ${isTitleResponsive && "2xl:text-lg 3xl:text-xl 4xl:text-2xl"} font-mono truncate`}>{title}</div>
 
           {/* Header Icons */}
           <div className="flex gap-1 ml-2">
             {/* Minimize */}
-            <button
-              onClick={(e) => {
-                setMaximized(false);
-                handleIconClick(e, onMinimize);
-              }}
-              className="window-button"
-              aria-label="Minimize">
-              <span className="text-xs font-bold">
-                <Minus />
-              </span>
-            </button>
+            {!disableMinimize && (
+              <button
+                onClick={(e) => {
+                  setMaximized(false);
+                  handleIconClick(e, onMinimize);
+                }}
+                className="window-button"
+                aria-label="Minimize">
+                <span className="text-xs font-bold">
+                  <Minus />
+                </span>
+              </button>
+            )}
 
             {/* Maximize & minimize */}
-            <button
-              onClick={(e) => {
-                if (!maximized) {
-                  handleIconClick(e, onMaximize);
-                } else {
-                  handleIconClick(e, onMinimize);
-                }
-                setMaximized(!maximized);
-              }}
-              className="window-button"
-              aria-label="Maximize">
-              <span className="text-xs font-bold flex items-center justify-center">
-                {!maximized ? (
-                  <Copy transform="scale(-1,1)" size={"60%"} />
-                ) : (
-                  <Square size={"70%"} />
-                )}
-              </span>
-            </button>
+            {!disableMaximize && (
+              <button
+                onClick={(e) => {
+                  if (!maximized) {
+                    handleIconClick(e, onMaximize);
+                  } else {
+                    handleIconClick(e, onMinimize);
+                  }
+                  setMaximized(!maximized);
+                }}
+                className="window-button"
+                aria-label="Maximize">
+                <span className="text-xs font-bold flex items-center justify-center">
+                  {maximized !== iconMaximisedByDefault ? (
+                    <Copy transform="scale(-1,1)" size={"60%"} />
+                  ) : (
+                    <Square size={"70%"} />
+                  )}
+                </span>
+              </button>
+            )}
 
             {/* Close */}
-            <button
-              onClick={(e) => handleIconClick(e, onClose)}
-              className="window-button"
-              aria-label="Close">
-              <X />
-            </button>
+            {!disableClose && (
+              <button
+                onClick={(e) => handleIconClick(e, onClose)}
+                className="window-button"
+                aria-label="Close">
+                <X />
+              </button>
+            )}
           </div>
         </div>
 

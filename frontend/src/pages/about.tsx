@@ -3,7 +3,7 @@ import { moduleIdMap } from "@/lib/navigation-system/types";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StylisedSpan from "@/components/ui/stylised-span";
-import { ArrowLeft } from "lucide-react";
+import { Earth } from "lucide-react";
 
 export function AboutPage() {
   const { navigateTo } = useNavigation();
@@ -13,50 +13,52 @@ export function AboutPage() {
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+    <div className="absolute inset-0 flex flex-col items-center justify-center p-4 3xl:p-6 4xl:p-8 5xl:p-10">
       {/* Cards Container */}
-      <div className="w-full max-w-6xl h-[calc(100%-2rem)] grid grid-cols-2 gap-8">
+      <div className="w-full max-w-6xl 3xl:max-w-7xl 4xl:max-w-[90rem] 5xl:max-w-[110rem] h-[calc(100%-2rem)] grid grid-cols-2 gap-8 3xl:gap-10 4xl:gap-12 5xl:gap-16">
         {/* Project Creation Card */}
         <div>
-          <Card className="h-fit bg-secondary-background gradient">
+          <Card className="h-fit bg-secondary-background gradient py-6 3xl:py-8 4xl:py-10 5xl:py-12 overflow-auto scrollbar-neobrutalist flex-1 min-h-0 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
             <CardHeader>
-              <CardTitle className="text-3xl font-heading">
+              <CardTitle className="text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl font-heading">
                 <StylisedSpan>O Projekcie</StylisedSpan>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 3xl:space-y-5 4xl:space-y-6 5xl:space-y-8 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
               <p className="text-foreground leading-relaxed">
                 <span className="font-bold">GeoRemix</span> to gra powstała w ramach współpracy Koła
                 Naukowego BIT i NVIDIA, łącząca zaawansowane technologie przetwarzania obrazu z
-                wykorzystaniem AI z klasyczną rozrywką znaną z gry GeoGuesser.
+                wykorzystaniem AI z klasyczną rozrywką znaną z gry GeoGuessr.
               </p>
+              <p className="text-foreground leading-relaxed">PIOTREK DOPISZ MI TU COŚ</p>
               <p className="text-foreground leading-relaxed">
-                PLACEHOLDERY DALEJ Projekt wykorzystuje nowoczesne technologie webowe oraz
-                zaawansowane renderowanie graficzne, aby zapewnić płynne i immersyjne doświadczenie
-                podczas eksploracji różnych zakątków świata.
-              </p>
-              <p className="text-foreground leading-relaxed">
-                Gra została stworzona z myślą o łączeniu edukacji z rozrywką, pozwalając graczom na
-                poznawanie nowych miejsc w interaktywny i angażujący sposób.
+                Sama platforma do gry została w całości zaprojektowana i zbudowana od podstaw przez
+                członków koła, z wykorzystaniem nowoczesnych technologii webowych - min. React po stronie frontendu oraz Flask po stronie backendu. Interfejs użytkownika utrzymany
+                jest w stylu neo-brutalistycznym, który łączy surową estetykę z funkcjonalnym
+                minimalizmem.
               </p>
             </CardContent>
           </Card>
 
-          <ButtonLarge onClick={handleGoBack} className="w-full mt-8 ">
-            <ArrowLeft className="mt-1" />
-            Powrót do Menu Głównego
+          <ButtonLarge
+            onClick={handleGoBack}
+            className="w-full mt-8 3xl:mt-10 4xl:mt-12 5xl:mt-16 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+            Powrót do Menu
+            <Earth className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
           </ButtonLarge>
         </div>
 
         {/* Game Rules Card */}
         {/* Has to be styled like that because of overflowing issues */}
-        <Card className="h-full py-0 flex flex-col bg-secondary-background gradient overflow-hidden">
-          <CardContent className="py-6 overflow-auto scrollbar-neobrutalist flex-1 min-h-0">
-            <CardTitle className="text-3xl font-heading">
+        <Card className="h-fit max-h-full py-0 flex flex-col bg-secondary-background gradient overflow-hidden">
+          <CardContent className="py-6 3xl:py-8 4xl:py-10 5xl:py-12 overflow-auto scrollbar-neobrutalist flex-1 min-h-0 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
+            <CardTitle className="text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl font-heading">
               <StylisedSpan>Zasady Gry</StylisedSpan>
             </CardTitle>
             <div>
-              <h3 className="text-lg font-bold text-foreground mb-2 mt-6">Przebieg rozgrywki</h3>
+              <h3 className="text-lg 3xl:text-xl 4xl:text-2xl 5xl:text-3xl font-bold text-foreground mb-2 mt-6">
+                Przebieg rozgrywki
+              </h3>
               <p className="text-foreground leading-relaxed mt-2">
                 Rozgrywka składa się z 5 rund, z których każda odbywa się w innej lokalizacji oraz w
                 odmiennym stylu wizualnym.
@@ -71,31 +73,23 @@ export function AboutPage() {
             <div>
               <h3 className="text-lg font-bold text-foreground mb-2 mt-4">Punktacja</h3>
               <p className="text-foreground leading-relaxed">
-                Po wyborze wskazane miejsce porównywane jest z faktyczną lokalizacją.
+                Po wyborze, wskazane miejsce porównywane jest z faktyczną lokalizacją.
               </p>
               <p className="text-foreground leading-relaxed mt-2">
                 Im mniejsza odległość między wytypowanym punktem a rzeczywistym, tym więcej punktów
                 gracz otrzymuje.
-              </p>
-              <p className="text-foreground leading-relaxed mt-2">
-                Dodatkowym kryterium jest czas podjęcia decyzji - szybsze odpowiedzi nagradzane są
-                wyższym wynikiem!
               </p>
             </div>
             <div>
               <h3 className="text-lg font-bold text-foreground mb-2 mt-4">Zakończenie rozgrywki</h3>
               <p className="text-foreground leading-relaxed">
                 Po rozegraniu wszystkich 5 rund gra prezentuje końcowy wynik gracza, obliczany na
-                podstawie:
+                podstawie wyników w poszczególnych rundach
               </p>
-              <ul className="list-disc list-inside text-foreground leading-relaxed mt-2 ml-4">
-                <li>średniej lub łącznej odległości od właściwych miejsc,</li>
-                <li>oraz czasu, jaki zajęło podjęcie decyzji w każdej rundzie.</li>
-              </ul>
 
               <p className="text-foreground leading-relaxed mt-2">
-                Celem jest uzyskanie jak największej liczby punktów, a więc trafne i szybkie
-                rozpoznawanie lokalizacji. Wyniki mogą być porównywane między graczami.
+                Celem jest uzyskanie jak największej liczby punktów, a więc, przede wszystkim,
+                wprawne oko i trafne rozpoznawanie lokalizacji. Powodzenia!
               </p>
             </div>
           </CardContent>

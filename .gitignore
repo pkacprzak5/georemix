@@ -4,6 +4,7 @@ frontend/dist/
 
 # Backend
 backend/.venv/
+backend/venv/
 *__pycache__/
 backend/*.pyc
 backend/instance/
@@ -19,6 +20,9 @@ Thumbs.db
 
 .env
 ignore*
+
+pipeline/pictures/
+pipeline/logs/
 images_1
 images_2
 cracow

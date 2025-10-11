@@ -8,8 +8,7 @@ interface ViteTypeOptions {
 
 interface ImportMetaEnv {
   readonly VITE_API_URL: string;
-  readonly VITE_MAPILLARY_ACCESS_TOKEN: string;
-  // more env variables...
+  readonly VITE_API_SECRET_KEY: string;
 }
 
 interface ImportMeta {

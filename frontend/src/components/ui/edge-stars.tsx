@@ -8,6 +8,11 @@ interface EdgeStarsProps {
   reverse?: boolean;
   paddingLeft?: number;   // Minimum distance from left edge in pixels
   paddingRight?: number;  // Minimum distance from right edge in pixels
+  baseStarCount?: number; // Base number of stars for narrow containers
+  starsPerHundredPx?: number; // Additional stars per 100px of width
+  yMargin?: number; // Base vertical spacing between stars
+  starClassName?: string; // Additional CSS classes for individual stars
+  starStyle?: React.CSSProperties; // Inline styles for individual stars
 }
 
 // Available icon components with weights (higher weight = more frequent)
@@ -34,22 +39,43 @@ function selectWeightedIcon() {
   return ICONS[0]; // Fallback to first icon
 }
 
+// Helper function to get base size based on viewport width
+function getBaseSize(viewportWidth: number): number {
+  const breakpoints = CONFIG.SIZE_BREAKPOINTS;
+  
+  // Find the largest breakpoint that the viewport width exceeds
+  for (let i = breakpoints.length - 1; i >= 0; i--) {
+    if (viewportWidth >= breakpoints[i].minWidth) {
+      return breakpoints[i].baseSize;
+    }
+  }
+  
+  return CONFIG.BASE_SIZE; // Fallback
+}
+
 // Configurable constants
 const CONFIG = {
   BASE_STAR_COUNT: 8,               // Base number of stars for narrow containers
   STARS_PER_100PX: 4,               // Additional stars per 100px of width
-  BASE_SIZE: 50,                    // Base size for stars
+  BASE_SIZE: 50,                    // Base size for stars (default breakpoint)
   SIZE_RANDOM_OFFSET: 15,           // Random size variation (+/-)
   Y_MARGIN: 100,                    // Base vertical spacing between stars
   Y_RANDOM_OFFSET: 30,              // Random vertical offset (+/-)
   X_RANDOM_OFFSET_PERCENT: 15,      // Random horizontal offset as % of container width
-  DEFAULT_PADDING: 0,               // Default padding from edges (in pixels)
+  DEFAULT_PADDING: 50,               // Default padding from edges (in pixels)
   MIN_WIDTH_FOR_MIDDLE: 150,        // Minimum width (px) to show middle column
   MIDDLE_X_OFFSET_PERCENT: 10,      // Random horizontal offset for middle stars (% of width)
   MAX_CONSECUTIVE_SAME_POSITION: 2, // Maximum times same position can appear in a row
   COLORS: [
     "var(--main)",
     "var(--secondary-background)",
+  ],
+  // Responsive base size based on viewport width
+  SIZE_BREAKPOINTS: [
+    { minWidth: 0, baseSize: 50 },      // Default (< 1920px)
+    { minWidth: 1920, baseSize: 60 },   // 3xl breakpoint
+    { minWidth: 2560, baseSize: 70 },   // 4xl breakpoint
+    { minWidth: 3840, baseSize: 85 },   // 5xl breakpoint
   ],
 };
 
@@ -62,8 +88,13 @@ const CONFIG = {
  * 
  * @param className - Additional CSS classes
  * @param reverse - Not used in random mode, kept for backwards compatibility
- * @param paddingLeft - Minimum distance from left edge in pixels (default: 0px)
- * @param paddingRight - Minimum distance from right edge in pixels (default: 0px)
+ * @param paddingLeft - Minimum distance from left edge in pixels (default: 50px)
+ * @param paddingRight - Minimum distance from right edge in pixels (default: 50px)
+ * @param baseStarCount - Base number of stars for narrow containers (default: 8)
+ * @param starsPerHundredPx - Additional stars per 100px of width (default: 4)
+ * @param yMargin - Base vertical spacing between stars (default: 100)
+ * @param starClassName - Additional CSS classes for individual stars
+ * @param starStyle - Inline styles for individual stars
  * 
  * @example
  * // Stars with custom left padding
@@ -72,6 +103,12 @@ const CONFIG = {
  * // Stars with different padding for each side
  * <EdgeStars className="lg:block hidden" paddingLeft={30} paddingRight={50} />
  * 
+ * // Less dense stars for map pages
+ * <EdgeStars baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
+ * 
+ * // Stars with fade-in animation
+ * <EdgeStars starClassName="animate-fade-in" />
+ * 
  * // Wider container automatically gets more stars proportionally
  * <EdgeStars className="w-[20%] lg:block hidden" />
  */
@@ -79,26 +116,33 @@ export default function EdgeStars({
   className, 
   reverse, 
   paddingLeft = CONFIG.DEFAULT_PADDING,
-  paddingRight = CONFIG.DEFAULT_PADDING 
+  paddingRight = CONFIG.DEFAULT_PADDING,
+  baseStarCount = CONFIG.BASE_STAR_COUNT,
+  starsPerHundredPx = CONFIG.STARS_PER_100PX,
+  yMargin = CONFIG.Y_MARGIN,
+  starClassName,
+  starStyle
 }: EdgeStarsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(0);
 
-  // Measure container width
+  // Measure container and viewport width
   useEffect(() => {
     if (!containerRef.current) {
       return;
     }
 
-    const updateWidth = () => {
+    const updateDimensions = () => {
       if (containerRef.current) {
         setContainerWidth(containerRef.current.offsetWidth);
       }
+      setViewportWidth(window.innerWidth);
     };
 
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
   const showMiddleColumn = containerWidth >= CONFIG.MIN_WIDTH_FOR_MIDDLE;
@@ -106,11 +150,11 @@ export default function EdgeStars({
   // Calculate number of stars based on container width
   const starCount = useMemo(() => {
     if (containerWidth === 0) {
-      return CONFIG.BASE_STAR_COUNT;
+      return baseStarCount;
     }
-    const additionalStars = Math.floor((containerWidth / 100) * CONFIG.STARS_PER_100PX);
-    return Math.max(CONFIG.BASE_STAR_COUNT, CONFIG.BASE_STAR_COUNT + additionalStars);
-  }, [containerWidth]);
+    const additionalStars = Math.floor((containerWidth / 100) * starsPerHundredPx);
+    return Math.max(baseStarCount, baseStarCount + additionalStars);
+  }, [containerWidth, baseStarCount, starsPerHundredPx]);
 
   // Generate stars with consistent random values using useMemo
   const stars = useMemo(() => {
@@ -118,6 +162,9 @@ export default function EdgeStars({
     let currentY = 40; // Starting Y position
     let lastPosition: 'left' | 'right' | 'middle' | null = null;
     let consecutiveCount = 0;
+
+    // Get responsive base size based on viewport width
+    const responsiveBaseSize = getBaseSize(viewportWidth);
 
     // Available positions based on whether middle column is shown
     const availablePositions: Array<'left' | 'right' | 'middle'> = showMiddleColumn 
@@ -155,8 +202,8 @@ export default function EdgeStars({
         lastPosition = position;
       }
       
-      // Calculate size with random offset
-      const size = CONFIG.BASE_SIZE + (Math.random() * CONFIG.SIZE_RANDOM_OFFSET * 2 - CONFIG.SIZE_RANDOM_OFFSET);
+      // Calculate size with random offset using responsive base size
+      const size = responsiveBaseSize + (Math.random() * CONFIG.SIZE_RANDOM_OFFSET * 2 - CONFIG.SIZE_RANDOM_OFFSET);
       
       // Calculate Y position with random offset
       const yOffset = Math.random() * CONFIG.Y_RANDOM_OFFSET * 2 - CONFIG.Y_RANDOM_OFFSET;
@@ -209,11 +256,11 @@ export default function EdgeStars({
       });
 
       // Increment Y for next star
-      currentY += CONFIG.Y_MARGIN;
+      currentY += yMargin;
     }
 
     return generatedStars;
-  }, [reverse, paddingLeft, paddingRight, showMiddleColumn, containerWidth, starCount]); // Regenerate if any prop changes
+  }, [reverse, paddingLeft, paddingRight, showMiddleColumn, containerWidth, starCount, viewportWidth, yMargin]); // Regenerate if any prop changes
 
   return (
     <div
@@ -230,13 +277,14 @@ export default function EdgeStars({
         return (
           <div
             key={index}
-            className="absolute"
+            className={cn("absolute", starClassName)}
             style={{
               top: `${star.y}px`,
               ...(star.position === 'middle' 
                 ? { left: `${star.x}px`, transform: `translateX(-50%) rotate(${star.rotation}deg)` }
                 : { [star.position]: `${star.x}px`, transform: `rotate(${star.rotation}deg)` }
               ),
+              ...starStyle,
             }}
           >
             {usesFillProp ? (

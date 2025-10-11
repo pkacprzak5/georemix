@@ -10,6 +10,7 @@ interface BrutalistInputProps {
   className?: string;
   label?: string;
   ref?: React.RefObject<HTMLInputElement | null>;
+  disabled?: boolean;
 }
 
 export const InputButton = ({
@@ -20,20 +21,21 @@ export const InputButton = ({
   className = "",
   label,
   ref,
+  disabled = false,
 }: BrutalistInputProps) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && onSubmit && value.trim()) {
+    if (e.key === "Enter" && onSubmit && value.trim() && !disabled) {
       onSubmit();
     }
   };
 
   const handleSubmit = () => {
-    if (onSubmit && value.trim()) {
+    if (onSubmit && value.trim() && !disabled) {
       onSubmit();
     }
   };
 
-  const isDisabled = !value.trim();
+  const isDisabled = !value.trim() || disabled;
 
   return (
     <div className={cn("relative w-full", className)}>
@@ -50,18 +52,18 @@ export const InputButton = ({
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="flex-1 px-6 py-4 text-lg font-base bg-transparent border-none outline-none placeholder:text-foreground/50 text-foreground rounded-l-base "
+          className="flex-1 px-6 py-4 3xl:py-6 4xl:py-7 text-lg 3xl:text-2xl 4xl:text-3xl font-base bg-transparent border-none outline-none placeholder:text-foreground/50 text-foreground rounded-l-base "
         />
         <button
           onClick={handleSubmit}
           disabled={isDisabled}
           className={cn(
-            "px-6 py-4 bg-main text-main-foreground border-l-2 border-border transition-all duration-150 flex items-center justify-center rounded-r-base",
+            "px-6 py-4 3xl:text-2xl 4xl:text-3xl bg-main text-main-foreground border-l-2 border-border transition-all duration-150 flex items-center justify-center rounded-r-base",
             "hover:bg-main/90",
             "disabled:pointer-events-none disabled:opacity-50"
           )}
           type="button">
-          <ArrowRight className="w-6 h-6" strokeWidth={2} />
+          <ArrowRight className="w-6 h-6 3xl:w-10 3xl:h-10 4xl:h-12 4xl:w-12" strokeWidth={2} />
         </button>
       </div>
     </div>

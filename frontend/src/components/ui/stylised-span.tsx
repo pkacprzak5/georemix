@@ -8,7 +8,7 @@ interface Props {
 
 const StylisedSpan = ({ children, showStars }: Props) => {
   return (
-    <span className="relative px-2 sm:mr-2 mr-0 md:[&_svg]:size-[45px] sm:[&_svg]:size-7 bg-main/50 rounded-base border-2 border-border/40 dark:border-border/70">
+    <span className=" whitespace-nowrap relative px-2 sm:mr-2 mr-0 md:[&_svg]:size-[45px] sm:[&_svg]:size-7 bg-main/50 rounded-base border-2 border-border/40 dark:border-border/70">
       {children}
       {showStars && (
         <>

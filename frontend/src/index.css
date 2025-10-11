@@ -73,6 +73,12 @@
   --breakpoint-8xl: 7680px;  /* 8K UHD */
 }
 
+@theme {
+  --breakpoint-3xl: 112rem;
+  --breakpoint-4xl: 128rem;
+  --breakpoint-5xl: 144rem;
+}
+
 .gradient {
   /* @apply bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] */
   @apply [background-size:20px_20px] [background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)];
@@ -118,7 +124,15 @@
   }
 
   h1 {
-    @apply text-6xl tracking-tight leading-none;
+    @apply text-6xl 3xl:text-7xl 4xl:text-8xl 5xl:text-9xl tracking-tight leading-none;
+  }
+  
+  h2 {
+    @apply 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl;
+  }
+  
+  h3 {
+    @apply 3xl:text-2xl 4xl:text-3xl 5xl:text-4xl;
   }
 }
 
@@ -191,6 +205,40 @@ body {
   }
 }
 
+@keyframes bounce-dots-2xl {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes bounce-dots-3xl {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-18px);
+  }
+}
+
+@keyframes bounce-dots-4xl {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-22px);
+  }
+}
+
+
 .animate-bounce-delay-0 {
   animation: bounce-dots 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
   animation-delay: 0s;
@@ -206,6 +254,57 @@ body {
   animation-delay: 0.2s;
 }
 
+@media (min-width: 96rem) {
+  .animate-bounce-delay-0 {
+    animation: bounce-dots-2xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0s;
+  }
+
+  .animate-bounce-delay-1 {
+    animation: bounce-dots-2xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.1s;
+  }
+
+  .animate-bounce-delay-2 {
+    animation: bounce-dots-2xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.2s;
+  }
+}
+
+@media (min-width: 112rem) {
+  .animate-bounce-delay-0 {
+    animation: bounce-dots-3xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0s;
+  }
+
+  .animate-bounce-delay-1 {
+    animation: bounce-dots-3xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.1s;
+  }
+
+  .animate-bounce-delay-2 {
+    animation: bounce-dots-3xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.2s;
+  }
+}
+
+@media (min-width: 128rem) {
+  .animate-bounce-delay-0 {
+    animation: bounce-dots-4xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0s;
+  }
+
+  .animate-bounce-delay-1 {
+    animation: bounce-dots-4xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.1s;
+  }
+
+  .animate-bounce-delay-2 {
+    animation: bounce-dots-4xl 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    animation-delay: 0.2s;
+  }
+}
+
 /* Fade-in animation for NVIDIA logo */
 @keyframes fade-in {
   from {
@@ -219,7 +318,11 @@ body {
 }
 
 .animate-fade-in {
-  animation: fade-in 2s ease-in-out forwards;
+  animation: fade-in 2.5s ease-in-out forwards;
+}
+
+.animate-fade-in-fast {
+  animation: fade-in 4s ease-in-out forwards;
 }
 /* 
  .leaflet-tile-container img {

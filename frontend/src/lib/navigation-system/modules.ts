@@ -24,8 +24,8 @@ export const introGroup: Module = {
   pages: [
     { id: "welcome-page", component: WelcomePage, title: "Welcome to GeoRemix", showStars: true },
     { id: "about", component: AboutPage, title: "About" },
-    { id: "leader-board", component: LeaderBoardPage, title: "Leader Board" },
-    { id: "stage-picker", component: StagePicker, title: "Pick the Stage" },
+    { id: "leader-board", component: LeaderBoardPage, title: "Leader Board", showStars: true },
+    { id: "stage-picker", component: StagePicker, title: "Pick the Stage", showStars: true },
   ],
   // initialPage: "welcome-page",
 };
@@ -50,10 +50,11 @@ export const levelEndGroup: Module = {
 
 export const gameEndGroup: Module = {
   id: moduleIdMap.FINAL,
-  pages: [
+   pages: [
     { id: "final-result", component: FinalResult, title: "Summary", showStars: true },
     { id: "final-map", component: FinalMap, title: "Final Map" },
   ],
+
 };
 
 export const loadingGroup: Module = {

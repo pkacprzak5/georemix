@@ -2,8 +2,7 @@ import { useRef } from "react";
 import { ReactPhotoSphereViewer } from "react-photo-sphere-viewer";
 import { VirtualTourPlugin } from "@photo-sphere-viewer/virtual-tour-plugin";
 import { Viewer } from "@photo-sphere-viewer/core";
-import { useEventBridge, useGameStateManager } from "@/context/game-state";
-import { BASE_URL } from "@/constants";
+import { useEventBridge, useGameStateManager, useDataSourceManager } from "@/context/game-state";
 import type { MapCoordinates } from "@/types/project";
 import "@photo-sphere-viewer/virtual-tour-plugin/index.css";
 import "@photo-sphere-viewer/core/index.css";
@@ -18,22 +17,15 @@ const PanoramaViewer = () => {
   const pSRef = useRef<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
   const eventBridge = useEventBridge();
   const gameStateManager = useGameStateManager();
+  const dataSourceManager = useDataSourceManager();
 
   // Get node function that fetches from server
   const getNode = async (nodeId: string): Promise<Node | null> => {
     const roundNumber = gameStateManager.currentRoundNumber;
     const levelNumber = gameStateManager.currentLevelInfo.number;
-    const endpoint = BASE_URL + `/round${roundNumber}/level${levelNumber}/nodes`;
-    console.log(endpoint, BASE_URL)
 
     try {
-      const response = await fetch(`${endpoint}/${nodeId}`, {
-        headers: { "Access-Control-Allow-Origin": "*" },
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const nodeData = await response.json();
+      const nodeData = await dataSourceManager.getNode<Node>(roundNumber, levelNumber, nodeId);
       return nodeData;
     } catch (error) {
       console.error("Error fetching node:", error);
@@ -48,15 +40,26 @@ const PanoramaViewer = () => {
       return;
     }
 
-    // Listen for node changes
-    virtualTour.addEventListener("node-changed", (e: any) => {
-      // eslint-disable-line @typescript-eslint/no-explicit-any
+    getNode(gameStateManager.currentLevelInfo.initialNode).then((node: any) => {
+      if (!node) {
+        throw new Error("Can not get starting node!");
+      }
       const location: MapCoordinates = {
-        lat: e.node.gps[1],
-        lng: e.node.gps[0],
+        lat: node.gps[1],
+        lng: node.gps[0],
       };
       gameStateManager.setCoordinates(location);
     });
+
+    // Listen for node changes
+    // virtualTour.addEventListener("node-changed", (e: any) => {
+    //   // eslint-disable-line @typescript-eslint/no-explicit-any
+    //   const location: MapCoordinates = {
+    //     lat: e.node.gps[1],
+    //     lng: e.node.gps[0],
+    //   };
+    //   gameStateManager.setCoordinates(location);
+    // });
 
     setTimeout(() => {
       eventBridge.emit("viewerLoaded", {});
