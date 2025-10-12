@@ -142,9 +142,9 @@ export function WelcomePage() {
   return (
     <div className="flex items-center justify-center h-full w-full px-4">
       <div className="w-full max-w-4xl 3xl:max-w-5xl 4xl:max-w-6xl 5xl:max-w-7xl space-y-8 3xl:space-y-10 4xl:space-y-12">
-        <div className="text-center mb-10 3xl:mb-12 4xl:mb-16">
-          <div className="flex justify-center mb-4 3xl:mb-6 4xl:mb-8">
-            <div className="w-[40%] 4xl:w-[30%] aspect-square max-w-sm 3xl:max-w-xl 4xl:max-w-lg ">
+        <div className="text-center mb-10 3xl:mb-12 4xl:mb-16 ">
+          <div className="flex justify-center mb-4 3xl:mb-6 4xl:mb-8 ">
+            <div className="w-[40%] short-screen-5xl:[w-15%] short-screen-4xl:w-[20%] short-screen-3xl:w-[25%] 4xl:w-[30%] aspect-square max-w-sm 3xl:max-w-xl 4xl:max-w-lg max-h-[960px]:max-w-sm">
               <GlobeLogo />
             </div>
           </div>
