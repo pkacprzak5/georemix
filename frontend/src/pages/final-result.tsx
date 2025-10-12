@@ -222,8 +222,8 @@ export function FinalResult() {
             <Card className="bg-secondary-background gradient">
               <CardContent className="text-center flex items-center justify-center flex-col h-full py-1 3xl:py-2 4xl:py-3">
                 <Clock
-                  className="mx-auto mb-4 3xl:mb-5 4xl:mb-6 text-main 3xl:w-9 3xl:h-9 4xl:w-11 4xl:h-11 5xl:w-14 5xl:h-14"
-                  size={28}
+                  className="mx-auto mb-4 3xl:mb-5 4xl:mb-6 text-main 3xl:w-12 3xl:h-12 4xl:w-16 4xl:h-16 5xl:w-20 5xl:h-20"
+                  size={36}
                 />
                 <div className="text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3">
                   {formatTime(animatedTotalTime)}
@@ -238,8 +238,8 @@ export function FinalResult() {
             <Card className="bg-secondary-background gradient">
               <CardContent className="text-center flex items-center justify-center flex-col h-full py-1 3xl:py-2 4xl:py-3">
                 <MapPin
-                  className="mx-auto mb-4 3xl:mb-5 4xl:mb-6 text-main 3xl:w-9 3xl:h-9 4xl:w-11 4xl:h-11 5xl:w-14 5xl:h-14"
-                  size={28}
+                  className="mx-auto mb-4 3xl:mb-5 4xl:mb-6 text-main 3xl:w-12 3xl:h-12 4xl:w-16 4xl:h-16 5xl:w-20 5xl:h-20"
+                  size={36}
                 />
                 <div className="text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3 whitespace-nowrap">
                   {formatDistance(animatedShortestDistance)}

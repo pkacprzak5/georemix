@@ -71,6 +71,22 @@
   --breakpoint-5xl: 144rem;
 }
 
+@custom-variant short-screen-3xl {
+  @media ((height <= 960px) and (width >= 112rem)){
+    @slot
+  }
+}
+@custom-variant short-screen-4xl {
+  @media ((height <= 1050px) and (width >= 128rem)){
+    @slot
+  }
+}
+@custom-variant short-screen-5xl {
+  @media ((height <= 1050px) and (width >= 144rem)){
+    @slot
+  }
+}
+
 .gradient {
   /* @apply bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] */
   @apply [background-size:20px_20px] [background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)];
