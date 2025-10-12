@@ -2,8 +2,50 @@ from datetime import datetime
 from typing import Any, List
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import inspect
 
 db = SQLAlchemy()
+
+
+def init_database(app):
+    """
+    Initialize database tables safely, handling race conditions with multiple workers.
+    This function should be called after db.init_app(app) in the application context.
+    """
+    try:
+        # Check if tables already exist to avoid race conditions
+        inspector = inspect(db.engine)
+        existing_tables = inspector.get_table_names()
+        
+        if not existing_tables:
+            print("Creating database tables...")
+            db.create_all()
+            print("Database tables created successfully")
+        else:
+            print(f"Database tables already exist: {existing_tables}")
+            # Call create_all anyway - it's safe and will create any missing tables
+            db.create_all()
+            print("Database schema verified")
+            
+    except Exception as e:
+        # This can happen with race conditions when multiple workers start simultaneously
+        print(f"Database initialization note: {e}")
+        
+        # Verify that tables exist (may have been created by another worker)
+        try:
+            inspector = inspect(db.engine)
+            tables = inspector.get_table_names()
+            
+            if tables:
+                print(f"Tables verified after race condition: {tables}")
+            else:
+                # If no tables exist, this is a real error
+                print("ERROR: Database initialization failed - no tables found")
+                raise Exception("Database initialization failed")
+                
+        except Exception as verify_error:
+            print(f"CRITICAL: Database verification error: {verify_error}")
+            raise
 
 
 class Player(db.Model):  # type: ignore

@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, jsonify, send_from_directory, make_response
 from flask_cors import CORS
-from models.database import db
+from models.database import db, init_database
 from routes.scoring import register_score_routes
 
 if not load_dotenv():
@@ -39,6 +39,10 @@ cors = CORS(
 
 db.init_app(app)
 register_score_routes(app)
+
+# Initialize database tables
+with app.app_context():
+    init_database(app)
 
 
 # Content endpoints below
@@ -212,37 +216,14 @@ def get_level_nodes(round_num, level_num):
 
 @app.route("/images/<path:filename>")
 def get_image(filename):
-    """Serve images from the images directory and ensure CORS headers are present."""
-    response = make_response(send_from_directory("images", filename))
-    # If ALLOWED_ORIGINS contains a wildcard, allow all; otherwise join allowed origins
-    if "*" in ALLOWED_ORIGINS:
-        response.headers.set("Access-Control-Allow-Origin", "*")
-    else:
-        # For simplicity, if multiple origins are present, expose the first one.
-        response.headers.set("Access-Control-Allow-Origin", ALLOWED_ORIGINS[0])
-    response.headers.set("Access-Control-Allow-Credentials", "true")
-    response.headers.set("Access-Control-Allow-Methods", "GET, OPTIONS")
-    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    return response
-
+    """Serve images from the images directory."""
+    return send_from_directory("images", filename)
 
 
 @app.route("/thumbnails/<path:filename>")
 def get_thumbnail(filename):
-    """Serve thumbnail images from the thumbnails directory and ensure CORS headers are present."""
-    response = make_response(send_from_directory("thumbnails", filename))
-    if "*" in ALLOWED_ORIGINS:
-        response.headers.set("Access-Control-Allow-Origin", "*")
-    else:
-        response.headers.set("Access-Control-Allow-Origin", ALLOWED_ORIGINS[0])
-    response.headers.set("Access-Control-Allow-Credentials", "true")
-    response.headers.set("Access-Control-Allow-Methods", "GET, OPTIONS")
-    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    return response
-
-
-with app.app_context():
-    db.create_all()
+    """Serve thumbnail images from the thumbnails directory."""
+    return send_from_directory("thumbnails", filename)
 
 
 if __name__ == "__main__":

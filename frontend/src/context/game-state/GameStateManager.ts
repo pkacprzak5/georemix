@@ -34,8 +34,6 @@ export class GameStateManager {
   // Result calculation factors
   private readonly _maxPoints: number = 5000;
   private readonly _distanceFactor: number = 30_000_000; // 2km
-  //private readonly _timeFactor: number = 120;
-  //private readonly _timeCap: number = 10; // 10secs
   private readonly _metersCap: number = 50;
 
   constructor() { }
@@ -206,7 +204,6 @@ export class GameStateManager {
     this._currentLevelNumber = levelNumber;
     const level = this._levels[levelNumber];
     this._currentTheme = level.theme;
-    console.log(level.colors)
     this._currentColors = level.colors;
   }
 
