@@ -279,16 +279,16 @@ export function LevelMap() {
         {/* Action Buttons - Same line */}
         <div className="flex space-x-4">
           <ButtonLarge onClick={handleBackToSummary} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
-            <ArrowLeft className="mt-1 2xl:w-5 aspect-square" /> Powrót do Podsumowania
+            <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" /> Powrót do Podsumowania
           </ButtonLarge>
           <ButtonLarge onClick={handleNextLevel} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
             {isFinalLevel ? (
               <>
-                Zakończ Rozgrywkę <Flag className="3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6" />
+                Zakończ Rozgrywkę <Flag className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
               </>
             ) : (
               <>
-                Następna Runda <Gamepad2 className="3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6" />
+                Następna Runda <Gamepad2 className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
               </>
             )}
           </ButtonLarge>
