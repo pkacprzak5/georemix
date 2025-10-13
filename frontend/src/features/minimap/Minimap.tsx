@@ -7,8 +7,8 @@ import { useResizableWindow } from "@/hooks/use-resizable-window";
 
 // Window size breakpoints based on viewport width (similar to edge-stars)
 const SIZE_BREAKPOINTS = [
-  { minWidth: 0, width: 400, height: 266 },      // Default (< 1920px)
-  { minWidth: 2000, width: 500, height: 333 },   // 3xl breakpoint
+  { minWidth: 0, width: 350, height: 233 },      // Default (< 1920px)
+  { minWidth: 2200, width: 500, height: 333 },   // 3xl breakpoint
   { minWidth: 2200, width: 650, height: 433 },   // 4xl breakpoint
   // { minWidth: 3840, width: 650, height: 433 },   // 5xl breakpoint
 ];
@@ -22,6 +22,7 @@ function getMinimizedSize(viewportWidth: number, viewportHeight: number): { widt
   // Find the largest breakpoint that the viewport width exceeds
   for (let i = SIZE_BREAKPOINTS.length - 1; i >= 0; i--) {
     if (viewportWidth >= SIZE_BREAKPOINTS[i].minWidth) {
+      console.log(i)
       return { width: SIZE_BREAKPOINTS[i].width, height: SIZE_BREAKPOINTS[i].height };
     }
   }
@@ -38,6 +39,7 @@ export function Minimap() {
 
   // Get responsive minimized size based on viewport width
   const minimizedSize = getMinimizedSize(window.innerWidth, window.innerHeight);
+      console.log(minimizedSize)
 
   const {
     position,
@@ -67,6 +69,7 @@ export function Minimap() {
     handleMinimize();
     // Get current minimized size for positioning
     const currentMinimizedSize = getMinimizedSize(window.innerWidth, window.innerHeight);
+
     // Reset to default position (bottom-right corner)
     setPosition({
       x: window.innerWidth * 0.98 - currentMinimizedSize.width,
@@ -129,7 +132,7 @@ export function Minimap() {
         position={position}
         setPosition={setPosition}
         className={windowClass}
-        style={style}
+        style={{...style, transform: "scale(1)"}}
         onMaximize={handleMaximize}
         onMinimize={handleMinimize}
         disableMinimize
