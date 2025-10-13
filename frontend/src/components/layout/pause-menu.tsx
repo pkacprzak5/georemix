@@ -34,13 +34,13 @@ export function PauseMenu() {
         <div className="space-y-6 3xl:space-y-7 4xl:space-y-8 w-full max-w-xl 3xl:max-w-2xl 4xl:max-w-3xl">
           {/* Resume Button */}
           <ButtonLarge onClick={onUnpause} className="w-full 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
-            Wróć do Gry <Gamepad2 className="mt-1"/>
+            Wróć do Gry <Gamepad2 className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2"/>
           </ButtonLarge>
 
           {/* Exit Section with Warning */}
           <div className="space-y-4 3xl:space-y-5 4xl:space-y-6">
             <ButtonLarge onClick={handleLeaveGame} className="w-full 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
-              <ArrowLeft className="mt-1"/>Wyjdź do Menu
+              <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2"/>Wyjdź do Menu
             </ButtonLarge>
             
             {/* Warning Card */}
