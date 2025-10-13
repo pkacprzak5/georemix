@@ -30,12 +30,18 @@ export function AboutPage() {
                 Naukowego BIT i NVIDIA, łącząca zaawansowane technologie przetwarzania obrazu z
                 wykorzystaniem AI z klasyczną rozrywką znaną z gry GeoGuessr.
               </p>
-              <p className="text-foreground leading-relaxed">PIOTREK DOPISZ MI TU COŚ</p>
+              <p className="text-foreground leading-relaxed">
+                Wykorzystane w rozgrywce lokalizacje zostały przetworzone za pomocą dedykowanego
+                pipeline'u zbudowanego w oparciu o narzędzie ComfyUI. Obejmował on nie tylko sam
+                model generatywny, lecz również węzły odpowiedzialne za ekstrakcję cech obrazu -
+                takich jak krawędzie czy głębia - co pozwoliło uzyskać spójny wizualnie efekt
+                końcowy.
+              </p>
               <p className="text-foreground leading-relaxed">
                 Sama platforma do gry została w całości zaprojektowana i zbudowana od podstaw przez
-                członków koła, z wykorzystaniem nowoczesnych technologii webowych - min. React po stronie frontendu oraz Flask po stronie backendu. Interfejs użytkownika utrzymany
-                jest w stylu neo-brutalistycznym, który łączy surową estetykę z funkcjonalnym
-                minimalizmem.
+                członków koła, począwszy od logiki funkcjonowania do opracowania stylu wizualnego.
+                Do wykonania aplikacji posłużyły nowoczesne technologie webowe, pozwalające cieszyć
+                się efektami projektu w dowolnej przeglądarce.
               </p>
             </CardContent>
           </Card>
@@ -71,7 +77,9 @@ export function AboutPage() {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-foreground mb-2 mt-4">Punktacja</h3>
+              <h3 className="text-lg 3xl:text-xl 4xl:text-2xl 5xl:text-3xl font-bold text-foreground mb-2 mt-6">
+                Punktacja
+              </h3>
               <p className="text-foreground leading-relaxed">
                 Po wyborze, wskazane miejsce porównywane jest z faktyczną lokalizacją.
               </p>
@@ -81,10 +89,12 @@ export function AboutPage() {
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-foreground mb-2 mt-4">Zakończenie rozgrywki</h3>
+              <h3 className="text-lg 3xl:text-xl 4xl:text-2xl 5xl:text-3xl font-bold text-foreground mb-2 mt-6">
+                Zakończenie rozgrywki
+              </h3>
               <p className="text-foreground leading-relaxed">
                 Po rozegraniu wszystkich 5 rund gra prezentuje końcowy wynik gracza, obliczany na
-                podstawie wyników w poszczególnych rundach
+                podstawie wyników w poszczególnych rundach.
               </p>
 
               <p className="text-foreground leading-relaxed mt-2">
