@@ -7,8 +7,8 @@ import { useResizableWindow } from "@/hooks/use-resizable-window";
 
 // Window size breakpoints based on viewport width (similar to edge-stars)
 const SIZE_BREAKPOINTS = [
-  { minWidth: 0, width: 300, height: 200 },      // Default (< 1920px)
-  { minWidth: 1800, width: 500, height: 333 },   // 3xl breakpoint
+  { minWidth: 0, width: 400, height: 266 },      // Default (< 1920px)
+  { minWidth: 2000, width: 500, height: 333 },   // 3xl breakpoint
   { minWidth: 2200, width: 650, height: 433 },   // 4xl breakpoint
   // { minWidth: 3840, width: 650, height: 433 },   // 5xl breakpoint
 ];
