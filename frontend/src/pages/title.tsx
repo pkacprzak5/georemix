@@ -5,10 +5,10 @@ import EdgeStars from "@/components/ui/edge-stars";
 // @ts-ignore
 import BitLogo from "../../public/bitv4.svg?react";
 
-const INTRO_DURATION = 7000; // 5 seconds
+const INTRO_DURATION = 0; // 5 seconds
 // const INTRO_DURATION = 1;
-const LOGO_DELAY = 1500; // 0.5 seconds
-const STARS_DELAY = 200; // 0.8 seconds - delay for stars animation
+const LOGO_DELAY = 0; // 0.5 seconds
+const STARS_DELAY = 0; // 0.8 seconds - delay for stars animation
 
 export function TitlePage() {
   const { navigateTo } = useNavigation();

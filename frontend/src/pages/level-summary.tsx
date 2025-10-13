@@ -185,7 +185,7 @@ export function LevelSummary() {
                   className="mx-auto mb-4 3xl:mb-5 4xl:mb-6 text-main 3xl:w-12 3xl:h-12 4xl:w-16 4xl:h-16 5xl:w-20 5xl:h-20"
                   size={36}
                 />
-                <div className="text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3 whitespace-nowrap">
+                <div className="text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3 whitespace-nowrap">
                   {formatDistance(animatedDistance)}
                 </div>
                 <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground">DYSTANS</div>
@@ -199,7 +199,7 @@ export function LevelSummary() {
                   className="mx-auto mb-4 3xl:mb-5 4xl:mb-6 text-main 3xl:w-12 3xl:h-12 4xl:w-16 4xl:h-16 5xl:w-20 5xl:h-20"
                   size={36}
                 />
-                <div className="text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3">
+                <div className="text-4xl 3xl:text-5xl 5xl:text-6xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3">
                   {formatTime(animatedTime)}
                 </div>
                 <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground">CZAS</div>

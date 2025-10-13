@@ -11,17 +11,33 @@ import { GlobeLogo } from "@/components/ui/globe-logo";
 import { Window, WindowContent } from "@/components/layout/window";
 import { useResizableWindow } from "@/hooks/use-resizable-window";
 
-const WINDOW_WIDTH_MINIMIZED = 400;
-const WINDOW_HEIGHT_MINIMIZED = 200;
-const WINDOW_WIDTH_MAXIMIZED_RATIO = 0.3;
-const WINDOW_HEIGHT_MAXIMIZED_RATIO = 0.3;
-
 const WINDOW_CLOSE_TIMEOUT = 300;
+
+// Function to get responsive window size based on viewport
+const getWindowSize = () => {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  
+  // Check for short screen first
+  if (height <= 960) {
+    return { width: 400, height: 200 };
+  }
+  
+  // Check breakpoints (112rem = 1792px, 128rem = 2048px)
+  if (width >= 2048) { // 4xl
+    return { width: 550, height: 280 };
+  } else if (width >= 1792) { // 3xl
+    return { width: 480, height: 240 };
+  }
+  
+  return { width: 400, height: 200 };
+};
 
 export function WelcomePage() {
   const gameStateManager = useGameStateManager();
   const dataSourceManager = useDataSourceManager();
   const { navigateTo } = useNavigation();
+  const [windowSize, setWindowSize] = useState(getWindowSize());
   const [playerName, setPlayerName] = useState("");
   const [isCheckingName, setIsCheckingName] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
@@ -40,20 +56,30 @@ export function WelcomePage() {
     handleOpen,
   } = useResizableWindow({
     minimizedSize: {
-      width: WINDOW_WIDTH_MINIMIZED,
-      height: WINDOW_HEIGHT_MINIMIZED,
+      width: windowSize.width,
+      height: windowSize.height,
     },
     maximizedRatio: {
-      width: WINDOW_WIDTH_MAXIMIZED_RATIO,
-      height: WINDOW_HEIGHT_MAXIMIZED_RATIO,
+      width: 0.3,
+      height: 0.3,
     },
     initialVisibility: true,
     initialOpened: false,
     initialPosition: {
-      x: window.innerWidth / 2 - WINDOW_WIDTH_MINIMIZED / 2,
-      y: window.innerHeight / 2 - WINDOW_HEIGHT_MINIMIZED / 2,
+      x: window.innerWidth / 2 - windowSize.width / 2,
+      y: window.innerHeight / 2 - windowSize.height / 2,
     },
   });
+
+  // Update window size on viewport changes
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize(getWindowSize());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     gameStateManager.resetAll();
@@ -195,34 +221,33 @@ export function WelcomePage() {
           onMaximize={handleMaximize}
           onMinimize={handleMinimize}
           onClose={errorMessage ? handleCloseError : handleRejectExistingPlayer}>
-          <WindowContent className="w-full h-full relative p-4">
+          <WindowContent className="w-full h-full relative p-4 3xl:p-6 4xl:p-8 short-screen:p-4">
             <div className="flex flex-col justify-between h-full">
               {errorMessage ? (
                 <>
-                  <span>{errorMessage}</span>
-                  <div className="flex justify-center mt-4">
-                    <Button onClick={handleCloseError} className="bg-main text-foreground">
+                  <span className="text-base 3xl:text-lg 4xl:text-xl short-screen:text-base">{errorMessage}</span>
+                  <div className="flex justify-center mt-4 3xl:mt-5 4xl:mt-6 short-screen:mt-4">
+                    <Button onClick={handleCloseError} className="bg-main text-foreground 3xl:text-lg 3xl:px-6 3xl:py-3 4xl:text-xl 4xl:px-8 4xl:py-4 short-screen:text-base short-screen:px-4 short-screen:py-2">
                       Zamknij
                     </Button>
                   </div>
                 </>
               ) : (
                 <>
-                  <span>
+                  <span className="text-lg 3xl:text-xl 4xl:text-2xl short-screen:text-lg leading-tight text-center">
                     Nazwa <span className="font-heading">{existingPlayerName} </span>
                     jest już aktywna. Kontynuując nadpiszesz aktualne wyniki tego gracza.
                   </span>
-                  <div className="flex flex-wrap justify-around mt-4 gap-4">
+                  <div className="flex justify-center items-center mt-2 3xl:mt-3 4xl:mt-4 short-screen:mt-2 gap-2 3xl:gap-3 4xl:gap-4 short-screen:gap-2">
                     <Button
                       onClick={handleRejectExistingPlayer}
-                      className="bg-secondary-background text-foreground">
+                      className="bg-secondary-background text-foreground text-md 3xl:text-lg 4xl:text-xl short-screen:text-md px-3 py-5 3xl:px-4 3xl:py-6 4xl:px-5 4xl:py-7 short-screen:px-3 short-screen:py-2 flex items-center justify-center">
                       Wybierz inną nazwę
                     </Button>
                     <Button
                       onClick={handleConfirmExistingPlayer}
-                      className="bg-main text-foreground">
-                      Kontynuuj jako
-                      <span className="font-heading">{existingPlayerName}</span>
+                      className="bg-main text-foreground text-md 3xl:text-lg 4xl:text-xl short-screen:text-md px-3 py-2 3xl:px-4 3xl:py-5 4xl:px-6 4xl:py-7 short-screen:px-3 short-screen:py-2 whitespace-nowrap">
+                      Kontynuuj jako <span className="font-bold">{existingPlayerName}</span>
                     </Button>
                   </div>
                 </>

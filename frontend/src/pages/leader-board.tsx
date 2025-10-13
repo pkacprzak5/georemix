@@ -57,7 +57,7 @@ const leaderboardColumns: RankingColumn<PlayerResults>[] = [
   },
   {
     key: "overallDistance",
-    header: "Minimalna Odległość",
+    header: "Najbliższy traf",
     align: "right",
     render: (row) => formatDistance(row.closestCall),
   },

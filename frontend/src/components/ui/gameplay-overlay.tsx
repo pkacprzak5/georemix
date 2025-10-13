@@ -52,21 +52,21 @@ export function GameplayOverlay() {
 
   return (
     <div className={`absolute inset-0 bg-transparent flex flex-col z-[500] pointer-events-none`}>
-      <div className="flex items-start gap-2 3xl:gap-3 4xl:gap-4 p-4 3xl:p-5 4xl:p-6 5xl:p-8">
+      <div className="flex items-start gap-2 3xl:gap-3 4xl:gap-4 short-screen:gap-2 p-4 3xl:p-5 4xl:p-6 short-screen:p-4">
         <IconButton
           disabled={disabled}
           onClick={handlePauseButton}
           icon={Menu}
           iconSize={16}
-          className="pointer-events-auto h-10 w-10 3xl:h-12 3xl:w-12 4xl:h-14 4xl:w-14 5xl:h-16 5xl:w-16 [&_svg]:!w-4 [&_svg]:!h-4 3xl:[&_svg]:!w-5 3xl:[&_svg]:!h-5 4xl:[&_svg]:!w-6 4xl:[&_svg]:!h-6 5xl:[&_svg]:!w-7 5xl:[&_svg]:!h-7"
+          className="pointer-events-auto h-10 w-10 3xl:h-12 3xl:w-12 4xl:h-14 4xl:w-14 short-screen:h-10 short-screen:w-10 [&_svg]:!w-4 [&_svg]:!h-4 3xl:[&_svg]:!w-5 3xl:[&_svg]:!h-5 4xl:[&_svg]:!w-6 4xl:[&_svg]:!h-6 short-screen:[&_svg]:!w-4 short-screen:[&_svg]:!h-4"
         />
 
-        <div className="pointer-events-auto scale-100 3xl:scale-110 4xl:scale-125 5xl:scale-150 origin-top-left">
+        <div className="pointer-events-auto">
           <Timer onTimeUpdate={handleTimeChange} />
         </div>
       </div>
 
-      <div className="flex items-start gap-2 3xl:gap-3 4xl:gap-4 p-4 3xl:p-5 4xl:p-6 5xl:p-8 absolute right-0 bottom-0 transition-opacity ease-in-out duration-200">
+      <div className="flex items-start gap-2 3xl:gap-3 4xl:gap-4 short-screen:gap-2 p-4 3xl:p-5 4xl:p-6 short-screen:p-4 absolute right-0 bottom-0 transition-opacity ease-in-out duration-200">
         <IconButton
           disabled={disabled}
           style={{
@@ -76,7 +76,7 @@ export function GameplayOverlay() {
           onClick={handleOpenMapButton}
           icon={Map}
           iconSize={16}
-          className="pointer-events-auto h-10 w-10 3xl:h-12 3xl:w-12 4xl:h-14 4xl:w-14 5xl:h-16 5xl:w-16 [&_svg]:!w-4 [&_svg]:!h-4 3xl:[&_svg]:!w-5 3xl:[&_svg]:!h-5 4xl:[&_svg]:!w-6 4xl:[&_svg]:!h-6 5xl:[&_svg]:!w-7 5xl:[&_svg]:!h-7"
+          className="pointer-events-auto h-10 w-10 3xl:h-12 3xl:w-12 4xl:h-14 4xl:w-14 short-screen:h-10 short-screen:w-10 [&_svg]:!w-4 [&_svg]:!h-4 3xl:[&_svg]:!w-5 3xl:[&_svg]:!h-5 4xl:[&_svg]:!w-6 4xl:[&_svg]:!h-6 short-screen:[&_svg]:!w-4 short-screen:[&_svg]:!h-4"
         />
       </div>
     </div>
