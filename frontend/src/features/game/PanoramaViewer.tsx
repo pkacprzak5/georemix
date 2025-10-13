@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { ReactPhotoSphereViewer } from "react-photo-sphere-viewer";
 import { VirtualTourPlugin } from "@photo-sphere-viewer/virtual-tour-plugin";
 import { Viewer } from "@photo-sphere-viewer/core";
@@ -11,6 +11,7 @@ interface Node {
   id: string;
   name: string;
   panorama: string;
+  gps: [number, number];
 }
 
 const PanoramaViewer = () => {
@@ -40,7 +41,7 @@ const PanoramaViewer = () => {
       return;
     }
 
-    getNode(gameStateManager.currentLevelInfo.initialNode).then((node: any) => {
+    getNode(gameStateManager.currentLevelInfo.initialNode).then((node: Node | null) => {
       if (!node) {
         throw new Error("Can not get starting node!");
       }
@@ -74,6 +75,7 @@ const PanoramaViewer = () => {
         positionMode: "gps",
         renderMode: "3d",
         getNode: getNode,
+        showLinkTooltip: false,
         startNodeId: gameStateManager.currentLevelInfo.initialNode, // Start with the first node
         preload: true,
         transitionOptions: {
@@ -85,6 +87,22 @@ const PanoramaViewer = () => {
       },
     ],
   ] as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+  // Listen for reset event
+  useEffect(() => {
+    const cleanup = eventBridge.addEventListener("resetToStartingNode", () => {
+      if (pSRef.current) {
+        const viewer = pSRef.current as Viewer;
+        const virtualTour = viewer.getPlugin(VirtualTourPlugin) as VirtualTourPlugin;
+        
+        if (virtualTour) {
+          virtualTour.setCurrentNode(gameStateManager.currentLevelInfo.initialNode);
+        }
+      }
+    });
+
+    return cleanup;
+  }, [eventBridge, gameStateManager.currentLevelInfo.initialNode]);
 
   return (
     <div id={"container-360"} style={{ width: "100%", height: "100%" }}>

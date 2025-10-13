@@ -12,10 +12,9 @@ export function TextParticle(props: TextParticleProps) {
   return (
     <div
       key={id}
-      className="pointer-events-none fixed z-50 select-none animate-[float-up_0.8s_ease-out_forwards] dark:text-foreground text-background font-heading text-3xl text-shadow-lg"
+      className="pointer-events-none fixed z-50 select-none animate-[float-up_0.8s_ease-out_forwards] dark:text-foreground text-background font-heading text-3xl 3xl:text-4xl 4xl:text-5xl short-screen:text-3xl text-shadow-lg font-outline-05 3xl:font-outline-1 4xl:font-outline-2 short-screen:font-outline-05"
       style={
         {
-          WebkitTextStroke: "0.5px var(--border)",
           ["--angle"]: `${angle}deg`,
           // TODO:  I believe this offsets work only for "Click!".
           //        We probably need to compute rendered text width in other cases.

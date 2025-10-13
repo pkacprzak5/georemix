@@ -23,7 +23,7 @@ function App() {
   return (
     <>
       <Window
-        title="guesser.exe"
+        title="GeoRemix.exe"
         initialPosition={{
           x: (window.innerWidth / 2) * 0.05,
           y: (window.innerHeight / 2) * 0.05,

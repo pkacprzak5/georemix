@@ -149,7 +149,7 @@
 }
 
 .window-button {
-  @apply w-6 h-6 flex items-center justify-center rounded-sm border-2 border-black  bg-background  text-foreground transition-all duration-75 hover:bg-foreground hover:text-background active:translate-x-px active:translate-y-px;
+  @apply w-6 h-6 3xl:w-7 3xl:h-7 4xl:h-9 4xl:w-9 flex items-center justify-center rounded-sm border-2 border-black  bg-background  text-foreground transition-all duration-75 hover:bg-foreground hover:text-background active:translate-x-px active:translate-y-px;
 }
 
 @theme {

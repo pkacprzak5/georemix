@@ -11,7 +11,8 @@ export type GameEvent =
   | "gameUnpaused"
   | "openMapButtonClicked"
   | "closeMapButtonClicked"
-  | "gameplayLeft";
+  | "gameplayLeft"
+  | "resetToStartingNode";
 
 export type LevelPhoto = {
   lat: number;
