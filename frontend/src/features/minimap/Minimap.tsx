@@ -132,7 +132,7 @@ export function Minimap() {
         position={position}
         setPosition={setPosition}
         className={windowClass}
-        style={{...style, transform: "scale(1)"}}
+        style={style}
         onMaximize={handleMaximize}
         onMinimize={handleMinimize}
         disableMinimize
