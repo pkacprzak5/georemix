@@ -5,7 +5,7 @@
   "thumbnail": "sci-fi.png",
   "number": 3,
   "colors": {
-    "main": "#70a116",
-    "background": "#b5d678"
+    "main": "oklch(83.29% 0.2331 132.51)",
+    "background": "oklch(95.37% 0.0549 125.19)"
   }
 }
