@@ -1,11 +1,11 @@
 {
-  "initialNode": 1364081121164895,
+  "initialNode": 924487595846721,
   "theme": "light",
-  "name": "Straszny Dwór",
-  "thumbnail": "horror.png",
-  "number": 3,
+  "name": "Słoneczna Plaża",
+  "thumbnail": "beach.png",
+  "number": 4,
   "colors": {
-    "main": "#4e7c91",
-    "background": "#afd1e0"
+    "main": "oklch(86.03% 0.176 92.36)",
+    "background": "oklch(96.79% 0.0654 102.26)"
   }
 }
