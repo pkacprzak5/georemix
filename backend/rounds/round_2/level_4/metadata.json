@@ -1,11 +1,11 @@
 {
-  "initialNode": 119439427372408,
+  "initialNode": 924487595846721,
   "theme": "light",
-  "name": "Atlantyda",
-  "thumbnail": "atlantyda.png",
-  "number": 5,
-   "colors": {
-    "main": "oklch(76.89% 0.139164 219.13)",
-    "background": "oklch(94.61% 0.043 211.12)"
+  "name": "Słoneczna Plaża",
+  "thumbnail": "beach.png",
+  "number": 4,
+  "colors": {
+    "main": "oklch(86.03% 0.176 92.36)",
+    "background": "oklch(96.79% 0.0654 102.26)"
   }
 }

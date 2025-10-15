@@ -1,0 +1,11 @@
+{
+  "initialNode": 119439427372408,
+  "theme": "light",
+  "name": "Atlantyda",
+  "thumbnail": "atlantyda.png",
+  "number": 5,
+   "colors": {
+    "main": "oklch(76.89% 0.139164 219.13)",
+    "background": "oklch(94.61% 0.043 211.12)"
+  }
+}

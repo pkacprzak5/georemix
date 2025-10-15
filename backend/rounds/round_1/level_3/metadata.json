@@ -1,11 +1,11 @@
 {
-  "initialNode": 767893531079270,
+  "initialNode": 1720995678649287,
   "theme": "light",
-  "name": "Metropolia Przyszłości",
-  "thumbnail": "sci-fy.png",
-  "number": 3,
+  "name": "Syberyjskie Równiny",
+  "thumbnail": "siberia.png",
+  "number": 4,
   "colors": {
-    "main": "#c9fa2f",
-    "background": "#e7faac"
+    "main": "oklch(78.57% 0.1422 180.36)",
+    "background": "oklch(95.08% 0.0481 184.07)"
   }
 }

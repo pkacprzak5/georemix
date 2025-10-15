@@ -1,11 +1,11 @@
 {
-  "initialNode": 820052035562972,
+  "initialNode": 767893531079270,
   "theme": "light",
-  "name": "Miasto Cyberpunk",
-  "thumbnail": "cyberpunk.png",
-  "number": 2,
+  "name": "Metropolia Przyszłości",
+  "thumbnail": "sci-fi.png",
+  "number": 3,
   "colors": {
-    "main": "oklch(66.34% 0.1806 277.2)",
-    "background": "oklch(92.13% 0.0388 282.36)"
+    "main": "#c9fa2f",
+    "background": "#e7faac"
   }
 }
