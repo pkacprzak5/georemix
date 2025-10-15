@@ -109,7 +109,7 @@ export function LevelMap() {
       setResultData({
         distance: levelResult.distance,
         actualPosition: [actualPosition.lat, actualPosition.lng],
-        guessPosition: [submittedPosition.lat, ((submittedPosition.lng % 360) + 360) % 360],
+        guessPosition: [submittedPosition.lat, ((submittedPosition.lng + 180) % 360 + 360) % 360 - 180],
       });
     } catch (error) {
       console.error("Error loading result data:", error);
