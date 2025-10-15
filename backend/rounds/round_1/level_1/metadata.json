@@ -1,11 +1,11 @@
 {
   "initialNode": 834015571448095,
   "theme": "light",
-  "name": "Obraz Van Gogha",
-  "thumbnail": "gogh.webp",
-  "number": 2,
+  "name": "Obraz Van Gogh'a",
+  "thumbnail": "van_gogh.png",
+  "number": 1,
   "colors": {
-    "background": "#dcebfe",
-    "main": "#5294ff"
+    "main": "oklch(67.47% 0.1726 259.49)",
+    "background": "oklch(93.46% 0.0305 255.11)"
   }
 }
