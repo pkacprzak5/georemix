@@ -24,12 +24,12 @@ export function StagePicker() {
     {
       roundNumber: 2,
       title: "Rozgrywka 2",
-      isLocked: true,
+      isLocked: false,
     },
     {
       roundNumber: 3,
       title: "Rozgrywka 3",
-      isLocked: true,
+      isLocked: false,
     },
   ];
 
