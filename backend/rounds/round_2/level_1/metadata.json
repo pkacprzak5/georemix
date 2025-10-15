@@ -1,0 +1,11 @@
+{
+  "initialNode": 526888718737582,
+  "theme": "light",
+  "name": "Miasto Anime",
+  "thumbnail": "anime.png",
+  "number": 1,
+  "colors": {
+    "main": "oklch(86.03% 0.176 92.36)",
+    "background": "oklch(96.79% 0.0654 102.26)"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "initialNode": 924487595846721,
+  "theme": "light",
+  "name": "Słoneczna Plaża",
+  "thumbnail": "beach.png",
+  "number": 4,
+  "colors": {
+    "main": "oklch(86.03% 0.176 92.36)",
+    "background": "oklch(96.79% 0.0654 102.26)"
+  }
+}

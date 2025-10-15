@@ -1,0 +1,11 @@
+{
+  "initialNode": 392098957061553,
+  "theme": "light",
+  "name": "Legendarna Kraina",
+  "thumbnail": "lol.png",
+  "number": 1,
+    "colors": {
+    "main": "oklch(71.9% 0.198 310.03)",
+    "background": "oklch(94.11% 0.036556 308.0303)"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "initialNode": 1852486848874758,
+  "theme": "light",
+  "name": "Apokaliptyczne Ruiny",
+  "thumbnail": "postapo.png",
+  "number": 4,
+  "colors": {
+    "main": "#4e7c91",
+    "background": "#afd1e0"
+  }
+}

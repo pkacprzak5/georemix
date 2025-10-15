@@ -1,12 +1,11 @@
 {
-  "initialNode": 1079232002985459,
+  "initialNode": 820052035562972,
   "theme": "light",
-  "name": "Straszny Dwór",
-  "thumbnail": "level_2.jpg",
+  "name": "Miasto Cyberpunk",
+  "thumbnail": "cyberpunk.png",
   "number": 2,
   "colors": {
-    "main": "oklch(67.47% 0.1726 259.49)",
-    "background": "oklch(93.46% 0.0305 255.11)"
+    "main": "oklch(66.34% 0.1806 277.2)",
+    "background": "oklch(92.13% 0.0388 282.36)"
   }
-  
 }

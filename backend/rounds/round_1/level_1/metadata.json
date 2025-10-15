@@ -1,11 +1,11 @@
 {
-  "initialNode": 119439427372408,
+  "initialNode": 1156350815484235,
   "theme": "light",
-  "name": "Miasto Cyberpunk",
-  "thumbnail": "level_1.jpg",
+  "name": "Obraz Van Gogh'a",
+  "thumbnail": "van_gogh.png",
   "number": 1,
   "colors": {
-    "main": "oklch(70.28% 0.1753 295.36)",
-    "background": "oklch(93.88% 0.033 300.19)"
+    "main": "oklch(67.47% 0.1726 259.49)",
+    "background": "oklch(93.46% 0.0305 255.11)"
   }
 }

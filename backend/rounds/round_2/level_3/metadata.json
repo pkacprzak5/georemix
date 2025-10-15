@@ -1,0 +1,11 @@
+{
+  "initialNode": 1364081121164895,
+  "theme": "light",
+  "name": "Straszny Dwór",
+  "thumbnail": "horror.png",
+  "number": 3,
+  "colors": {
+    "main": "#4e7c91",
+    "background": "#afd1e0"
+  }
+}

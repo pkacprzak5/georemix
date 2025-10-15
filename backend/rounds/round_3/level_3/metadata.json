@@ -1,0 +1,11 @@
+{
+  "initialNode": 387799543827090,
+  "theme": "light",
+  "name": "Rubieża Borderlands",
+  "thumbnail": "borderlands.png",
+  "number": 3,
+  "colors": {
+    "main": "oklch(84.08% 0.1725 84.2)",
+    "background": "oklch(96.22% 0.0569 95.61)"
+  }
+}
