@@ -26,11 +26,15 @@ export function Timer({ className, onTimeUpdate }: TimerProps) {
     const unpausedCleanup = eventBridge.addEventListener("gameUnpaused", () => {
       setIsPaused(false);
     });
+    const resultSubmittedCleanup = eventBridge.addEventListener("resultSubmitted", () => {
+      setIsPaused(true);
+    })
 
     return () => {
       startedCleanup();
       pausedCleanup();
       unpausedCleanup();
+      resultSubmittedCleanup();
     };
   }, [eventBridge]);
 

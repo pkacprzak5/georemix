@@ -22,7 +22,6 @@ function getMinimizedSize(viewportWidth: number, viewportHeight: number): { widt
   // Find the largest breakpoint that the viewport width exceeds
   for (let i = SIZE_BREAKPOINTS.length - 1; i >= 0; i--) {
     if (viewportWidth >= SIZE_BREAKPOINTS[i].minWidth) {
-      console.log(i)
       return { width: SIZE_BREAKPOINTS[i].width, height: SIZE_BREAKPOINTS[i].height };
     }
   }
@@ -39,7 +38,6 @@ export function Minimap() {
 
   // Get responsive minimized size based on viewport width
   const minimizedSize = getMinimizedSize(window.innerWidth, window.innerHeight);
-      console.log(minimizedSize)
 
   const {
     position,
