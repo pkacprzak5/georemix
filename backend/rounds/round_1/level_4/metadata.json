@@ -1,11 +1,11 @@
 {
-  "initialNode": 846584160585297,
+  "initialNode": 1720995678649287,
   "theme": "light",
-  "name": "Średniowieczna Twierdza",
-  "thumbnail": "castle.png",
-  "number": 5,
+  "name": "Syberyjskie Równiny",
+  "thumbnail": "siberia.png",
+  "number": 4,
   "colors": {
-    "main": "#627d3b",
-    "background": "#b2c793"
+    "main": "oklch(78.57% 0.1422 180.36)",
+    "background": "oklch(95.08% 0.0481 184.07)"
   }
 }

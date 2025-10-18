@@ -1,0 +1,11 @@
+{
+  "initialNode": 846584160585297,
+  "theme": "light",
+  "name": "Średniowieczna Twierdza",
+  "thumbnail": "castle.png",
+  "number": 5,
+  "colors": {
+    "main": "#627d3b",
+    "background": "#b2c793"
+  }
+}
