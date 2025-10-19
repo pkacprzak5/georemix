@@ -177,7 +177,7 @@ export function LeaderBoardPage() {
                 key={round}
                 className="h-full m-0 rounded-none border-0 border-r-2 last:border-r-0 border-border bg-white text-base 3xl:text-2xl 4xl:text-3xl 5xl:text-4xl"
                 value={round.toString()}>
-                Runda {round}
+                Rozgrywka {round}
               </TabsTrigger>
             ))}
           </TabsList>

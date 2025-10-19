@@ -55,10 +55,17 @@ export function useDrag({
 
   const handleMouseDown = useCallback(
     (e: MouseEvent) => {
-      if (
-        !ref.current ||
-        (dragHandleRef?.current && !dragHandleRef.current.contains(e.target as Node))
-      ) {
+      if (!ref.current) {
+        return;
+      }
+
+      // If dragHandleRef is undefined, dragging is disabled
+      if (dragHandleRef === undefined) {
+        return;
+      }
+
+      // If dragHandleRef is provided, only allow dragging from the handle
+      if (dragHandleRef.current && !dragHandleRef.current.contains(e.target as Node)) {
         return;
       }
 

@@ -24,6 +24,7 @@ function App() {
     <>
       <Window
         title="GeoRemix.exe"
+        disableDrag={true}
         initialPosition={{
           x: (window.innerWidth / 2) * 0.05,
           y: (window.innerHeight / 2) * 0.05,

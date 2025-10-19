@@ -22,6 +22,7 @@ type WindowLayoutProps = {
   disableMinimize?: boolean;
   disableMaximize?: boolean;
   disableClose?: boolean;
+  disableDrag?: boolean;
   iconMaximisedByDefault?: boolean;
   isTitleResponsive?: boolean;
 } & React.ComponentProps<"div">;
@@ -39,6 +40,7 @@ function WindowLayout({
   disableMinimize = false,
   disableMaximize = false,
   disableClose = false,
+  disableDrag = false,
   iconMaximisedByDefault = true,
   isTitleResponsive = false,
   style,
@@ -57,7 +59,7 @@ function WindowLayout({
     position: externalPosition,
     setPosition: externalSetPosition,
     ref: windowRef,
-    dragHandleRef: draggableHeaderRef,
+    dragHandleRef: disableDrag ? undefined : draggableHeaderRef,
     style,
   });
 
