@@ -1,11 +1,11 @@
 {
   "initialNode": 301521361383886,
   "theme": "light",
-  "name": "Wąwozy Księżyca",
+  "name": "Książycowa Wyrwa",
   "thumbnail": "moon.png",
   "number": 11,
     "colors": {
-    "main": "oklch(67.47% 0.1726 259.49)",
-    "background": "oklch(93.46% 0.0305 255.11)"
+    "main": "#bccacf",
+    "background": "#ebeff0"
   }
 }
