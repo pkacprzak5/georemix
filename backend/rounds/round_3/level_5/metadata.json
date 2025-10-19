@@ -1,10 +1,10 @@
 {
   "initialNode": 768565221953214,
   "theme": "light",
-  "name": "Miasteczko Dzikiego Zachodu",
+  "name": "Szlak Śniadej Skały",
   "thumbnail": "wild_west.png",
   "colors": {
-    "main": "oklch(84.08% 0.1725 84.2)",
-    "background": "oklch(96.22% 0.0569 95.61)"
+    "main": "#c97f10",
+    "background": "#fcd79f"
   }
 }
