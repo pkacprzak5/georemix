@@ -1,11 +1,11 @@
 {
-  "initialNode": 924487595846721,
+  "initialNode": 301521361383886,
   "theme": "light",
-  "name": "Słoneczna Plaża",
-  "thumbnail": "beach.png",
-  "number": 4,
-  "colors": {
-    "main": "oklch(86.03% 0.176 92.36)",
-    "background": "oklch(96.79% 0.0654 102.26)"
+  "name": "Wąwozy Księżyca",
+  "thumbnail": "moon.png",
+  "number": 11,
+    "colors": {
+    "main": "oklch(67.47% 0.1726 259.49)",
+    "background": "oklch(93.46% 0.0305 255.11)"
   }
 }

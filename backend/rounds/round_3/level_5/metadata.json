@@ -1,11 +1,10 @@
 {
-  "initialNode": 337661345552026,
+  "initialNode": 768565221953214,
   "theme": "light",
-  "name": "Metropolia Przyszłości",
-  "thumbnail": "sci-fi.png",
-  "number": 5,
+  "name": "Miasteczko Dzikiego Zachodu",
+  "thumbnail": "wild_west.png",
   "colors": {
-    "main": "oklch(83.29% 0.2331 132.51)",
-    "background": "oklch(95.37% 0.0549 125.19)"
+    "main": "oklch(84.08% 0.1725 84.2)",
+    "background": "oklch(96.22% 0.0569 95.61)"
   }
 }
