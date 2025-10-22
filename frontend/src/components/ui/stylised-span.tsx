@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import Star9 from "./stars/Star9";
+import Star9 from "../stars/Star9";
 
 interface Props {
   children: ReactNode;

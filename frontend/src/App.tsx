@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { Window, WindowContent } from "@/components/layout/window";
-import { Router } from "@/lib/navigation-system/router";
-import { Minimap } from "./features/minimap/Minimap";
-import { useDataSourceManager } from "@/context/game-state";
+import { Window, WindowContent } from "@/components/ui/window";
+import { Router } from "@/lib/navigation/router";
+import { Minimap } from "./components/minimap/Minimap";
+import { useDataSourceManager } from "@/context";
 
 function App() {
   const dataSourceManager = useDataSourceManager();

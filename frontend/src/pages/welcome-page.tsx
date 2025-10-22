@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Button, ButtonLarge } from "@/components/ui/button";
-import { useDataSourceManager, useGameStateManager } from "@/context/game-state";
-import { ApiError } from "@/context/game-state/DataSourceManager";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import { moduleIdMap } from "@/lib/navigation-system/types";
+import { useDataSourceManager, useGameStateManager } from "@/context";
+import { ApiError } from "@/context/DataSourceManager";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import { moduleIdMap } from "@/types/navigation";
 import StylisedSpan from "@/components/ui/stylised-span";
 import { InputButton } from "@/components/ui/input-button";
 import { BookText, Trophy } from "lucide-react";
 import { GlobeLogo } from "@/components/ui/globe-logo";
-import { Window, WindowContent } from "@/components/layout/window";
+import { Window, WindowContent } from "@/components/ui/window";
 import { useResizableWindow } from "@/hooks/use-resizable-window";
 
 const WINDOW_CLOSE_TIMEOUT = 300;

@@ -4,19 +4,20 @@ import {
   type LevelResultInfo,
   type MapCoordinates,
   type PlayerResults,
-  DEFAULT_COLORS,
 } from "@/types/project";
-import { BASE_URL } from "@/constants";
+import { DEFAULT_COLORS } from "@/lib/constants";
+import { BASE_URL } from "@/lib/constants";
 import type { DataSourceManager } from "./DataSourceManager";
 
 // TODO:  I truly grieve that this is not a zustand store.
+
+// sorry, I dont care ~ Paweł
 export class GameStateManager {
   // TODO: remove mock static level / round numbers
   private _currentRoundNumber: number | null = null;
   private _currentLevelNumber: number | null = null;
   private _levels: LevelInfo[] = [];
   private _levelResults: LevelResultInfo[] = [];
-  private _currentTheme: "light" | "dark" = "light";
   private _currentColors: Colors = DEFAULT_COLORS;
   private _playerName: string = "";
 
@@ -55,10 +56,6 @@ export class GameStateManager {
     return this._playerName;
   }
 
-  get gameTheme(): "light" | "dark" {
-    return this._currentTheme;
-  }
-
   get colorTheme(): Colors {
     return this._currentColors;
   }
@@ -89,7 +86,7 @@ export class GameStateManager {
   }
 
   get maxScore(): number {
-    if(this._levels.length === 0) {
+    if (this._levels.length === 0) {
       throw new Error("No levels loaded");
     }
     return this._maxPoints * this._levels.length;
@@ -131,6 +128,7 @@ export class GameStateManager {
     const { lng: lng1, lat: lat1 } = this._currentCoordinates;
     const { lng: lng2, lat: lat2 } = submittedPosition;
 
+    // chat cooked those variables ngl
     const R = 6371e3; // Earth radius in meters
     const φ1 = toRad(lat1);
     const φ2 = toRad(lat2);
@@ -152,7 +150,7 @@ export class GameStateManager {
       distanceFactor = Math.exp(-10 * this._currentDistance / this._distanceFactor);
     }
 
-  
+
 
     const levelScore = Math.round(this._maxPoints * distanceFactor);
 
@@ -203,7 +201,6 @@ export class GameStateManager {
     }
     this._currentLevelNumber = levelNumber;
     const level = this._levels[levelNumber];
-    this._currentTheme = level.theme;
     this._currentColors = level.colors;
   }
 
@@ -214,7 +211,6 @@ export class GameStateManager {
       }
       this._currentLevelNumber += 1;
       const level = this._levels[this._currentLevelNumber];
-      this._currentTheme = level.theme;
       this._currentColors = level.colors;
     });
   }
@@ -256,7 +252,6 @@ export class GameStateManager {
     }
   }
 
-  /** Computes stats included in the leaderboard from finished round. */
   private computeRoundResults(): PlayerResults {
     // Reduce over level results and gather essential stats.
     const results: PlayerResults = this._levelResults.reduce(
@@ -287,7 +282,6 @@ export class GameStateManager {
     this._levels = [];
     this._currentColors = DEFAULT_COLORS;
     this._playerName = "";
-    this._currentTheme = "light";
     this.resetCurrentResultInfo();
   }
 
@@ -296,7 +290,7 @@ export class GameStateManager {
     this._currentRoundNumber = 1;
     this._currentLevelNumber = 4; // Set to last level (0-indexed, so level 5)
     this._playerName = "Test Player";
-    
+
     // Mock levels data
     this._levels = [
       {
@@ -308,7 +302,7 @@ export class GameStateManager {
         colors: DEFAULT_COLORS
       },
       {
-        initialNode: "mock-node-2", 
+        initialNode: "mock-node-2",
         name: "Warszawa - Pałac Kultury",
         theme: "dark",
         thumbnail: "level_2.png",
@@ -317,7 +311,7 @@ export class GameStateManager {
       },
       {
         initialNode: "mock-node-3",
-        name: "Gdańsk - Długa Ulica", 
+        name: "Gdańsk - Długa Ulica",
         theme: "light",
         thumbnail: "level_1.jpg",
         number: 3,
@@ -326,7 +320,7 @@ export class GameStateManager {
       {
         initialNode: "mock-node-4",
         name: "Wrocław - Rynek",
-        theme: "dark", 
+        theme: "dark",
         thumbnail: "level_2.png",
         number: 4,
         colors: DEFAULT_COLORS
@@ -335,7 +329,7 @@ export class GameStateManager {
         initialNode: "mock-node-5",
         name: "Poznań - Stary Rynek",
         theme: "light",
-        thumbnail: "level_1.jpg", 
+        thumbnail: "level_1.jpg",
         number: 5,
         colors: DEFAULT_COLORS
       },

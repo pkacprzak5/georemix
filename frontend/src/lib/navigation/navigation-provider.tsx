@@ -9,7 +9,7 @@ import {
   useRef,
 } from "react";
 import { modulesMap } from "./modules";
-import type { Module, ModuleId, PageId } from "./types";
+import type { Module, ModuleId, PageId } from "../../types/navigation";
 
 export type NavigationAction =
   | { type: "SHOW_MENU" }
@@ -90,6 +90,8 @@ export function NavigationProvider({ children }: PropsWithChildren) {
 
       // TODO:  This logic and it's point a bit vague. Can't we just
       //        hard-code what's the first page, instead of doing all of this?
+
+      // It stayed here for ore than 5 minutes so it can stay for good at this point. ~Paweł
       modules.current.set(module.id, module);
 
       if (

@@ -1,7 +1,7 @@
-import { useGameStateManager } from "@/context/game-state";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import { moduleIdMap } from "@/lib/navigation-system/types";
-import { THUMBNAIL_ENDPOINT } from "@/constants";
+import { useGameStateManager } from "@/context";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import { moduleIdMap } from "@/types/navigation";
+import { THUMBNAIL_ENDPOINT } from "@/lib/constants";
 import { ButtonLarge } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
 

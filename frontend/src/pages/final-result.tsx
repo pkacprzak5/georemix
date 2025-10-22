@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Clock, Map, ArrowLeft, MapPin } from "lucide-react";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import { useGameStateManager } from "@/context/game-state";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import { useGameStateManager } from "@/context";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { moduleIdMap } from "@/lib/navigation-system/types";
+import { moduleIdMap } from "@/types/navigation";
 import StylisedSpan from "@/components/ui/stylised-span";
 
 const COUNT_UP_DURATION = 3000;
@@ -253,12 +253,17 @@ export function FinalResult() {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 w-full ">
-            <ButtonLarge onClick={handleBackToMenu} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+            <ButtonLarge
+              onClick={handleBackToMenu}
+              className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
               <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
               Powrót do Menu
             </ButtonLarge>
-            <ButtonLarge onClick={handlePlayAgain} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
-              Zobacz mapę <Map className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
+            <ButtonLarge
+              onClick={handlePlayAgain}
+              className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+              Zobacz mapę{" "}
+              <Map className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
             </ButtonLarge>
           </div>
         </div>

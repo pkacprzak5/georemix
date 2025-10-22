@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import { moduleIdMap } from "@/lib/navigation-system/types";
-import EdgeStars from "@/components/ui/edge-stars";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import { moduleIdMap } from "@/types/navigation";
+import EdgeStars from "@/components/stars/edge-stars";
 // @ts-ignore
 import BitLogo from "../../public/bitv4.svg?react";
 

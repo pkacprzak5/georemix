@@ -1,3 +1,4 @@
+import type { PlayerResults } from "@/types/project";
 export interface LevelScoreSummary {
   id: number;
   stageScoreId: number;
@@ -55,4 +56,10 @@ export interface PlayerScoreResponse {
     overallDistance: number;
   };
   scores: StageScoreSummary[];
+}
+
+export interface RoundLeaderboard {
+  roundNumber: number;
+  results: PlayerResults[];
+  lastUpdated: number;
 }

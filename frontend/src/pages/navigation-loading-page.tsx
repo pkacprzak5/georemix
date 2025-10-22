@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { LoadingScreen } from "@/pages/loading-screen";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
 import { useProgressiveLoading } from "@/hooks/use-progressive-loading";
 
 // Loading page component that handles promise resolution and navigation

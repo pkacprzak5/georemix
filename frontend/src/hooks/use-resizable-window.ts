@@ -109,11 +109,6 @@ export function useResizableWindow({
     }, 300);
   }, []);
 
-  // const windowClass = cn(
-  //   isResizing && `transition-[width,height,left,top,transform] duration-${animationDuration} sharp-ease`,
-  //   (isClosing || isOpening) && "transition-transform duration-300 sharp-ease"
-  // );
-
   const windowClass = `${isResizing ? "transition-[width,height,left,top,transform] duration-400 sharp-ease" : ""} ${isClosing || isOpening ? "transition-transform duration-300 sharp-ease" : ""}`;
 
   const style = {

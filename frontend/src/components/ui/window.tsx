@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { TextParticle, type TextParticleProps } from "../ui/text-particle";
+import { TextParticle, type TextParticleProps } from "./text-particle";
 import { useDrag } from "@/hooks/use-drag";
 import { Square, Minus, Copy, X } from "lucide-react";
 

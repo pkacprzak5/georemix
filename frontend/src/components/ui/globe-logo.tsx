@@ -1,6 +1,6 @@
 // @ts-ignore
 import Globe from "../../../public/globe.svg?react";
-import Star9 from "./stars/Star9";
+import Star9 from "../stars/Star9";
 
 export function GlobeLogo() {
   return (

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { OverlaySheet } from "@/components/layout/overlay-sheet";
-import PanoramaViewer from "@/features/game/PanoramaViewer";
+import { OverlaySheet } from "@/components/gameplay/overlay-sheet";
+import PanoramaViewer from "@/components/gameplay/PanoramaViewer";
 import { LoadingScreen } from "@/pages/loading-screen";
-import { PauseMenu } from "@/components/layout/pause-menu";
-import { useEventBridge } from "@/context/game-state";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import { moduleIdMap } from "@/lib/navigation-system/types";
+import { PauseMenu } from "@/components/gameplay/pause-menu";
+import { useEventBridge } from "@/context";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import { moduleIdMap } from "@/types/navigation";
 import { useProgressiveLoading } from "@/hooks/use-progressive-loading";
-import { GameplayOverlay } from "@/components/ui/gameplay-overlay";
+import { GameplayOverlay } from "@/components/gameplay/gameplay-overlay";
 
 export function Gameplay() {
   const [menuOpen, setMenuOpen] = useState(false);

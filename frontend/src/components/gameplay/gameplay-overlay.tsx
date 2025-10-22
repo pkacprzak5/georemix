@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Menu, Map, MapPin } from "lucide-react";
-import { useEventBridge, useGameStateManager } from "@/context/game-state";
-import { IconButton } from "./icon-button";
+import { useEventBridge, useGameStateManager } from "@/context";
+import { IconButton } from "../ui/icon-button";
 import { Timer } from "./timer";
 
 export function GameplayOverlay() {
@@ -23,7 +23,7 @@ export function GameplayOverlay() {
     eventBridge.emit("resetToStartingNode", {});
   };
 
-  const hanldeUnpause = () => {
+  const handleUnpause = () => {
     setDisabled(false);
   };
 
@@ -37,18 +37,12 @@ export function GameplayOverlay() {
   };
 
   useEffect(() => {
-    // const pausedCleanup = eventBridge.addEventListener("gamePaused", handleClose);
-    // const startedCleanup = eventBridge.addEventListener("gameStarted", handleClose);
-    // const unloadedCleanup = eventBridge.addEventListener("resultSubmitted", handleClose);
-    const unpausedCleanup = eventBridge.addEventListener("gameUnpaused", hanldeUnpause);
+    const unpausedCleanup = eventBridge.addEventListener("gameUnpaused", handleUnpause);
     const mapForceHiddenCleanup = eventBridge.addEventListener("closeMapButtonClicked", () => {
       handleMapForceHidden();
     });
 
     return () => {
-      // pausedCleanup();
-      // startedCleanup();
-      // unloadedCleanup();
       unpausedCleanup();
       mapForceHiddenCleanup();
     };
@@ -72,10 +66,9 @@ export function GameplayOverlay() {
         </div>
       </div>
 
-      {/* Bottom-left: reset (home) and map buttons */}
+      {/* reset and map buttons */}
       <div className="absolute left-0 bottom-0 p-4 3xl:p-5 4xl:p-6 short-screen:p-4">
         <div className="flex items-center gap-2 3xl:gap-3 4xl:gap-4 short-screen:gap-2">
-          {/* Reset / Home button (already present at top-left column; keep an extra one here) */}
           <IconButton
             disabled={disabled}
             onClick={handleResetButton}
@@ -84,7 +77,6 @@ export function GameplayOverlay() {
             className="pointer-events-auto h-10 w-10 3xl:h-12 3xl:w-12 4xl:h-14 4xl:w-14 short-screen:h-10 short-screen:w-10 [&_svg]:!w-4 [&_svg]:!h-4 3xl:[&_svg]:!w-5 3xl:[&_svg]:!h-5 4xl:[&_svg]:!w-6 4xl:[&_svg]:!h-6 short-screen:[&_svg]:!w-4 short-screen:[&_svg]:!h-4"
           />
 
-          {/* Map button placed to the right of the reset button */}
           <IconButton
             disabled={disabled}
             style={{

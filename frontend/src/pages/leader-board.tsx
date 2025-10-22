@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import { ArrowLeft, Earth } from "lucide-react";
 import { RankingTable, type RankingColumn } from "@/components/ui/ranking-table";
-import { type RoundLeaderboard } from "@/context/game-state/DataSourceManager";
+import { type RoundLeaderboard } from "@/types/leaderboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGameStateManager, useDataSourceManager } from "@/context/game-state";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import { moduleIdMap } from "@/lib/navigation-system/types";
+import { useGameStateManager, useDataSourceManager } from "@/context";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import { moduleIdMap } from "@/types/navigation";
 import { ButtonLarge } from "@/components/ui/button";
 import type { PlayerResults } from "@/types/project";
 

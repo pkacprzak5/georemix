@@ -56,10 +56,3 @@ export type Leaderboard = Array<{
   roundNumber: number;
   results: Array<PlayerResults>;
 }>;
-
-export const DEFAULT_COLORS = {
-  background: "#eaf7cf",
-  main: "#77b900",
-};
-
-export const MAP_TILE_URL = "https://tiles.openfreemap.org/styles/positron"

@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 import { ReactPhotoSphereViewer } from "react-photo-sphere-viewer";
 import { VirtualTourPlugin } from "@photo-sphere-viewer/virtual-tour-plugin";
 import { Viewer } from "@photo-sphere-viewer/core";
-import { useEventBridge, useGameStateManager, useDataSourceManager } from "@/context/game-state";
+import { useEventBridge, useGameStateManager, useDataSourceManager } from "@/context";
 import type { MapCoordinates } from "@/types/project";
 import "@photo-sphere-viewer/virtual-tour-plugin/index.css";
 import "@photo-sphere-viewer/core/index.css";
@@ -52,16 +52,6 @@ const PanoramaViewer = () => {
       gameStateManager.setCoordinates(location);
     });
 
-    // Listen for node changes
-    // virtualTour.addEventListener("node-changed", (e: any) => {
-    //   // eslint-disable-line @typescript-eslint/no-explicit-any
-    //   const location: MapCoordinates = {
-    //     lat: e.node.gps[1],
-    //     lng: e.node.gps[0],
-    //   };
-    //   gameStateManager.setCoordinates(location);
-    // });
-
     setTimeout(() => {
       eventBridge.emit("viewerLoaded", {});
     }, 1000);
@@ -94,7 +84,7 @@ const PanoramaViewer = () => {
       if (pSRef.current) {
         const viewer = pSRef.current as Viewer;
         const virtualTour = viewer.getPlugin(VirtualTourPlugin) as VirtualTourPlugin;
-        
+
         if (virtualTour) {
           virtualTour.setCurrentNode(gameStateManager.currentLevelInfo.initialNode);
         }
@@ -118,7 +108,6 @@ const PanoramaViewer = () => {
         container={"container-360"}
         requestHeaders={{ "Cache-Control": "no-store" }}
         defaultZoomLvl={40}
-        // src={`${IMAGES_ENDPOINT}/${gameState.currentLevelInfo.initialNode}.jpg`} // Default image, will be replaced by server-mode loading
       />
     </div>
   );

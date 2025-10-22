@@ -1,9 +1,9 @@
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import { moduleIdMap } from "@/lib/navigation-system/types";
+import { Earth } from "lucide-react";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import { moduleIdMap } from "@/types/navigation";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StylisedSpan from "@/components/ui/stylised-span";
-import { Earth } from "lucide-react";
 
 export function AboutPage() {
   const { navigateTo } = useNavigation();
@@ -56,6 +56,7 @@ export function AboutPage() {
 
         {/* Game Rules Card */}
         {/* Has to be styled like that because of overflowing issues */}
+        {/* Still not perfect, but can do */}
         <Card className="h-fit max-h-full py-0 flex flex-col bg-secondary-background gradient overflow-hidden">
           <CardContent className="py-6 3xl:py-8 4xl:py-10 5xl:py-12 overflow-auto scrollbar-neobrutalist flex-1 min-h-0 3xl:text-lg 4xl:text-xl 5xl:text-2xl">
             <CardTitle className="text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl font-heading">

@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect, useMemo } from "react";
-import { EventBridge } from "@/context/game-state/EventBridge";
-import { GameStateManager } from "@/context/game-state/GameStateManager";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import type { ModuleId } from "@/lib/navigation-system/types";
-import ThemeManager from "@/context/game-state/ThemeManager";
-import { DEFAULT_COLORS } from "@/types/project";
-import { DataSourceManager } from "@/context/game-state/DataSourceManager";
+import { EventBridge } from "@/context/EventBridge";
+import { GameStateManager } from "@/context/GameStateManager";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import type { ModuleId } from "@/types/navigation";
+import ThemeManager from "@/context/ThemeManager";
+import { DEFAULT_COLORS } from "@/lib/constants.ts";
+import { DataSourceManager } from "@/context/DataSourceManager";
 
 interface GameStateContextType {
   eventBridge: EventBridge;

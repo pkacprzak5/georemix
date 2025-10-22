@@ -4,25 +4,21 @@ import { MapContainer, Marker, useMapEvents, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { MapZoomControls } from "@/components/ui/map-zoom-controls";
 import { type MapCoordinates } from "@/types/project";
-import { useEventBridge, useGameStateManager } from "@/context/game-state";
-import MAP_TILES from "@/../public/MapTiles.json"
-// @ts-ignore
+import { useEventBridge, useGameStateManager } from "@/context";
+import MAP_TILES from "@/../public/MapTiles.json";
 import "@maplibre/maplibre-gl-leaflet";
 
 interface MapClickHandlerProps {
   onPositionSelect: (position: MapCoordinates) => void;
 }
 
-
-// Component to add MapLibre GL layer
 function MapLibreLayer() {
   const map = useMap();
 
   useEffect(() => {
-    // @ts-ignore - MapLibre GL Leaflet plugin
     const mapLibreLayer = L.maplibreGL({
       //@ts-ignore
-      style: MAP_TILES
+      style: MAP_TILES,
     }).addTo(map);
 
     return () => {
@@ -46,12 +42,12 @@ function MapClickHandler({ onPositionSelect }: MapClickHandlerProps) {
 function MapResizer() {
   const map = useMap();
 
+  // needed for map to not be updated too frequently, which cuased jugged behaviour on resize
   useEffect(() => {
     let resizeInterval: NodeJS.Timeout | null = null;
     let stopTimeout: NodeJS.Timeout | null = null;
 
     const resizeObserver = new ResizeObserver(() => {
-      // Clear any existing interval and stop timeout
       if (resizeInterval) {
         clearInterval(resizeInterval);
       }
@@ -59,12 +55,10 @@ function MapResizer() {
         clearTimeout(stopTimeout);
       }
 
-      // Start continuous updates during resize
       resizeInterval = setInterval(() => {
         map.invalidateSize({ pan: false, animate: false });
       }, 15);
 
-      // Stop the interval after 150ms of no resize events
       stopTimeout = setTimeout(() => {
         if (resizeInterval) {
           clearInterval(resizeInterval);
@@ -138,7 +132,9 @@ export default function MapViewer() {
       <div
         style={{ opacity: position ? 1 : 0, pointerEvents: position ? "auto" : "none" }}
         className="absolute 2xl:w-[50%] w-[30%] max-w-[200px] 3xl:max-w-[240px] 4xl:max-w-[280px] short-screen:max-w-[200px] bottom-4 left-1/2 transform transition-opacity duration-200 ease-in-out -translate-x-1/2 z-[1000]">
-        <Button onClick={handleSubmit} className="relative z-[1000] w-full 3xl:text-xl 3xl:py-5 4xl:text-2xl 4xl:py-6 short-screen:text-base short-screen:py-3">
+        <Button
+          onClick={handleSubmit}
+          className="relative z-[1000] w-full 3xl:text-xl 3xl:py-5 4xl:text-2xl 4xl:py-6 short-screen:text-base short-screen:py-3">
           To tutaj!
         </Button>
       </div>

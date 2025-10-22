@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { useGameStateManager } from "@/context/game-state";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import { moduleIdMap } from "@/lib/navigation-system/types";
+import { useGameStateManager } from "@/context";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import { moduleIdMap } from "@/types/navigation";
 import StylisedSpan from "@/components/ui/stylised-span";
 import { Map, MapPin, Clock } from "lucide-react";
 

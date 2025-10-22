@@ -1,18 +1,17 @@
+import L from "leaflet";
 import { useEffect, useState, useRef } from "react";
 import { MapContainer, Marker, Polyline, useMap } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import { ArrowLeft, Trophy } from "lucide-react";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapZoomControls } from "@/components/ui/map-zoom-controls";
-import EdgeStars from "@/components/ui/edge-stars";
-import { useGameStateManager } from "@/context/game-state";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import { moduleIdMap } from "@/lib/navigation-system/types";
-import MAP_TILES from "@/../public/MapTiles.json"
-// @ts-ignore
+import EdgeStars from "@/components/stars/edge-stars";
+import { useGameStateManager } from "@/context";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import { moduleIdMap } from "@/types/navigation";
+import MAP_TILES from "@/../public/MapTiles.json";
 import "@maplibre/maplibre-gl-leaflet";
+import "leaflet/dist/leaflet.css";
 
 // Fix for default markers in React Leaflet
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl: unknown })._getIconUrl;
@@ -52,15 +51,13 @@ const createGuessLocationIcon = (color: string) =>
     iconAnchor: [18, 36],
   });
 
-// Component to add MapLibre GL layer
 function MapLibreLayer() {
   const map = useMap();
 
   useEffect(() => {
-    // @ts-ignore - MapLibre GL Leaflet plugin
     const mapLibreLayer = L.maplibreGL({
       //@ts-ignore
-      style: MAP_TILES
+      style: MAP_TILES,
     }).addTo(map);
 
     return () => {
@@ -70,18 +67,6 @@ function MapLibreLayer() {
 
   return null;
 }
-
-// Level colors for differentiation
-const levelColors = [
-  "#FF6B6B", // Red
-  "#4ECDC4", // Teal
-  "#45B7D1", // Blue
-  "#FFA07A", // Light Salmon
-  "#98D8C8", // Mint
-  "#F7DC6F", // Yellow
-  "#BB8FCE", // Purple
-  "#85C1E2", // Sky Blue
-];
 
 interface LevelMapData {
   levelNumber: number;
@@ -139,30 +124,12 @@ export function FinalMap() {
           number,
           number,
         ],
-        // Get color from level info's main color, fallback to levelColors array
-        color: allLevels[index]?.colors?.main || levelColors[index % levelColors.length],
+        color: allLevels[index]?.colors?.main,
       }));
 
       setLevelsData(mappedData);
     } catch (error) {
       console.error("Error loading all level results:", error);
-      // Fallback to mock data
-      setLevelsData([
-        {
-          levelNumber: 1,
-          distance: 245,
-          actualPosition: [50.0619, 19.9368],
-          guessPosition: [50.0643, 19.9401],
-          color: levelColors[0],
-        },
-        {
-          levelNumber: 2,
-          distance: 1250,
-          actualPosition: [52.2297, 21.0122],
-          guessPosition: [52.2403, 21.0189],
-          color: levelColors[1],
-        },
-      ]);
     }
   }, [gameStateManager]);
 
@@ -171,7 +138,6 @@ export function FinalMap() {
   };
 
   const handleShowLeaderboard = () => {
-    // TODO: Implement leaderboard navigation
     navigateTo(moduleIdMap.INTRO, "leader-board");
   };
 
@@ -208,6 +174,7 @@ export function FinalMap() {
 
   return (
     <div className="flex items-center h-full justify-center min-h-full bg-background relative">
+      {/* Left EdgeStars */}
       <div className="w-[15%] h-full">
         <EdgeStars className="h-full" baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
       </div>
@@ -221,7 +188,9 @@ export function FinalMap() {
             <Card className="p-0 bg-secondary-background gradient">
               <CardContent className="px-3 py-2 3xl:px-4 3xl:py-3 4xl:px-5 4xl:py-4">
                 <div className="space-y-3 3xl:space-y-4 4xl:space-y-5">
-                  <div className="text-sm 3xl:text-base 4xl:text-lg 5xl:text-xl font-bold text-foreground mb-2">Legenda:</div>
+                  <div className="text-sm 3xl:text-base 4xl:text-lg 5xl:text-xl font-bold text-foreground mb-2">
+                    Legenda:
+                  </div>
                   <div className="space-y-2 3xl:space-y-3 text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg max-h-64 3xl:max-h-80 4xl:max-h-96 overflow-y-auto">
                     {levelsData.map((level) => (
                       <div key={level.levelNumber} className="space-y-1">
@@ -290,7 +259,6 @@ export function FinalMap() {
                   style={{ height: "100%", width: "100%" }}
                   zoomControl={false}
                   attributionControl={false}>
-                  {/* Use MapLibre GL for vector tiles */}
                   <MapLibreLayer />
 
                   {/* Render markers and lines for each level */}
@@ -354,18 +322,29 @@ export function FinalMap() {
 
         {/* Action Buttons */}
         <div className="flex space-x-4">
-          <ButtonLarge onClick={handleBackToResults} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
-            <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" /> Powrót do Wyników
+          <ButtonLarge
+            onClick={handleBackToResults}
+            className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+            <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" /> Powrót
+            do Wyników
           </ButtonLarge>
-          <ButtonLarge onClick={handleShowLeaderboard} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
-            Tabela Wyników <Trophy className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
+          <ButtonLarge
+            onClick={handleShowLeaderboard}
+            className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+            Tabela Wyników{" "}
+            <Trophy className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
           </ButtonLarge>
         </div>
       </div>
 
-      {/* Right EdgeStars - 10% width */}
       <div className="w-[15%] h-full">
-        <EdgeStars className="h-full" reverse baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
+        <EdgeStars
+          className="h-full"
+          reverse
+          baseStarCount={4}
+          starsPerHundredPx={2}
+          yMargin={150}
+        />
       </div>
     </div>
   );

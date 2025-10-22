@@ -6,10 +6,10 @@ import { ArrowLeft, Gamepad2, Flag } from "lucide-react";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapZoomControls } from "@/components/ui/map-zoom-controls";
-import EdgeStars from "@/components/ui/edge-stars";
-import { useGameStateManager, useDataSourceManager, useThemeManager } from "@/context/game-state";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import { moduleIdMap } from "@/lib/navigation-system/types";
+import EdgeStars from "@/components/stars/edge-stars";
+import { useGameStateManager, useDataSourceManager, useThemeManager } from "@/context";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import { moduleIdMap } from "@/types/navigation";
 import MAP_TILES from "@/../public/MapTiles.json"
 // @ts-ignore
 import "@maplibre/maplibre-gl-leaflet";

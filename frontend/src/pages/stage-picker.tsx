@@ -1,10 +1,10 @@
 
 import { Button } from "@/components/ui/button";
 import StylisedSpan from "@/components/ui/stylised-span";
-import { useGameStateManager } from "@/context/game-state";
+import { useGameStateManager } from "@/context";
 import { cn } from "@/lib/utils";
-import { useNavigation } from "@/lib/navigation-system/navigation-provider";
-import { moduleIdMap } from "@/lib/navigation-system/types";
+import { useNavigation } from "@/lib/navigation/navigation-provider";
+import { moduleIdMap } from "@/types/navigation";
 
 export function StagePicker() {
   const { navigateWithLoading } = useNavigation();

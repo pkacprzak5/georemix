@@ -1,4 +1,5 @@
-import { type Colors, DEFAULT_COLORS } from "@/types/project";
+import { type Colors } from "@/types/project";
+import { DEFAULT_COLORS } from "@/lib/constants";
 
 const THEME_CHANGE_CLASS = "theme-change";
 const THEME_CHANGE_DURATION = 1100;

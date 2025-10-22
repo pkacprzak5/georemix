@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useGameStateManager, useThemeManager } from "@/context/game-state";
+import { useGameStateManager, useThemeManager } from "@/context";
 
 interface UseProgressiveLoadingOptions {
   initialProgress?: number;
@@ -49,7 +49,6 @@ export function useProgressiveLoading({
         await new Promise((resolve) => setTimeout(resolve, getRandomizedDelay(baseDelayMs)));
         setProgress(66);
 
-        // themeManager.setTheme(gameStateManager.gameTheme);
         themeManager.setColors(gameStateManager.colorTheme);
 
         // Progress to 100%

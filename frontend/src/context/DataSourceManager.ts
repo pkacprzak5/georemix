@@ -1,16 +1,11 @@
-import { BASE_URL } from "@/constants";
+import { BASE_URL } from "@/lib/constants";
 import type { PlayerResults } from "@/types/project";
+import type { RoundLeaderboard } from "@/types/leaderboard";
 
 const LEADERBOARD_CACHE_KEY = "leaderboard-cache";
 const CACHE_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
 
-export interface RoundLeaderboard {
-  roundNumber: number;
-  results: PlayerResults[];
-  lastUpdated: number;
-}
-
-export interface LeaderboardCache {
+interface LeaderboardCache {
   rounds: RoundLeaderboard[];
 }
 
@@ -66,7 +61,6 @@ export class DataSourceManager {
     this.baseUrl = baseUrl.replace(/\/?$/, "");
   }
 
-  // Check if username is available
   async checkUsernameAvailability(username: string): Promise<boolean> {
     if (!username.trim()) {
       throw new Error("Username is required");
@@ -79,7 +73,6 @@ export class DataSourceManager {
     return Boolean(data?.available);
   }
 
-  // Create a new player
   async createPlayer(username: string): Promise<PlayerResults> {
     const trimmed = username.trim();
     if (!trimmed) {
@@ -95,7 +88,6 @@ export class DataSourceManager {
     return response;
   }
 
-  // Submit round score
   async submitRoundScore(data: {
     username: string;
     roundNumber: number;
@@ -109,7 +101,7 @@ export class DataSourceManager {
       body: JSON.stringify(data),
     });
 
-    // Transform backend data to match PlayerResults format
+    // transform backend data to match PlayerResults format
     return {
       playerName: backendScore.username,
       totalScore: backendScore.score || 0,
@@ -118,14 +110,12 @@ export class DataSourceManager {
     };
   }
 
-  // Get scores for a specific round
   async getRoundScores(roundNumber: number): Promise<PlayerResults[]> {
     const response = await this.get<RoundScoresResponse>(`/scores/rounds/${roundNumber}`);
     const scores = response?.scores || [];
 
-    // Transform backend data to match RoundScore/PlayerResults format
+    // transform backend data to match RoundScore/PlayerResults format
     return scores.map(score => ({
-      // Map to PlayerResults fields
       playerName: score.username,
       totalScore: score.score || 0,
       totalTime: score.time || 0,
@@ -133,7 +123,6 @@ export class DataSourceManager {
     }));
   }
 
-  // Get node data for panorama viewer
   async getNode<T = any>(roundNumber: number, levelNumber: number, nodeId: string): Promise<T> {
     return this.get<T>(`/round${roundNumber}/level${levelNumber}/nodes/${nodeId}`);
   }
@@ -152,14 +141,11 @@ export class DataSourceManager {
     } catch (error) {
       console.error("Error reading leaderboard cache:", error);
     }
-    
+
     // Return empty cache
     return { rounds: [] };
   }
 
-  /**
-   * Save leaderboard data to localStorage cache
-   */
   private saveLeaderboardCache(cache: LeaderboardCache): void {
     try {
       localStorage.setItem(LEADERBOARD_CACHE_KEY, JSON.stringify(cache));
@@ -168,13 +154,10 @@ export class DataSourceManager {
     }
   }
 
-  /**
-   * Update cache for a specific round
-   */
   async updateRoundCache(roundNumber: number): Promise<void> {
     const results = await this.getRoundScores(roundNumber);
     const cache = this.getLeaderboardCache();
-    
+
     // Sort results by score (descending), then time (ascending)
     const sortedResults = results
       .sort((a, b) => {
@@ -184,59 +167,47 @@ export class DataSourceManager {
         return a.totalTime - b.totalTime;
       })
       .slice(0, 10); // Keep only top 10
-    
-    // Update or add round data
+
+    // update or add round data
     const existingIndex = cache.rounds.findIndex(r => r.roundNumber === roundNumber);
     const roundData: RoundLeaderboard = {
       roundNumber,
       results: sortedResults,
       lastUpdated: Date.now(),
     };
-    
+
     if (existingIndex >= 0) {
       cache.rounds[existingIndex] = roundData;
     } else {
       cache.rounds.push(roundData);
     }
-    
+
     this.saveLeaderboardCache(cache);
   }
 
-  /**
-   * Update cache for all rounds (1, 2, 3)
-   */
   async updateAllRoundsCache(): Promise<void> {
     const rounds = [1, 2, 3];
     await Promise.all(rounds.map(round => this.updateRoundCache(round)));
   }
 
-  /**
-   * Check if cache for a round needs refresh
-   */
   needsCacheRefresh(roundNumber: number): boolean {
     const cache = this.getLeaderboardCache();
     const roundData = cache.rounds.find(r => r.roundNumber === roundNumber);
-    
+
     if (!roundData) {
       return true;
     }
-    
+
     const timeSinceUpdate = Date.now() - roundData.lastUpdated;
     return timeSinceUpdate > CACHE_EXPIRY_MS;
   }
 
-  /**
-   * Get leaderboard for a specific round from cache
-   */
   getRoundLeaderboard(roundNumber: number): PlayerResults[] {
     const cache = this.getLeaderboardCache();
     const roundData = cache.rounds.find(r => r.roundNumber === roundNumber);
     return roundData?.results || [];
   }
 
-  /**
-   * Get all rounds leaderboard data from cache
-   */
   getAllRoundsLeaderboard(): RoundLeaderboard[] {
     const cache = this.getLeaderboardCache();
     return cache.rounds;
@@ -251,7 +222,6 @@ export class DataSourceManager {
     if (!headers.has("Accept")) {
       headers.set("Accept", "application/json");
     }
-    console.log(this.baseUrl)
     const response = await fetch(`${this.baseUrl}${endpoint}`, {
       ...init,
       headers,

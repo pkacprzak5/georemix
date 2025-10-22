@@ -1,8 +1,8 @@
 import { AnimatePresence, motion, type Transition, type Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { useNavigation } from "./navigation-provider";
-import type { Page } from "./types";
-import EdgeStars from "@/components/ui/edge-stars";
+import type { Page } from "../../types/navigation";
+import EdgeStars from "@/components/stars/edge-stars";
 
 const pageVariants: Variants = {
   enter: {

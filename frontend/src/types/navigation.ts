@@ -2,7 +2,7 @@ export type Page = {
   id: PageId;
   component: React.ComponentType;
   title?: string;
-  showStars?: boolean;  // Whether to show EdgeStars decoration on this page
+  showStars?: boolean;
 };
 
 export type PageId = string;
