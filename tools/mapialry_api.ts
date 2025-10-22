@@ -69,29 +69,21 @@ const API_testing = async (mode: API_mode) => {
     })
   );
 
-  //for (const url of res) {
-  //  console.log(url.id, url.thumb_original_url, url.computed_geometry, url.computed_compass_angle);
-  //}
-
   if (mode == 'download') {
-    // Pobieranie obrazów
     for (const item of res) {
       if (!item.thumb_original_url) continue;
 
       try {
-        // Usuń backslashe z URL
         const imageUrl = item.thumb_original_url.replace(/\\/g, '');
         const response = await fetch(imageUrl);
         const blob = await response.blob();
 
-        // Utwórz obiekt URL dla blob
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = url;
-        a.download = `${item.id}.jpg`; // nazwa pliku do pobrania
+        a.download = `${item.id}.jpg`;
 
-        // Dodaj element do body, kliknij i usuń
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
@@ -108,12 +100,10 @@ const API_testing = async (mode: API_mode) => {
     const linksObject = ids.reduce((acc, currentId, index, array) => {
       const links = [];
 
-      // Dodaj poprzedni element, jeśli istnieje
       if (index > 0) {
         links.push(array[index - 1]);
       }
 
-      // Dodaj następny element, jeśli istnieje
       if (index < array.length - 1) {
         links.push(array[index + 1]);
       }
@@ -127,21 +117,15 @@ const API_testing = async (mode: API_mode) => {
     console.log(linksObject);
 
     function downloadJSON(data: any, filename: string) {
-      // Konwersja obiektu na string JSON
       const jsonString = JSON.stringify(data, null, 2);
-      // Tworzenie obiektu Blob z typem application/json
       const blob = new Blob([jsonString], { type: 'application/json' });
-      // Tworzenie URL dla blob
       const url = URL.createObjectURL(blob);
-      // Tworzenie elementu <a> do pobrania
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
-      // Dodanie elementu do body, kliknięcie i usunięcie
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      // Zwolnienie URL
       URL.revokeObjectURL(url);
     }
 
@@ -155,14 +139,12 @@ const API_testing = async (mode: API_mode) => {
       .map(item => ({
         id: item.id,
         panorama: `${item.id}.jpg`,
-        gps: item.computed_geometry.coordinates, // Zakładam, że computed_geometry to obiekt z właściwością coordinates
+        gps: item.computed_geometry.coordinates,
         sphereCorrection: {
           pan: item.computed_compass_angle
         }
       }));
 
-    //console.log(formattedData);
-    // Jeśli chcesz zapisać to jako plik JSON
     function downloadFormattedJSON() {
       const jsonString = JSON.stringify(formattedData, null, 2);
       const blob = new Blob([jsonString], { type: 'application/json' });
@@ -177,7 +159,6 @@ const API_testing = async (mode: API_mode) => {
       URL.revokeObjectURL(url);
     }
 
-    // Wywołaj funkcję do pobrania
     downloadFormattedJSON();
   }
 
