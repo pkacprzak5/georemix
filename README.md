@@ -1,3 +1,10 @@
+
+
+<div align="center">
+   <img width="90%" minWidth="500px"  alt="Group 3" src="https://github.com/user-attachments/assets/311914fb-fa9a-4b67-bf44-f672759dc271" />
+</div>
+<br />
+
 # 🌍 GeoRemix!
 
 **GeoRemix** to gra stworzona we współpracy Koła Naukowego **BIT** z firmą **NVIDIA**, która łączy nowoczesne technologie przetwarzania obrazu oparte na sztucznej inteligencji z dobrze znaną zabawą w stylu **GeoGuessr**.
@@ -5,6 +12,8 @@
 Lokalizacje wykorzystywane w grze zostały przetworzone za pomocą specjalnie przygotowanego pipeline’u, opartego nie tylko na modelach generatywnych, ale też na autorskich rozwiązaniach zapewniających ciekawy i realistyczny wygląd miejsc.
 
 Cała platforma – od pomysłu, przez logikę rozgrywki, aż po stronę wizualną – została w całości zaprojektowana i zbudowana przez członków koła. **GeoRemix** to połączenie pasji do technologii, sztucznej inteligencji i dobrej zabawy!
+
+
 
 ---
 
