@@ -10,11 +10,9 @@ Cała platforma – od pomysłu, przez logikę rozgrywki, aż po stronę wizualn
 
 [ENG] 
 
-# Setup Instructions
+## Setup Instructions
 
 This project consists of a Vite React-TypeScript frontend and a Python Flask backend. You can run it using Docker with nginx or locally without Docker.
-
-## Table of Contents
 
 - [Running with Docker (Recommended)](#running-with-docker-recommended)
 - [Running Locally without Docker](#running-locally-without-docker)
