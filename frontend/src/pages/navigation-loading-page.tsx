@@ -9,7 +9,7 @@ export function NavigationLoadingPage() {
   const { progress, executeWithProgress } = useProgressiveLoading({
     initialProgress: 33,
     baseDelayMs: 500,
-    randomizationFactor: 1, // 40% randomization for variety
+    randomizationFactor: 1,
   });
 
   useEffect(() => {

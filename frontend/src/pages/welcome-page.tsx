@@ -17,19 +17,21 @@ const WINDOW_CLOSE_TIMEOUT = 300;
 const getWindowSize = () => {
   const width = window.innerWidth;
   const height = window.innerHeight;
-  
+
   // Check for short screen first
   if (height <= 960) {
     return { width: 400, height: 200 };
   }
-  
-  // Check breakpoints (112rem = 1792px, 128rem = 2048px)
-  if (width >= 2048) { // 4xl
+
+  // Check breakpointsF
+  if (width >= 2048) {
+    // 4xl
     return { width: 550, height: 280 };
-  } else if (width >= 1792) { // 3xl
+  } else if (width >= 1792) {
+    // 3xl
     return { width: 480, height: 240 };
   }
-  
+
   return { width: 400, height: 200 };
 };
 
@@ -77,8 +79,8 @@ export function WelcomePage() {
       setWindowSize(getWindowSize());
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -177,10 +179,6 @@ export function WelcomePage() {
           <h1 className="leading-normal 3xl:text-[5em] 4xl:text-[5.8em] mb-4 whitespace-nowrap">
             Witaj w <StylisedSpan showStars>GeoRemix!</StylisedSpan>
           </h1>
-          {/* <p className="leading-snug mx-auto my-0 w-full 2xl:text-lg xl:text-lg lg:text-lg xl:w-full lg:w-2/3 md:w-full md:text-2xl sm:text-xl text-xl">
-            Od futurystycznych metropolii po fantastyczne krainy - Spradź, czy potrafisz rozpoznać
-            znajome miejsca w nowej odsłonie!
-          </p> */}
         </div>
 
         <div className="space-y-4 3xl:space-y-5 4xl:spacey-6 max-w-md xl:max-w-lg 3xl:max-w-3xl 4xl:max-w-4xl mx-auto">
@@ -225,9 +223,13 @@ export function WelcomePage() {
             <div className="flex flex-col justify-between h-full">
               {errorMessage ? (
                 <>
-                  <span className="text-base 3xl:text-lg 4xl:text-xl short-screen:text-base">{errorMessage}</span>
+                  <span className="text-base 3xl:text-lg 4xl:text-xl short-screen:text-base">
+                    {errorMessage}
+                  </span>
                   <div className="flex justify-center mt-4 3xl:mt-5 4xl:mt-6 short-screen:mt-4">
-                    <Button onClick={handleCloseError} className="bg-main text-foreground 3xl:text-lg 3xl:px-6 3xl:py-3 4xl:text-xl 4xl:px-8 4xl:py-4 short-screen:text-base short-screen:px-4 short-screen:py-2">
+                    <Button
+                      onClick={handleCloseError}
+                      className="bg-main text-foreground 3xl:text-lg 3xl:px-6 3xl:py-3 4xl:text-xl 4xl:px-8 4xl:py-4 short-screen:text-base short-screen:px-4 short-screen:py-2">
                       Zamknij
                     </Button>
                   </div>

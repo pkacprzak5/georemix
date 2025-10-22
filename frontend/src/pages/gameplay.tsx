@@ -16,7 +16,7 @@ export function Gameplay() {
   const eventBridge = useEventBridge();
   const { navigateTo } = useNavigation();
 
-  // Progressive loading hooks for start and end loading
+  // progressive loading hooks for start and end loading
   const startLoading = useProgressiveLoading({
     initialProgress: 33,
     baseDelayMs: 300,
@@ -26,15 +26,13 @@ export function Gameplay() {
   const endLoading = useProgressiveLoading({
     initialProgress: 33,
     baseDelayMs: 400,
-    randomizationFactor: 0.6, // More variation for end loading
+    randomizationFactor: 0.6, 
   });
-
-  // const toggleMenu = () => setMenuOpen((old) => !old);
 
   useEffect(() => {
     const loadedCleanup = eventBridge.addEventListener("viewerLoaded", () => {
       startLoading.executeWithProgress(
-        undefined, // No async operation to wait for
+        undefined, // nothing to wait for
         () => {
           setLoadingOverlayOpen(false);
           eventBridge.emit("gameStarted", {});
@@ -45,10 +43,9 @@ export function Gameplay() {
     const resultCleanup = eventBridge.addEventListener("resultSubmitted", () => {
       setResultOverlayOpen(true);
       endLoading.executeWithProgress(
-        undefined, // No async operation to wait for
+        undefined,// nothing to wait for
         () => {
-          // setResultOverlayOpen(false);
-          navigateTo(moduleIdMap.LEVEL_END, "level-summary");
+          navigateTo(moduleIdMap.LEVEL_END, "level-result");
         }
       );
     });

@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+* {
+  user-select: none;
+}
+
 :root {
   --background: oklch(95.618% 0.05406 122.129);
   /* --secondary-background: #fcf4e9; */
@@ -65,6 +69,8 @@
   --font-weight-heading: 700;
 }
 
+/* Breakpoints */
+
 @theme {
   --breakpoint-3xl: 112rem;
   --breakpoint-4xl: 128rem;
@@ -72,29 +78,31 @@
 }
 
 @custom-variant short-screen-3xl {
-  @media ((height <= 960px) and (width >= 112rem)){
-    @slot
+  @media ((height <= 960px) and (width >= 112rem)) {
+    @slot;
   }
 }
 @custom-variant short-screen-4xl {
-  @media ((height <= 1050px) and (width >= 128rem)){
-    @slot
+  @media ((height <= 1050px) and (width >= 128rem)) {
+    @slot;
   }
 }
 @custom-variant short-screen-5xl {
-  @media ((height <= 1050px) and (width >= 144rem)){
-    @slot
+  @media ((height <= 1050px) and (width >= 144rem)) {
+    @slot;
   }
 }
 
+/* Gradient class */
+
 .gradient {
-  /* @apply bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] */
   @apply [background-size:20px_20px] [background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)];
 }
 
 @layer base {
   body {
     --link-button-ring: var(--main);
+    overflow-x: hidden;
     @apply text-foreground font-base bg-secondary-background [background-size:20px_20px] [background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)];
   }
 
@@ -134,13 +142,17 @@
   h1 {
     @apply text-6xl 3xl:text-7xl 4xl:text-8xl 5xl:text-9xl tracking-tight leading-none;
   }
-  
+
   h2 {
     @apply 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl;
   }
-  
+
   h3 {
     @apply 3xl:text-2xl 4xl:text-3xl 5xl:text-4xl;
+  }
+
+  button {
+    @apply cursor-pointer;
   }
 }
 
@@ -152,9 +164,25 @@
   @apply w-6 h-6 3xl:w-7 3xl:h-7 4xl:h-9 4xl:w-9 flex items-center justify-center rounded-sm border-2 border-black  bg-background  text-foreground transition-all duration-75 hover:bg-foreground hover:text-background active:translate-x-px active:translate-y-px;
 }
 
-@theme {
-  --sharp-ease: cubic-bezier(0.16, 0.77, 0.01, 0.99);
+.custom-pinpoint-icon {
+  background: transparent !important;
 }
+.custom-pinpoint-icon svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+  color: var(--main) !important;
+}
+
+.svg-shadow {
+  svg,
+  path {
+    -webkit-filter: drop-shadow(4px 4px 0px rgba(0, 0, 0));
+    filter: drop-shadow(4px 4px 0px rgba(0, 0, 0));
+  }
+}
+
+/* Animation keyframes */
 
 @keyframes float-up {
   0% {
@@ -180,25 +208,6 @@
     transform: translate(var(--dx-end, 40px), var(--dy-end, -25px)) scale(0.8);
     opacity: 0;
   }
-}
-
-button {
-  @apply cursor-pointer;
-}
-
-/* Ensure burst particles don't cause page layout shifts */
-body {
-  overflow-x: hidden;
-}
-
-.custom-pinpoint-icon {
-  background: transparent !important;
-}
-.custom-pinpoint-icon svg {
-  display: block;
-  width: 32px;
-  height: 32px;
-  color: var(--main) !important;
 }
 
 /* Jumping dots animation */
@@ -245,7 +254,6 @@ body {
     transform: translateY(-22px);
   }
 }
-
 
 .animate-bounce-delay-0 {
   animation: bounce-dots 1s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
@@ -332,28 +340,27 @@ body {
 .animate-fade-in-fast {
   animation: fade-in 4s ease-in-out forwards;
 }
-/* 
- .leaflet-tile-container img {
-  filter: sepia(200%)  contrast(95%)  hue-rotate(-25deg);
-} */
 
-* {
-  user-select: none;
-}
-/* 
-.psv-virtual-tour-arrow svg, .psv-virtual-tour-link {
-  @apply dark:text-foreground text-background
-} */
+/* PanoramaViewer walker */
 
-.svg-shadow {
-  svg,
-  path {
-    -webkit-filter: drop-shadow(4px 4px 0px rgba(0, 0, 0));
-    filter: drop-shadow(4px 4px 0px rgba(0, 0, 0));
+/* Overwriting default walking-arrow animation from panorama-viewer */
+@keyframes psv-virtual-tour-link-button-in-custom {
+  0% {
+    box-shadow: 0 0 0 0 rgba(97, 170, 242, 0);
+  }
+  20% {
+    box-shadow: 0 0 0 5px var(--main);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(97, 170, 242, 0);
   }
 }
+.psv-virtual-tour-arrow:hover {
+  animation-name: psv-virtual-tour-link-button-in-custom !important;
+}
 
-/* SCROLLBAR */
+/* Scrollbar */
+
 .scrollbar-neobrutalist::-webkit-scrollbar {
   width: 12px;
   scrollbar-color: var(--background);
@@ -384,20 +391,4 @@ body {
 
 .scrollbar-neobrutalist::-webkit-scrollbar-corner {
   background: transparent;
-}
-
-/* Overwriting default walking-arrow animation from panorama-viewer */
-@keyframes psv-virtual-tour-link-button-in-custom {
-  0% {
-    box-shadow: 0 0 0 0 rgba(97, 170, 242, 0);
-  }
-  20% {
-    box-shadow: 0 0 0 5px var(--main);
-  }
-  100% {
-    box-shadow: 0 0 0 20px rgba(97, 170, 242, 0);
-  }
-}
-.psv-virtual-tour-arrow:hover {
-  animation-name: psv-virtual-tour-link-button-in-custom !important;
 }

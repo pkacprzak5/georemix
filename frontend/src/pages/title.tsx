@@ -5,10 +5,9 @@ import EdgeStars from "@/components/stars/edge-stars";
 // @ts-ignore
 import BitLogo from "../../public/bitv4.svg?react";
 
-const INTRO_DURATION = 7000; // 5 seconds
-// const INTRO_DURATION = 1;
-const LOGO_DELAY = 1500; // 0.5 seconds
-const STARS_DELAY = 200; // 0.8 seconds - delay for stars animation
+const INTRO_DURATION = 7000; // 7 seconds
+const LOGO_DELAY = 1500; // 1.5 seconds
+const STARS_DELAY = 200; // 0.2 seconds - delay for stars animation
 
 export function TitlePage() {
   const { navigateTo } = useNavigation();
@@ -16,17 +15,14 @@ export function TitlePage() {
   const [showStars, setShowStars] = useState(false);
 
   useEffect(() => {
-    // Show logo after 0.5 seconds
     const logoTimer = setTimeout(() => {
       setShowLogo(true);
     }, LOGO_DELAY);
 
-    // Show stars after 0.8 seconds
     const starsTimer = setTimeout(() => {
       setShowStars(true);
     }, STARS_DELAY);
 
-    // Navigate after 7 seconds
     const navigationTimer = setTimeout(() => {
       navigateTo(moduleIdMap.INTRO, "welcome-page");
     }, INTRO_DURATION);
@@ -40,7 +36,7 @@ export function TitlePage() {
 
   return (
     <div className="flex items-center justify-center min-h-full relative">
-      {/* Left EdgeStars - 10% width */}
+      {/* Left EdgeStars */}
       {showStars && (
         <div className="absolute left-0 top-0 w-[20%] h-full">
           <EdgeStars className="h-full" starClassName="animate-fade-in-fast" />
@@ -58,7 +54,7 @@ export function TitlePage() {
         </div>
       </div>
 
-      {/* Right EdgeStars - 10% width */}
+      {/* Right EdgeStars */}
       {showStars && (
         <div className="absolute right-0 top-0 w-[20%] h-full">
           <EdgeStars className="h-full" reverse starClassName="animate-fade-in-fast" />

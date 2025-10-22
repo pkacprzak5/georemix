@@ -7,7 +7,7 @@ import { useDataSourceManager } from "@/context";
 function App() {
   const dataSourceManager = useDataSourceManager();
 
-  // Initialize leaderboard cache when app launches
+  // initialize leaderboard cache when app launches
   useEffect(() => {
     const initializeCache = async () => {
       try {

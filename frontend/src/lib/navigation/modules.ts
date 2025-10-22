@@ -1,6 +1,6 @@
 import { Gameplay } from "@/pages/gameplay";
 import { LevelStart } from "@/pages/level-start";
-import { LevelSummary } from "@/pages/level-summary";
+import { LevelResult } from "@/pages/level-result";
 import { LevelMap } from "@/pages/level-map";
 import { WelcomePage } from "@/pages/welcome-page";
 import { StagePicker } from "@/pages/stage-picker";
@@ -41,7 +41,7 @@ export const gameplayGroup: Module = {
 export const levelEndGroup: Module = {
   id: moduleIdMap.LEVEL_END,
   pages: [
-    { id: "level-summary", component: LevelSummary, title: "Level Results", showStars: true },
+    { id: "level-result", component: LevelResult, title: "Level Results", showStars: true },
     { id: "level-map", component: LevelMap, title: "Result Map" },
   ],
 };

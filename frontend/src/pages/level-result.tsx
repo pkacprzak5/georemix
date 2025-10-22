@@ -1,3 +1,4 @@
+import { Map, MapPin, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,48 +7,11 @@ import { useGameStateManager } from "@/context";
 import { useNavigation } from "@/lib/navigation/navigation-provider";
 import { moduleIdMap } from "@/types/navigation";
 import StylisedSpan from "@/components/ui/stylised-span";
-import { Map, MapPin, Clock } from "lucide-react";
+import { useCountUp } from "@/hooks/use-count-up";
 
 const COUNT_UP_DURATION = 2500;
 
-// Custom hook for counter animation
-const useCountUp = (target: number, duration: number = 5000) => {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (target === 0) {
-      return;
-    }
-
-    const startTime = Date.now();
-    const startValue = 0;
-
-    const animate = () => {
-      const now = Date.now();
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Easing function for smooth animation
-      // const easeOut = Math.sqrt(1 - (Math.pow(1 - progress, 4)));
-      const easeOut = progress === 1 ? 1 : 1 - Math.pow(3, -10 * progress);
-      const currentValue = Math.floor(startValue + (target - startValue) * easeOut);
-
-      setCount(currentValue);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setCount(target);
-      }
-    };
-
-    requestAnimationFrame(animate);
-  }, [target, duration]);
-
-  return count;
-};
-
-export function LevelSummary() {
+export function LevelResult() {
   const { navigateTo } = useNavigation();
   const gameStateManager = useGameStateManager();
   const [resultData, setResultData] = useState<{
@@ -60,7 +24,7 @@ export function LevelSummary() {
   useEffect(() => {
     try {
       const levelResult = gameStateManager.levelResult;
-      const maxScore = 5000; // Max score per level
+      const maxScore = gameStateManager.levelMaxScore;
 
       setResultData({
         distance: levelResult.distance,
@@ -70,13 +34,6 @@ export function LevelSummary() {
       });
     } catch (error) {
       console.error("Error loading result data:", error);
-      // Fallback to mock data
-      setResultData({
-        distance: 1230,
-        timeTaken: 45,
-        score: 3770,
-        maxScore: 5000,
-      });
     }
   }, [gameStateManager]);
 
@@ -139,9 +96,9 @@ export function LevelSummary() {
         </h1>
 
         <div className="max-w-4xl 3xl:max-w-5xl 4xl:max-w-6xl 5xl:max-w-7xl w-full flex flex-col items-center justify-center space-y-8 3xl:space-y-10 4xl:space-y-12">
-          {/* Grid Layout - 3 columns */}
+          {/* Grid Layout */}
           <div className="grid grid-cols-3 grid-rows-2 gap-6 3xl:gap-8 4xl:gap-10 5xl:gap-12 w-full">
-            {/* Combined Score and Progress Card - spans 2 columns, 2 rows */}
+            {/* Combined Score and Progress Card */}
             <div className="col-span-2 row-span-2 relative">
               <Card className="absolute -top-3 z-[100] -left-8 bg-main py-2">
                 <CardContent className="px-4">
@@ -178,7 +135,7 @@ export function LevelSummary() {
               </Card>
             </div>
 
-            {/* Distance Card - spans 1 column, 1 row (1x1) */}
+            {/* Distance Card */}
             <Card className="bg-secondary-background gradient">
               <CardContent className="text-center flex items-center justify-center flex-col h-full py-1 3xl:py-2 4xl:py-3">
                 <MapPin
@@ -188,11 +145,13 @@ export function LevelSummary() {
                 <div className="text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3 whitespace-nowrap">
                   {formatDistance(animatedDistance)}
                 </div>
-                <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground">DYSTANS</div>
+                <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground">
+                  DYSTANS
+                </div>
               </CardContent>
             </Card>
 
-            {/* Time Card - spans 1 column, 1 row (1x1) */}
+            {/* Time Card */}
             <Card className="bg-secondary-background gradient">
               <CardContent className="text-center flex items-center justify-center flex-col h-full py-1 3xl:py-2 4xl:py-3">
                 <Clock
@@ -202,14 +161,19 @@ export function LevelSummary() {
                 <div className="text-4xl 3xl:text-5xl 5xl:text-6xl font-bold text-background dark:text-foreground font-outline-1 mb-1 3xl:mb-2 4xl:mb-3">
                   {formatTime(animatedTime)}
                 </div>
-                <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground">CZAS</div>
+                <div className="text-xs 3xl:text-sm 4xl:text-base 5xl:text-lg text-muted-foreground">
+                  CZAS
+                </div>
               </CardContent>
             </Card>
           </div>
           {/* Navigation Buttons */}
           <div className="space-y-4 w-full">
-            <ButtonLarge onClick={handleViewMap} className="w-full 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
-              Pokaż na mapie <Map className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
+            <ButtonLarge
+              onClick={handleViewMap}
+              className="w-full 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+              Pokaż na mapie{" "}
+              <Map className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
             </ButtonLarge>
           </div>
         </div>

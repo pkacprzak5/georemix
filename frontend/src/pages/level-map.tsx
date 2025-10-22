@@ -1,18 +1,17 @@
+import L from "leaflet";
 import { useEffect, useState } from "react";
 import { MapContainer, Marker, Polyline, useMap } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import { ArrowLeft, Gamepad2, Flag } from "lucide-react";
 import { ButtonLarge } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapZoomControls } from "@/components/ui/map-zoom-controls";
-import EdgeStars from "@/components/stars/edge-stars";
 import { useGameStateManager, useDataSourceManager, useThemeManager } from "@/context";
 import { useNavigation } from "@/lib/navigation/navigation-provider";
 import { moduleIdMap } from "@/types/navigation";
-import MAP_TILES from "@/../public/MapTiles.json"
-// @ts-ignore
+import EdgeStars from "@/components/stars/edge-stars";
+import MAP_TILES from "@/../public/MapTiles.json";
 import "@maplibre/maplibre-gl-leaflet";
+import "leaflet/dist/leaflet.css";
 
 // Fix for default markers in React Leaflet
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl: unknown })._getIconUrl;
@@ -54,10 +53,9 @@ function MapLibreLayer() {
   const map = useMap();
 
   useEffect(() => {
-    // @ts-ignore - MapLibre GL Leaflet plugin
     const mapLibreLayer = L.maplibreGL({
       //@ts-ignore
-      style: MAP_TILES
+      style: MAP_TILES,
     }).addTo(map);
 
     return () => {
@@ -109,21 +107,18 @@ export function LevelMap() {
       setResultData({
         distance: levelResult.distance,
         actualPosition: [actualPosition.lat, actualPosition.lng],
-        guessPosition: [submittedPosition.lat, ((submittedPosition.lng + 180) % 360 + 360) % 360 - 180],
+        guessPosition: [
+          submittedPosition.lat,
+          ((((submittedPosition.lng + 180) % 360) + 360) % 360) - 180,
+        ],
       });
     } catch (error) {
       console.error("Error loading result data:", error);
-      // Fallback to mock data
-      setResultData({
-        distance: 1230,
-        actualPosition: [50.0619, 19.9368],
-        guessPosition: [50.0647, 19.945],
-      });
     }
   }, [gameStateManager]);
 
   const handleBackToSummary = () => {
-    navigateTo(moduleIdMap.LEVEL_END, "level-summary");
+    navigateTo(moduleIdMap.LEVEL_END, "level-result");
   };
 
   const handleNextLevel = async () => {
@@ -132,11 +127,10 @@ export function LevelMap() {
         await gameStateManager.submitRoundResults(dataSourceManager);
         setTimeout(() => {
           themeManager.resetColors();
-        },200)
+        }, 200);
         navigateTo(moduleIdMap.FINAL, "final-result");
       } catch (error) {
         console.error("Failed to submit round results:", error);
-        // Still navigate even if submission fails
         navigateTo(moduleIdMap.FINAL, "final-result");
       }
     } else {
@@ -170,7 +164,7 @@ export function LevelMap() {
         <EdgeStars className="h-full" baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
       </div>
 
-      {/* Main content - 80% width */}
+      {/* Main content */}
       <div className="w-[70%] h-full flex flex-col justify-center space-y-6 3xl:space-y-8 4xl:space-y-10 p-4 3xl:p-6 4xl:p-8 5xl:p-10">
         {/* Map Container with Legend Card Overlay */}
         <div className="relative flex-1 max-h-[80%] min-h-[400px] 3xl:min-h-[500px] 4xl:min-h-[600px] 5xl:min-h-[700px]">
@@ -235,7 +229,6 @@ export function LevelMap() {
                   style={{ height: "100%", width: "100%" }}
                   zoomControl={false}
                   attributionControl={false}>
-                  {/* Use MapLibre GL for vector tiles */}
                   <MapLibreLayer />
 
                   {/* Actual location marker */}
@@ -278,17 +271,24 @@ export function LevelMap() {
 
         {/* Action Buttons - Same line */}
         <div className="flex space-x-4">
-          <ButtonLarge onClick={handleBackToSummary} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
-            <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" /> Powrót do Podsumowania
+          <ButtonLarge
+            onClick={handleBackToSummary}
+            className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+            <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" /> Powrót
+            do Podsumowania
           </ButtonLarge>
-          <ButtonLarge onClick={handleNextLevel} className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
+          <ButtonLarge
+            onClick={handleNextLevel}
+            className="flex-1 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6">
             {isFinalLevel ? (
               <>
-                Zakończ Rozgrywkę <Flag className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
+                Zakończ Rozgrywkę{" "}
+                <Flag className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
               </>
             ) : (
               <>
-                Następna Runda <Gamepad2 className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
+                Następna Runda{" "}
+                <Gamepad2 className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
               </>
             )}
           </ButtonLarge>
@@ -296,7 +296,13 @@ export function LevelMap() {
       </div>
 
       <div className="w-[15%] h-full">
-        <EdgeStars className="h-full" reverse baseStarCount={4} starsPerHundredPx={2} yMargin={150} />
+        <EdgeStars
+          className="h-full"
+          reverse
+          baseStarCount={4}
+          starsPerHundredPx={2}
+          yMargin={150}
+        />
       </div>
     </div>
   );

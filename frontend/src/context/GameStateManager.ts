@@ -92,6 +92,10 @@ export class GameStateManager {
     return this._maxPoints * this._levels.length;
   }
 
+  get levelMaxScore():number {
+    return this._maxPoints
+  }
+
   get allLevelResults(): LevelResultInfo[] {
     return this._levelResults;
   }

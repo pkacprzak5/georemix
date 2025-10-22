@@ -70,7 +70,7 @@ export function LeaderBoardPage() {
   const [leaderboardData, setLeaderboardData] = useState<RoundLeaderboard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [maxRows, setMaxRows] = useState(10);
-  
+
   // Refs to measure actual DOM elements
   const containerRef = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -81,11 +81,10 @@ export function LeaderBoardPage() {
     const loadLeaderboard = async () => {
       setIsLoading(true);
 
-      // Get cached data immediately
       const cached = dataSourceManager.getAllRoundsLeaderboard();
       setLeaderboardData(cached);
 
-      // Update cache from backend
+      // update cache from backend
       try {
         await dataSourceManager.updateAllRoundsCache();
         const updated = dataSourceManager.getAllRoundsLeaderboard();
@@ -104,36 +103,37 @@ export function LeaderBoardPage() {
     const calculateMaxRows = () => {
       if (!containerRef.current || !tabsRef.current) return;
 
-      // Get the table element (first child of TabsContent)
       const tableWrapper = tabsRef.current.querySelector('[role="tabpanel"]:not([hidden])');
       if (!tableWrapper) return;
 
-      const table = tableWrapper.querySelector('table');
+      const table = tableWrapper.querySelector("table");
       if (!table) return;
 
-      // Measure actual heights
       const containerHeight = containerRef.current.clientHeight;
       const tabsHeaderHeight = tabsRef.current.querySelector('[role="tablist"]')?.clientHeight || 0;
       const buttonsHeight = buttonsRef.current?.clientHeight || 0;
-      
-      // Get padding/gap values from container
+
       const containerStyles = window.getComputedStyle(containerRef.current);
-      const containerPadding = parseFloat(containerStyles.paddingTop) + parseFloat(containerStyles.paddingBottom);
-      
-      // Get gap between tabs and buttons
+      const containerPadding =
+        parseFloat(containerStyles.paddingTop) + parseFloat(containerStyles.paddingBottom);
+
       const gapMatch = containerStyles.gap.match(/(\d+)/);
       const gap = gapMatch ? parseFloat(gapMatch[0]) * 2 : 0; // multiply by 2 for gaps between elements
 
-      // Measure a single row height from the table
-      const tableHeader = table.querySelector('thead');
-      const tableRow = table.querySelector('tbody tr');
+      const tableHeader = table.querySelector("thead");
+      const tableRow = table.querySelector("tbody tr");
       const headerHeight = tableHeader?.clientHeight || 0;
       const rowHeight = tableRow?.clientHeight || 65; // fallback to 65 if no rows yet
 
-      // Calculate available height for table body
-      const availableHeight = containerHeight - tabsHeaderHeight - buttonsHeight - containerPadding - gap - headerHeight - 100;
-      
-      // Calculate max rows that can fit
+      const availableHeight =
+        containerHeight -
+        tabsHeaderHeight -
+        buttonsHeight -
+        containerPadding -
+        gap -
+        headerHeight -
+        100;
+
       const calculatedMaxRows = Math.max(1, Math.floor(availableHeight / rowHeight));
       setMaxRows(calculatedMaxRows);
     };
@@ -147,7 +147,7 @@ export function LeaderBoardPage() {
       resizeObserver.observe(containerRef.current);
     }
 
-    // Initial calculation with a small delay to ensure DOM is ready
+    // initial calculation with a small delay to ensure DOM is ready
     const timeout = setTimeout(calculateMaxRows, 100);
 
     return () => {
@@ -168,9 +168,14 @@ export function LeaderBoardPage() {
   }
 
   return (
-    <div ref={containerRef} className="flex justify-center items-center min-h-full p-8 3xl:p-10 4xl:p-12 5xl:p-16">
+    <div
+      ref={containerRef}
+      className="flex justify-center items-center min-h-full p-8 3xl:p-10 4xl:p-12 5xl:p-16">
       <div className="w-[900px] 3xl:w-[1100px] 4xl:w-[1400px] 5xl:w-[1800px] flex flex-col gap-8 3xl:gap-10 4xl:gap-12">
-        <Tabs ref={tabsRef} className="shadow-shadow rounded-base" defaultValue={defaultRound.toString()}>
+        <Tabs
+          ref={tabsRef}
+          className="shadow-shadow rounded-base"
+          defaultValue={defaultRound.toString()}>
           <TabsList className="grid p-0 w-full rounded-b-none grid-cols-3 gap-0 overflow-hidden h-12 3xl:h-16 4xl:h-20 5xl:h-24 border-b-0">
             {rounds.map((round) => (
               <TabsTrigger
@@ -201,13 +206,15 @@ export function LeaderBoardPage() {
             <ButtonLarge
               className="whitespace-nowrap 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6"
               onClick={() => navigateTo(moduleIdMap.FINAL, "final-result")}>
-              <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" /> Powrót do Podsumowania
+              <ArrowLeft className="w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />{" "}
+              Powrót do Podsumowania
             </ButtonLarge>
           )}
           <ButtonLarge
             className="whitespace-nowrap 3xl:text-3xl 3xl:py-5 4xl:text-4xl 4xl:py-6"
             onClick={() => navigateTo(moduleIdMap.INTRO, "welcome-page")}>
-             Powrót do Menu  <Earth className="whitespace-nowrap w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
+            Powrót do Menu{" "}
+            <Earth className="whitespace-nowrap w-6 h-6 3xl:w-7 3xl:h-7 4xl:w-10 4xl:h-10 mt-1 3xl:mt-2" />
           </ButtonLarge>
         </div>
       </div>

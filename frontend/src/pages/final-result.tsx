@@ -7,44 +7,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { moduleIdMap } from "@/types/navigation";
 import StylisedSpan from "@/components/ui/stylised-span";
+import { useCountUp } from "@/hooks/use-count-up";
 
 const COUNT_UP_DURATION = 3000;
-
-// Custom hook for counter animation
-const useCountUp = (target: number, duration: number = 3000) => {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (target === 0) {
-      return;
-    }
-
-    const startTime = Date.now();
-    const startValue = 0;
-
-    const animate = () => {
-      const now = Date.now();
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Easing function for smooth animation
-      const easeOut = progress === 1 ? 1 : 1 - Math.pow(3, -10 * progress);
-      const currentValue = Math.floor(startValue + (target - startValue) * easeOut);
-
-      setCount(currentValue);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setCount(target);
-      }
-    };
-
-    requestAnimationFrame(animate);
-  }, [target, duration]);
-
-  return count;
-};
 
 export function FinalResult() {
   const { navigateTo } = useNavigation();
@@ -179,9 +144,9 @@ export function FinalResult() {
         </h1>
 
         <div className="max-w-4xl 3xl:max-w-5xl 4xl:max-w-6xl 5xl:max-w-7xl w-full flex flex-col items-center justify-center space-y-8 3xl:space-y-10 4xl:space-y-12">
-          {/* 2x2 Grid Layout */}
+          {/* Grid Layout */}
           <div className="grid grid-cols-3 grid-rows-2 gap-6 3xl:gap-8 4xl:gap-10 5xl:gap-12 w-full">
-            {/* Combined Score and Progress Card - spans 2 columns, 2 rows (2x2) */}
+            {/* Combined Score and Progress Card */}
             <div className="col-span-2 row-span-2 relative">
               <Card className="absolute -top-3 z-[100] -left-8 bg-main py-2">
                 <CardContent className="px-4">
@@ -218,7 +183,7 @@ export function FinalResult() {
               </Card>
             </div>
 
-            {/* Total Time Card - spans 1 column, 1 row (1x1) */}
+            {/* Total Time Card */}
             <Card className="bg-secondary-background gradient">
               <CardContent className="text-center flex items-center justify-center flex-col h-full py-1 3xl:py-2 4xl:py-3">
                 <Clock
@@ -234,7 +199,7 @@ export function FinalResult() {
               </CardContent>
             </Card>
 
-            {/* Shortest Distance Card - spans 1 column, 1 row (1x1) */}
+            {/* Shortest Distance Card */}
             <Card className="bg-secondary-background gradient">
               <CardContent className="text-center flex items-center justify-center flex-col h-full py-1 3xl:py-2 4xl:py-3">
                 <MapPin
