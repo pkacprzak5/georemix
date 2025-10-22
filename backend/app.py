@@ -17,19 +17,20 @@ IMAGE_ENDPOINT = f"{BASE_URL}/images/"
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///scores.db")
 CLIENT_ORIGIN = os.getenv("CLIENT_ORIGIN", "http://localhost:5173")
 ALLOWED_ORIGINS = CLIENT_ORIGIN.split(",")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+IS_DEVELOPMENT = ENVIRONMENT == "development"
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# Configure CORS with stricter settings
 cors = CORS(
     app,
     resources={
         r"/*": {
             "origins": CLIENT_ORIGIN.split(","),
             "methods": ["GET", "POST", "OPTIONS"],
-            "allow_headers": ["Content-Type", "X-API-Key"],
+            "allow_headers": "*" if IS_DEVELOPMENT else ["Content-Type", "X-API-Key"],
             "expose_headers": ["Content-Type"],
             "supports_credentials": True,
             "max_age": 3600
