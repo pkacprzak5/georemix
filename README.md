@@ -18,7 +18,14 @@ The game application is built on a containerized three-tier architecture. The fr
 
 The backend runs on [**Flask**](https://flask.palletsprojects.com/en/stable/) with [**SQLAlchemy**](https://www.sqlalchemy.org/), managing player progress, scoring and content serving. The entire stack is orchestrated with Docker Compose, combining nginx as a reverse proxy.
 
+<br />
+
+<div align="center">
+  <img width="90%" minWidth="500px" alt="GeoRemix" src="https://github.com/user-attachments/assets/d724dc73-a9f6-4eba-961c-5bdabfac9659" />
+</div>
+
 ---
+
 
 ### 🎬 Demo
 
