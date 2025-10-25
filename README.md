@@ -8,11 +8,11 @@
 
 # 🌍 GeoRemix
 
-**GeoRemix** is a research-driven guessing game created by the **BIT** Student Research Group in partnership with **NVIDIA**. It blends cutting-edge, AI-powered image processing with the tension of classic GeoGuessr-style exploration, inviting players to navigate unfamiliar worlds and pinpoint their locations.
+**GeoRemix** is a research-driven guessing game created by the **BIT** Student Scientific Group in partnership with **NVIDIA**. It blends cutting-edge, AI-powered image processing with the tension of classic GeoGuessr-style exploration, inviting players to navigate unfamiliar worlds and pinpoint their locations.
 
 Every panorama in GeoRemix was passed through a bespoke content pipeline that mixes generative models with custom ComfyUI nodes and in-house tooling. The workflow enhances street-level captures with depth-aware styling, edge detection, and theme-specific prompts, producing visually coherent worlds that still feel grounded in reality.
 
-From the initial concept, through gameplay logic, UX, and deployment, the entire platform was designed and built by BIT Scientific Group members. GeoRemix embodies the team’s passion for creative technology, artificial intelligence, and accessible fun.
+From the initial concept, through gameplay logic, UX, and deployment, the entire platform was designed and built by  **BIT** Student Scientific Group members. GeoRemix embodies the team’s passion for creative technology, artificial intelligence, and accessible fun.
 
 ---
 
