@@ -36,7 +36,7 @@ export function StagePicker() {
             disabled={round.isLocked}
             className={cn(
               "relative group flex flex-col items-center justify-center flex-shrink-0 z-[5000]",
-              "w-64 h-48  3xl:w-64 3xl:h-64 4xl:w-72 4xl:h-72",
+              "w-64 h-48 3xl:w-80 3xl:h-72 4xl:w-96 4xl:h-72",
               "font-heading text-3xl 3xl:text-4xl 4xl:text-5xl",
               round.isLocked
                 ? "bg-foreground/10 cursor-not-allowed opacity-60"
