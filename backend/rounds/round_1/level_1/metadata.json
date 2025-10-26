@@ -1,11 +1,11 @@
 {
   "initialNode": 240481898850363,
   "theme": "light",
-  "name": "Sydney - temp",
-  "thumbnail": "anime.png",
+  "name": "Przedmieścia RetroWave",
+  "thumbnail": "valorant.png",
   "number": 1,
   "colors": {
-    "main": "oklch(86.03% 0.176 92.36)",
-    "background": "oklch(96.79% 0.0654 102.26)"
+    "main": "oklch(71.9% 0.198 310.03)",
+    "background": "oklch(94.11% 0.036556 308.0303)"
   }
 }

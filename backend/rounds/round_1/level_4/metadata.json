@@ -1,11 +1,11 @@
 {
-  "initialNode": 337661345552026,
+  "initialNode": 351574807461858,
   "theme": "light",
-  "name": "Los Angeles - temp",
-  "thumbnail": "anime.png",
+  "name": "Wzgórza Rubieży",
+  "thumbnail": "borderlands.png",
   "number": 4,
   "colors": {
-    "main": "oklch(86.03% 0.176 92.36)",
-    "background": "oklch(96.79% 0.0654 102.26)"
+    "main": "oklch(71.5% 0.197 354.23)",
+    "background": "oklch(95.16% 0.0242 343.23)"
   }
 }

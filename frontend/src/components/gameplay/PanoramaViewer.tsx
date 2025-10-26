@@ -41,6 +41,9 @@ const PanoramaViewer = () => {
       return;
     }
 
+    
+
+
     getNode(gameStateManager.currentLevelInfo.initialNode).then((node: Node | null) => {
       if (!node) {
         throw new Error("Can not get starting node!");
@@ -52,10 +55,22 @@ const PanoramaViewer = () => {
       gameStateManager.setCoordinates(location);
     });
 
+    virtualTour.addEventListener("node-changed", (e: any) => {
+      // eslint-disable-line @typescript-eslint/no-explicit-any
+      const location: MapCoordinates = {
+        lat: e.node.gps[1],
+        lng: e.node.gps[0],
+      };
+      console.log(e.node)
+      gameStateManager.setCoordinates(location);
+    });
+
     setTimeout(() => {
       eventBridge.emit("viewerLoaded", {});
     }, 1000);
   };
+
+  
 
   const plugins = [
     [

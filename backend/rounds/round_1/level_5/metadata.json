@@ -1,11 +1,11 @@
 {
   "initialNode": 4196087943953496,
   "theme": "light",
-  "name": "Lisbona - temp",
-  "thumbnail": "anime.png",
+  "name": "Skuty Lodem Szlak",
+  "thumbnail": "siberia.png",
   "number": 5,
   "colors": {
-    "main": "oklch(86.03% 0.176 92.36)",
-    "background": "oklch(96.79% 0.0654 102.26)"
+    "main": "oklch(78.57% 0.1422 180.36)",
+    "background": "oklch(95.08% 0.0481 184.07)"
   }
 }
