@@ -1,11 +1,11 @@
 {
-  "initialNode": 294755352295048,
+  "initialNode": 1207115893074896,
   "theme": "light",
-  "name": "Neonowy Cyberpunk",
-  "thumbnail": "cyberpunk.png",
-  "number": 1,
+  "name": "Rio de Janeiro - temp",
+  "thumbnail": "anime.png",
+  "number": 2,
   "colors": {
-    "main": "oklch(67.28% 0.2147 24.22)",
-    "background": "oklch(93.3% 0.0339 17.77)"
+    "main": "oklch(86.03% 0.176 92.36)",
+    "background": "oklch(96.79% 0.0654 102.26)"
   }
 }

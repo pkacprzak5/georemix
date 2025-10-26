@@ -1,11 +1,11 @@
 {
-  "initialNode": 767893531079270,
+  "initialNode": 924487595846721,
   "theme": "light",
-  "name": "Metropolia Przyszłości",
-  "thumbnail": "sci-fi.png",
+  "name": "Hawaii - temp",
+  "thumbnail": "anime.png",
   "number": 3,
   "colors": {
-    "main": "oklch(83.29% 0.2331 132.51)",
-    "background": "oklch(95.37% 0.0549 125.19)"
+    "main": "oklch(86.03% 0.176 92.36)",
+    "background": "oklch(96.79% 0.0654 102.26)"
   }
 }

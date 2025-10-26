@@ -1,11 +1,11 @@
 {
-  "initialNode": 834015571448095,
+  "initialNode": 240481898850363,
   "theme": "light",
-  "name": "Obraz Van Gogh'a",
-  "thumbnail": "van_gogh.png",
+  "name": "Sydney - temp",
+  "thumbnail": "anime.png",
   "number": 1,
   "colors": {
-    "main": "oklch(67.47% 0.1726 259.49)",
-    "background": "oklch(93.46% 0.0305 255.11)"
+    "main": "oklch(86.03% 0.176 92.36)",
+    "background": "oklch(96.79% 0.0654 102.26)"
   }
 }

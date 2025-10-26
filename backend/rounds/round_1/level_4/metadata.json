@@ -1,11 +1,11 @@
 {
-  "initialNode": 1720995678649287,
+  "initialNode": 337661345552026,
   "theme": "light",
-  "name": "Syberyjskie Stepy",
-  "thumbnail": "siberia.png",
+  "name": "Los Angeles - temp",
+  "thumbnail": "anime.png",
   "number": 4,
   "colors": {
-    "main": "oklch(78.57% 0.1422 180.36)",
-    "background": "oklch(95.08% 0.0481 184.07)"
+    "main": "oklch(86.03% 0.176 92.36)",
+    "background": "oklch(96.79% 0.0654 102.26)"
   }
 }

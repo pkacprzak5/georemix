@@ -1,11 +1,11 @@
 {
-  "initialNode": 846584160585297,
+  "initialNode": 4196087943953496,
   "theme": "light",
-  "name": "Twierdza Krzyżowców",
-  "thumbnail": "castle.png",
+  "name": "Lisbona - temp",
+  "thumbnail": "anime.png",
   "number": 5,
   "colors": {
-    "main": "#627d3b",
-    "background": "#b2c793"
+    "main": "oklch(86.03% 0.176 92.36)",
+    "background": "oklch(96.79% 0.0654 102.26)"
   }
 }

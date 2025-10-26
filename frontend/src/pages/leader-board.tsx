@@ -156,7 +156,7 @@ export function LeaderBoardPage() {
     };
   }, [leaderboardData]);
 
-  const rounds = useMemo(() => [1, 2, 3], []);
+  const rounds = useMemo(() => [1], []);
   const defaultRound = useMemo(() => rounds[0], [rounds]);
 
   if (isLoading && leaderboardData.length === 0) {
@@ -176,13 +176,13 @@ export function LeaderBoardPage() {
           ref={tabsRef}
           className="shadow-shadow rounded-base"
           defaultValue={defaultRound.toString()}>
-          <TabsList className="grid p-0 w-full rounded-b-none grid-cols-3 gap-0 overflow-hidden h-12 3xl:h-16 4xl:h-20 5xl:h-24 border-b-0">
+          <TabsList className="grid p-0 w-full rounded-b-none grid-cols-1 gap-0 overflow-hidden h-12 3xl:h-16 4xl:h-20 5xl:h-24 border-b-0">
             {rounds.map((round) => (
               <TabsTrigger
                 key={round}
                 className="h-full m-0 rounded-none border-0 border-r-2 last:border-r-0 border-border bg-white text-base 3xl:text-2xl 4xl:text-3xl 5xl:text-4xl"
                 value={round.toString()}>
-                Rozgrywka {round}
+                Rozgrywka Bonusowa
               </TabsTrigger>
             ))}
           </TabsList>

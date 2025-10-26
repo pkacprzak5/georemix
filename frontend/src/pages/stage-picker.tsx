@@ -17,19 +17,9 @@ export function StagePicker() {
   const rounds = [
     {
       roundNumber: 1,
-      title: "Rozgrywka 1",
+      title: "Rozgrywka Bonusowa",
       isLocked: false,
-    },
-    {
-      roundNumber: 2,
-      title: "Rozgrywka 2",
-      isLocked: false,
-    },
-    {
-      roundNumber: 3,
-      title: "Rozgrywka 3",
-      isLocked: false,
-    },
+    }
   ];
 
   return (
@@ -46,7 +36,7 @@ export function StagePicker() {
             disabled={round.isLocked}
             className={cn(
               "relative group flex flex-col items-center justify-center flex-shrink-0 z-[5000]",
-              "w-48 h-48  3xl:w-64 3xl:h-64 4xl:w-72 4xl:h-72",
+              "w-64 h-48  3xl:w-64 3xl:h-64 4xl:w-72 4xl:h-72",
               "font-heading text-3xl 3xl:text-4xl 4xl:text-5xl",
               round.isLocked
                 ? "bg-foreground/10 cursor-not-allowed opacity-60"
@@ -54,7 +44,7 @@ export function StagePicker() {
             )}>
             {/* Round Number */}
             <div className="text-6xl 3xl:text-7xl 4xl:text-8xl font-bold mb-4 3xl:mb-6 4xl:mb-8">
-              {round.roundNumber}
+              {"Bonus!"}
             </div>
 
             {/* Title or Lock */}
