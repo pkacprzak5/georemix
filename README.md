@@ -80,3 +80,9 @@ Panoramic pictures were taken from the [**Mapillary API**](https://www.mapillary
 ---
 
 Happy guessing! 🌐
+
+---
+
+## License
+
+This project is released under the MIT License — see the full text in `./LICENSE`.  
