@@ -85,4 +85,4 @@ Happy guessing! 🌐
 
 ## License
 
-This project is released under the MIT License — see the full text in `./LICENSE`.  
+This project is released under the MIT License — see the full text in [**LICENSE**](./LICENSE).  
