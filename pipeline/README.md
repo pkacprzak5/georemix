@@ -95,7 +95,6 @@ It will read all JSON files from the `prompts/` directory and process each one i
 
 ## ⚠️ Gotchas
 
-- ### **File paths** → Workflow files must live in workflows/.
 - ### **Indexing and signatures**:
   - `find_line_with_max_avg()` returns 0-based line numbers (and truncates the score file after reading). The code expects this value to be used as a batch prefix when copying images.
   - `copy_images_with_pattern()` in `helpers.py` is defined as `copy_images_with_pattern(src_dir: str, dst_dir: str, org_dir: str, starts_with: str)`, but the `process_localization.py` calls it with three arguments: `copy_images_with_pattern(DEFAULT_OUTPUTS_PATH, new_dest, copy_pattern)`. If you keep the current code, pass a fourth argument `org_dir` (likely the original pictures directory or a directory listing used for naming). Otherwise update the function call to match the implementation.

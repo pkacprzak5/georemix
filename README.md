@@ -12,14 +12,15 @@
 
 ### 🛠️ Technology Stack
 
-Content generation for the project was made possible by custom **AI Processing Chain**. Every panoramic photo used in the game was passed through **ComfyUI** pipeline, that mixes generative models, custom nodes and in-house tooling. The wokrflow enhances street-level captures with depth-aware styling, edge detection, and theme-specific prompts, thus producing visually coherent locations.
+Content generation for the project was made possible by custom **AI Processing Chain**. Every panoramic photo used in the game was passed through **ComfyUI** pipeline, that mixes generative models, custom nodes and in-house tooling. The workflow enhances street-level captures with depth-aware styling, edge detection, and theme-specific prompts, thus producing visually coherent locations.
 
-The ComfyUI chain runs on the [`RealVisXL_V5.0`](https://huggingface.co/SG161222/RealVisXL_V5.0) SDXL model for generating images, and every batch of renders is automatically tested and scored by the quality model [`PickScore_v1`](https://huggingface.co/yuvalkirstain/PickScore_v1) before we ingest the top panoramas. Technical details are documented in the [`pipeline/README.md`](./pipeline/README.md).
+The ComfyUI chain runs on the [**RealVisXL_V5.0**](https://huggingface.co/SG161222/RealVisXL_V5.0) SDXL model for generating images, and every batch of renders is automatically tested and scored by the quality model [**PickScore_v1**](https://huggingface.co/yuvalkirstain/PickScore_v1) before we ingest the top panoramas. Technical details are documented in the [**pipeline/README.md**](./pipeline/README.md).
 
 The game application is built on a containerized three-tier architecture. The frontend leverages [**Vite**](https://vitejs.dev/), [**React**](https://react.dev/), and [**TypeScript**](https://www.typescriptlang.org/) with [**Tailwind CSS**](https://tailwindcss.com/) and [**Neobrutalism Components**](https://www.neobrutalism.dev/) for styling. The capabilities also feature panorama viewing via [**Photo Sphere Viewer**](https://photo-sphere-viewer.js.org/) package and interactive map functionality powered by [**Leaflet**](https://leafletjs.com/) and [**MapLibre**](https://maplibre.org/).
 
 The backend runs on [**Flask**](https://flask.palletsprojects.com/en/stable/) with [**SQLAlchemy**](https://www.sqlalchemy.org/), managing player progress, scoring and content serving. The entire stack is orchestrated with Docker Compose, combining nginx as a reverse proxy.
 
+Panoramic pictures were taken from the [**Mapillary API**](https://www.mapillary.com/developer/api-documentation/) and the imagery is available under the [**CC BY-SA 4.0**](https://creativecommons.org/licenses/by-sa/4.0/) license.
 <br />
 
 <div align="center">
