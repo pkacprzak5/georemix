@@ -21,9 +21,18 @@ This folder contains helper scripts and a small driver to run a pipeline that qu
 
    - Selects the best-scoring line in a results file and copies matching images to a destination folder.
 
+## 🔬 Technical details
+
+- **Image ingest** — `LoadImagesFromDir //Inspire` pulls a batch from the folder defined in `PICTURES_DIRECTORY`. `process_localization.py` rewrites `directory`, `image_load_cap`, and related fields at runtime so the workflow always targets the current location dataset.
+- **ControlNet preprocessing** — three `AV_ControlNetPreprocessor` nodes derive canny edges, semantic segmentation, and normals from the source batch. The node strengths and timing are later combined in `CR Multi-ControlNet Stack`.
+- **Prompt conditioning** — the positive/negative prompts from each JSON file overwrite the default text in the CLIP encoders. The ControlNet stack is merged with those encodings in `CR Apply Multi-ControlNet` before entering the sampler.
+- **Diffusion core** — the checkpoint is made tile-aware via `SeamlessTile`, a circular VAE is prepared, an `EmptyLatentImage` sized to the batch is created, and `KSampler` runs with the current cfg / denoise / seed triple. Outputs decode through `VAEDecode` and `SaveImage`, which receives a dynamic `filename_prefix` such as `0batch`, `1batch`, etc.
+- **Automatic scoring** — PickScore nodes load the model, process the rendered images, and write comma-separated scores into `temp/scores.txt` inside the ComfyUI tree. `find_line_with_max_avg()` consumes this file to decide which batch prefix produced the best result and clears the file afterwards.
+- **Workflow JSON vs. UI graph** — `workflows/pipeline_api.json` mirrors the `pipeline.json` graph but stores only node metadata required by the HTTP API. `process_localization.py` mutates the serialized JSON prior to each submission (paths, prompts, sampler params), so you can keep the ComfyUI graph static and still run dynamic batches.
+
 ## ⚙️ Setup & Running
 
-### 1. Install dependencies for this folder (recommended into a virtualenv):
+### 1. Install dependencies for this folder:
 
 ```bash
 pip install -r requirements.txt
@@ -70,6 +79,12 @@ It will read all JSON files from the `prompts/` directory and process each one i
   - `load_prompt(prompt_path)` loads a workflow JSON from the `workflows/` directory.
   - `load_prompt_text(json_path)` loads a prompt JSON and validates required keys.
 
+## 🤖 Automating multi-location runs
+
+- **Sequential orchestration** — `process_localization.py` loops over every prompt file, clears the ComfyUI output directory, dispatches all cfg/denoise/seed combinations, waits for the queue to drain, then copies the top-scoring images into `DEFAULT_COPY_DEST/<prompt-name>`.
+- **Batching locations** — `run_all.sh` iterates over each subdirectory of `pictures/`. For every location it rewrites `.env` with the location’s `before`/`after` paths, calls `process_localization.py`, and captures logs per folder. Completed runs restore the original `.env` automatically.
+- **Directory structure expectations** — each location folder must contain `before/` (input reference images) and `after/` (where selected outputs land). The script creates missing folders on the fly, ensuring the workflow can run unattended across an arbitrary number of locations.
+
 ## 🎛️ Customization
 
 - **Prompts** → Edit/add JSON files in prompts/.
@@ -80,7 +95,6 @@ It will read all JSON files from the `prompts/` directory and process each one i
 
 ## ⚠️ Gotchas
 
-- ### **File paths** → Workflow files must live in workflows/.
 - ### **Indexing and signatures**:
   - `find_line_with_max_avg()` returns 0-based line numbers (and truncates the score file after reading). The code expects this value to be used as a batch prefix when copying images.
   - `copy_images_with_pattern()` in `helpers.py` is defined as `copy_images_with_pattern(src_dir: str, dst_dir: str, org_dir: str, starts_with: str)`, but the `process_localization.py` calls it with three arguments: `copy_images_with_pattern(DEFAULT_OUTPUTS_PATH, new_dest, copy_pattern)`. If you keep the current code, pass a fourth argument `org_dir` (likely the original pictures directory or a directory listing used for naming). Otherwise update the function call to match the implementation.
@@ -88,5 +102,5 @@ It will read all JSON files from the `prompts/` directory and process each one i
 
 ## 🛠️ Troubleshooting
 
-- ### If the script cannot reach the server, check `SERVER_ADDRESS` and ensure the server exposes `/prompt` and `/queue` endpoints compatible with the payload shape.
-- ### If `find_line_with_max_avg()` prints warnings about parsing floats, inspect the score file (`DEFAULT_FIND_MAX_FILE`) and ensure it contains numeric values separated by ", ".
+-  If the script cannot reach the server, check `SERVER_ADDRESS` and ensure the server exposes `/prompt` and `/queue` endpoints compatible with the payload shape.
+-  If `find_line_with_max_avg()` prints warnings about parsing floats, inspect the score file (`DEFAULT_FIND_MAX_FILE`) and ensure it contains numeric values separated by ", ".

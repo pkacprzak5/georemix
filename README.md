@@ -1,187 +1,82 @@
 
 
 <div align="center">
-   <img width="90%" minWidth="500px"  alt="Group 3" src="https://github.com/user-attachments/assets/311914fb-fa9a-4b67-bf44-f672759dc271" />
+  <img width="90%" minWidth="500px" alt="GeoRemix" src="https://github.com/user-attachments/assets/311914fb-fa9a-4b67-bf44-f672759dc271" />
 </div>
+
 <br />
 
-# 🌍 GeoRemix!
+# 🌍 GeoRemix
 
-**GeoRemix** to gra stworzona we współpracy Koła Naukowego **BIT** z firmą **NVIDIA**, która łączy nowoczesne technologie przetwarzania obrazu oparte na sztucznej inteligencji z dobrze znaną zabawą w stylu **GeoGuessr**.
+**GeoRemix** is a research-driven geo-guessing game created by the **BIT Student Scientific Group at AGH University** in partnership with **NVIDIA**, which blends AI-powered image processing with classic GeoGuessr-style exploration gameplay, inviting players to navigate unfamiliar worlds and pinpoint their locations.
 
-Lokalizacje wykorzystywane w grze zostały przetworzone za pomocą specjalnie przygotowanego pipeline’u, opartego nie tylko na modelach generatywnych, ale też na autorskich rozwiązaniach zapewniających ciekawy i realistyczny wygląd miejsc.
+### 🛠️ Technology Stack
 
-Cała platforma – od pomysłu, przez logikę rozgrywki, aż po stronę wizualną – została w całości zaprojektowana i zbudowana przez członków koła. **GeoRemix** to połączenie pasji do technologii, sztucznej inteligencji i dobrej zabawy!
+Content generation for the project was made possible by custom **AI Processing Chain**. Every panoramic photo used in the game was passed through **ComfyUI** pipeline, that mixes generative models, custom nodes and in-house tooling. The workflow enhances street-level captures with depth-aware styling, edge detection, and theme-specific prompts, thus producing visually coherent locations.
 
+The ComfyUI chain runs on the [**RealVisXL_V5.0**](https://huggingface.co/SG161222/RealVisXL_V5.0) SDXL model for generating images, and every batch of renders is automatically tested and scored by the quality model [**PickScore_v1**](https://huggingface.co/yuvalkirstain/PickScore_v1) before we ingest the top panoramas. Technical details are documented in the [**pipeline/README.md**](./pipeline/README.md).
 
+The game application is built on a containerized three-tier architecture. The frontend leverages [**Vite**](https://vitejs.dev/), [**React**](https://react.dev/), and [**TypeScript**](https://www.typescriptlang.org/) with [**Tailwind CSS**](https://tailwindcss.com/) and [**Neobrutalism Components**](https://www.neobrutalism.dev/) for styling. The capabilities also feature panorama viewing via [**Photo Sphere Viewer**](https://photo-sphere-viewer.js.org/) package and interactive map functionality powered by [**Leaflet**](https://leafletjs.com/) and [**MapLibre**](https://maplibre.org/).
+
+The backend runs on [**Flask**](https://flask.palletsprojects.com/en/stable/) with [**SQLAlchemy**](https://www.sqlalchemy.org/), managing player progress, scoring and content serving. The entire stack is orchestrated with Docker Compose, combining nginx as a reverse proxy.
+
+Panoramic pictures were taken from the [**Mapillary API**](https://www.mapillary.com/developer/api-documentation/) and the imagery is available under the [**CC BY-SA 4.0**](https://creativecommons.org/licenses/by-sa/4.0/) license.
+<br />
+
+<div align="center">
+  <img width="90%" minWidth="500px" alt="GeoRemix" src="https://github.com/user-attachments/assets/d724dc73-a9f6-4eba-961c-5bdabfac9659" />
+</div>
 
 ---
 
-[ENG] 
-
-## Setup Instructions
-
-This project consists of a Vite React-TypeScript frontend and a Python Flask backend. You can run it using Docker with nginx or locally without Docker.
-
-- [Running with Docker (Recommended)](#running-with-docker-recommended)
-- [Running Locally without Docker](#running-locally-without-docker)
+### 🎥 Videos
+- [Creation process](https://www.youtube.com/watch?v=YOUR_DEV_DIARY_VIDEO)
 
 ---
 
-## Running with Docker (Recommended)
+### 🧰 Project Structure
+- `frontend/` — [**Vite**](https://vitejs.dev/) + [**React**](https://react.dev/) + [**TypeScript**](https://www.typescriptlang.org/) client with [**Neobrutalism Components**](https://www.neobrutalism.dev/) UI, framer-motion transitions, and custom windowed layout components.
+- `backend/` — [**Flask**](https://flask.palletsprojects.com/en/stable/) service serving panoramas, routes, leaderboard, and player management via [**SQLAlchemy**](https://www.sqlalchemy.org/).
+- `pipeline/` — [**ComfyUI**](https://github.com/comfyanonymous/ComfyUI)-integrated tooling that transforms raw panoramas into stylised scenes using prompt-driven workflows.
+- `docker-compose.yaml` — Bridges **nginx**, frontend, and backend API into one deployment.
 
-Docker Compose orchestrates both frontend (with nginx) and backend services.
+---
 
-### Prerequisites
+### 🖥️ Local Setup Instructions
+1. **Clone the repository**
 
-- Docker and Docker Compose installed
-- Port 80 (frontend) and 5000 (backend) available
+   ```bash
+   git clone https://github.com/bit-labs/geo-remix.git
+   ```
 
-### Setup
+2. **Navigate to the project directory**
 
-1. **Create a `.env` file in the project root directory** with the following environment variables:
+   ```bash
+   cd geo-remix
+   ```
+
+3. **Create a `.env` file in the project root**
 
    ```env
-   # Backend Configuration
-   API_SECRET_KEY=your-secret-key-here
-   API_PORT=5000
-   API_HOST=http://localhost
+   API_SECRET_KEY=change-me
+   API_PORT=80
+   API_HOST=http://localhost/api/
    DATABASE_URL=sqlite:///scores.db
    CLIENT_ORIGIN=http://localhost
    FLASK_ENV=production
    SKIP_API_KEY_CHECK=false
-   
-   # Frontend Configuration
-   VITE_API_SECRET_KEY=your-secret-key-here
-   VITE_API_URL=http://localhost/api
    ```
 
-   **Important Notes:**
-   - `API_SECRET_KEY` and `VITE_API_SECRET_KEY` should match
-   - `CLIENT_ORIGIN` should match where the frontend will be accessed from
-   - `VITE_API_URL` uses `/api` prefix as nginx proxies to backend
-   - Set `SKIP_API_KEY_CHECK=true` for development (skips API key validation)
-
-2. **Build and start the containers:**
+4. **Start the stack with Docker Compose**
 
    ```bash
-   docker-compose up --build
+   docker compose up --build
    ```
 
-   Or run in detached mode:
+5. **Open the game** at `http://localhost` (the backend is proxied under `http://localhost/api`).
 
-   ```bash
-   docker-compose up -d --build
-   ```
-
-3. **Access the application:**
-   - **Frontend:** http://localhost (port 80)
-   - **Backend API:** http://localhost:5000
-
-### Managing Docker Containers
-
-- **Stop containers:**
-  ```bash
-  docker-compose down
-  ```
-
-- **View logs:**
-  ```bash
-  docker-compose logs -f
-  ```
-
-- **Rebuild after changes:**
-  ```bash
-  docker-compose up --build
-  ```
+> 🔁 Rebuild with `docker compose up --build` after changing source files.
 
 ---
 
-## Running Locally without Docker
-
-Run the frontend and backend separately for development.
-
-### Backend Setup
-
-1. **Navigate to the backend directory:**
-   ```bash
-   cd backend
-   ```
-
-2. **Create a `.env` file in the `backend` directory:**
-
-   ```env
-   API_SECRET_KEY=your-secret-key-here
-   API_PORT=5000
-   API_HOST=http://localhost
-   DATABASE_URL=sqlite:///scores.db
-   CLIENT_ORIGIN=http://localhost:5173
-   FLASK_ENV=development
-   SKIP_API_KEY_CHECK=true
-   ```
-
-   **Notes:**
-   - `CLIENT_ORIGIN=http://localhost:5173` matches Vite's default dev server port
-   - `FLASK_ENV=development` enables debug mode
-   - `SKIP_API_KEY_CHECK=true` disables API key validation for local development
-
-3. **Create a Python virtual environment:**
-   ```bash
-   python -m venv .venv
-   ```
-
-4. **Activate the virtual environment:**
-   - On Windows (PowerShell):
-     ```powershell
-     .venv\Scripts\Activate.ps1
-     ```
-   - On Windows (CMD):
-     ```cmd
-     .venv\Scripts\activate.bat
-     ```
-   - On Linux/Mac:
-     ```bash
-     source .venv/bin/activate
-     ```
-
-5. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-6. **Run the Flask app:**
-   ```bash
-   python app.py
-   ```
-
-   The backend will be available at **http://localhost:5000**
-
-### Frontend Setup
-
-1. **Navigate to the frontend directory:**
-   ```bash
-   cd frontend
-   ```
-
-2. **Create a `.env` file in the `frontend` directory:**
-
-   ```env
-   VITE_API_SECRET_KEY=your-secret-key-here
-   VITE_API_URL=http://localhost:5000
-   ```
-
-   **Notes:**
-   - `VITE_API_SECRET_KEY` should match the backend's `API_SECRET_KEY`
-   - `VITE_API_URL=http://localhost:5000` points directly to the Flask backend
-
-3. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-
-   The frontend will be available at **http://localhost:5173** (default Vite port)
+Happy guessing! 🌐
