@@ -30,7 +30,7 @@ Panoramic pictures were taken from the [**Mapillary API**](https://www.mapillary
 ---
 
 ### 🎥 Videos
-- [Creation process](https://www.youtube.com/watch?v=YOUR_DEV_DIARY_VIDEO)
+- [Creation process](https://www.youtube.com/watch?v=Xc_3xxuDa-4)
 
 ---
 
