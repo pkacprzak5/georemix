@@ -1,18 +1,8 @@
-// import { API_testing } from "../../backend/mapilary_api/mapialry_api";
-// API_testing('none');
-//
-// download - downloads images from thumb_original_url in res array
-// nodes - creates nodes.json file
-// links - creates links.json file
-// none - nothing addicional
-//
-// Add this lines to app.tsx or anywhere else you want to make it work.
-
 type API_mode = 'download' | 'nodes' | 'links' | 'none';
 
 const API_testing = async (mode: API_mode) => {
   async function fetchMapillaryData(imageId: string) {
-    const token = 'MLY|25029665826641263|11a89c920225f029a3179155d78aef55';
+    const token = 'TOP_SECRET';
     const url = `https://graph.mapillary.com/${imageId}?fields=id,thumb_original_url,computed_geometry,compass_angle,computed_compass_angle`;
 
     try {
